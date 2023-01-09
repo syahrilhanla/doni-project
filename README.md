@@ -6,7 +6,7 @@ This is a freelance project with the members of:
 
 1. Syahril Hanla (@syahrilhanla)
 2. Dimas M. Muhammad (@diimasmuhammad)
-3. Renaldi AlAmin (@username)
+3. Renaldi AlAmin (@aaldyy)
 
 ### Requirements
 
