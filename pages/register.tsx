@@ -51,7 +51,7 @@ export default function Register() {
                 </div>
                 <div className="mb-6">
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Nomer Telepon / HP
+                    No Telepon/HP
                   </label>
                   <input
                     type="text"
