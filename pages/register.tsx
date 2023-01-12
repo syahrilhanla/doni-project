@@ -141,7 +141,7 @@ export default function Register() {
                 <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5" />
                 <div className="text-center">
                   <p className="text-sm font-semibold mt-2 pt-1 mb-4">
-                    Sudah punya akun ?{" "}
+                    Sudah punya akun?{" "}
                     <a
                       href="#!"
                       className=" text-patternThree hover:text-patternOne focus:text-red-700 transition duration-200 ease-in-out dark:text-patternFive"
