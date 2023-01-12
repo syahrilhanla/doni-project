@@ -3,7 +3,7 @@ import React from "react";
 const Dashboard = () => {
   return (
     <div>
-      <section className="h-screen">aaaa
+      <section className="h-screen">
         <div className="px-6 h-full text-gray-800">
           <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
             <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-2 md:mb-0">
@@ -57,7 +57,7 @@ const Dashboard = () => {
                 <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5" />
                 <div className="text-center">
                   <p className="text-sm font-semibold mt-2 pt-1 mb-0">
-                    Don't have an account?
+                    Belum punya akun?
                     <a
                       href="#!"
                       className="text-[#BE95C4] hover:text-[#5E548E] focus:text-red-700 transition duration-200 ease-in-out"
