@@ -3,21 +3,21 @@ import React from "react";
 const Dashboard = () => {
 	return (
 		<div>
-		<section className="h-screen">
+		<section className="bg-gradient-to-r from-[#5E548E] via-[#9F86C0] to-[#BE95C4] h-screen">
 			<div className="px-6 h-full text-gray-800">
-			<div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
-			<div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-2 md:mb-0">
+			<div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6 ">
+			<div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-2 md:mb-0 rounded-2xl bg-white">
 			<form>
+			<div className="mx-5">
 			<div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
 									<p className="text-center text-[#5E548E] font-semibold mx-4 mb-0 text-4xl">Login</p>
-								</div>
+			</div>
 				<div className="mb-6">
 					<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 						Username
 					</label>
 					<input
-						type="email"
-						id="email"
+						type="text"
 						className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 						placeholder="ex: 1710131310001"
 						required
@@ -56,7 +56,7 @@ const Dashboard = () => {
 				</button>
 				<div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5"/>
 				<div className="text-center">
-				<p className="text-sm font-semibold mt-2 pt-1 mb-0">
+				<p className="text-sm font-semibold mt-2 pt-1 mb-5">
 										Don't have an account? 
 										<a
 											href="#!"
@@ -65,6 +65,7 @@ const Dashboard = () => {
 											Register
 										</a>
 									</p>
+				</div>
 				</div>
 			</form>
 			</div>
