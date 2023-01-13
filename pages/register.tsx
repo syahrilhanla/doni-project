@@ -46,14 +46,14 @@ export default function Register() {
                 </div>
                 <div className="mb-6">
                   <label className="block mb-2 text-sm font-medium text-white dark:text-white">
-                    Nama Pengguna
+                    NIM
                   </label>
                   <input
                     {...register("username", {
-                      required: "Nama pengguna diperlukan",
+                      required: "NIM diperlukan",
                       maxLength: {
                         value: 13,
-                        message: "Nama pengguna maksimal 13 karakter",
+                        message: "NIM maksimal 13 karakter",
                       },
                     })}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -75,11 +75,11 @@ export default function Register() {
                 </div>
                 <div className="mb-6">
                   <label className="block mb-2 text-sm font-medium text-white dark:text-white">
-                    No Telepon/HP
+                    No HP/WA
                   </label>
                   <input
                     {...register("phoneNumber", {
-                      required: "No Telepon/HP diperlukan",
+                      required: "No HP/WA diperlukan",
                     })}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
