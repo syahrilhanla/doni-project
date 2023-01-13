@@ -21,8 +21,8 @@ export default function Register() {
   const onSubmit: SubmitHandler<formInput> = (data) => console.log(data);
   return (
     <div>
-      <section className="h-screen overflow-auto">
-        <div className="px-6 h-max dark:text-white bg-gradient-to-t from-patternThree via-patternTwo to-patternOne text-white dark:bg-gray-800 ">
+      <section className="h-screen overflow-auto bg-gradient-to-t from-patternThree via-patternTwo to-patternOne dark:text-white  text-white dark:bg-gray-800">
+        <div className="px-6 h-max">
           <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
             <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-2 md:mb-0">
               <form onSubmit={handleSubmit(onSubmit)}>
@@ -46,14 +46,14 @@ export default function Register() {
                 </div>
                 <div className="mb-6">
                   <label className="block mb-2 text-sm font-medium text-white dark:text-white">
-                    Nama Pengguna
+                    NIM
                   </label>
                   <input
                     {...register("username", {
-                      required: "Nama pengguna diperlukan",
+                      required: "NIM diperlukan",
                       maxLength: {
                         value: 13,
-                        message: "Nama pengguna maksimal 13 karakter",
+                        message: "NIM maksimal 13 karakter",
                       },
                     })}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -75,11 +75,11 @@ export default function Register() {
                 </div>
                 <div className="mb-6">
                   <label className="block mb-2 text-sm font-medium text-white dark:text-white">
-                    No Telepon/HP
+                    No HP/WA
                   </label>
                   <input
                     {...register("phoneNumber", {
-                      required: "No Telepon/HP diperlukan",
+                      required: "No HP/WA diperlukan",
                     })}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
@@ -107,10 +107,9 @@ export default function Register() {
                     type="password"
                     {...register("password", {
                       required: "Password diperlukan",
-                      min: {
+                      minLength: {
                         value: 6,
-                        message:
-                          "Password harus harus memiliki minimal 6 karakter",
+                        message: "Password harus memiliki minimal 6 karakter",
                       },
                     })}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -131,20 +130,6 @@ export default function Register() {
                   <p>{errors.confirmPassword?.message}</p>
                 </div>
 
-                {/* <div className="flex items-start mb-6">
-                  <div className="flex items-center h-5">
-                    <input
-                      type="checkbox"
-                      id="remember"
-                      value=""
-                      className="w-4 h-4 border accent-patternTwo  border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-patternThree dark:bg-patternThree dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                      required
-                    />
-                  </div>
-                  <label className="ml-2 text-sm font-medium text-white dark:text-gray-300">
-                    Ingat Aku
-                  </label>
-                </div> */}
                 <button
                   type="submit"
                   className="text-white bg-patternOne hover:bg-patternFour focus:ring-4 focus:outline-none focus:ring-navy-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:text-patternFour dark:bg-patternFive dark:hover:bg-patternThree dark:focus:ring-blue-800"
@@ -156,7 +141,7 @@ export default function Register() {
                   <p className="text-sm font-semibold mt-2 pt-1 mb-4">
                     Sudah punya akun?{" "}
                     <Link href="/dashboard">
-                      <button className=" text-white hover:text-patternThree focus:text-red-700 transition duration-200 ease-in-out dark:text-patternFive">
+                      <button className=" text-patternFour hover:text-patternOne focus:text-red-700 transition duration-200 ease-in-out dark:text-patternFive">
                         Masuk
                       </button>
                     </Link>
