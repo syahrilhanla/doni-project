@@ -50,7 +50,7 @@ const Dashboard = () => {
 										/>
 										{errors.username && errors.username.type === "required" && (
 											<p className="bg-red-100 mt-1 text-red-900 text-sm rounded-lg block w-full p-2.5 font-semibold">
-												Lengkapi dan sesuaikan username kamu !
+												{"Lengkapi dan sesuaikan username kamu !"}
 											</p>
 										)}
 									</div>
@@ -67,7 +67,7 @@ const Dashboard = () => {
 										/>
 										{errors.password && errors.password.type === "required" && (
 											<p className="bg-red-100 mt-1 text-red-900 text-sm rounded-lg block w-full p-2.5 font-semibold">
-												Sesuaikan password kamu !
+												{"Sesuaikan password kamu !"}
 											</p>
 										)}
 									</div>
