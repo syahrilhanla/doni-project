@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -32,12 +33,12 @@ const Dashboard = () => {
 								<div className="mx-5">
 									<div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
 										<p className="text-center text-[#5E548E] font-semibold mx-4 mb-0 text-4xl">
-											Login
+											Masuk
 										</p>
 									</div>
 									<div className="mb-6">
 										<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-											Username
+											{"NIM/Username"}
 										</label>
 										<input
 											type="text"
@@ -71,36 +72,21 @@ const Dashboard = () => {
 											</p>
 										)}
 									</div>
-									<div className="flex items-start mb-6">
-										<div className="flex items-center h-5">
-											<input
-												type="checkbox"
-												id="remember"
-												value=""
-												className="w-4 h-4 border accent-[#9F86C0]  border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-[#BE95C4] dark:bg-[#BE95C4] dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-												required
-											/>
-										</div>
-										<label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-											Remember me
-										</label>
-									</div>
 									<button
 										type="submit"
 										className="text-white bg-[#5E548E] hover:bg-[#231942] focus:ring-4 focus:outline-none focus:ring-navy-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-[#E0B1CB] dark:hover:bg-[#BE95C4] dark:focus:ring-blue-800"
 									>
-										LOGIN
+										Masuk
 									</button>
 									<div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5" />
 									<div className="text-center">
 										<p className="text-sm font-semibold mt-2 pt-1 mb-6">
-											Belum punya akun?
-											<a
-												href="#!"
-												className="text-[#BE95C4] hover:text-[#5E548E] focus:text-red-700 transition duration-200 ease-in-out"
-											>
-												Register
-											</a>
+											Belum punya akun ? &nbsp;
+                      <Link href="/register">
+                      <button className="text-[#BE95C4] hover:text-[#5E548E] focus:text-red-700 transition duration-200 ease-in-out">
+                        Daftar {"Di sini"}
+                      </button>
+                    </Link>
 										</p>
 									</div>
 								</div>
