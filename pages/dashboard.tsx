@@ -85,7 +85,7 @@ const Dashboard = () => {
 											Belum punya akun ? &nbsp;
                       <Link href="/register">
                       <button className="text-[#BE95C4] hover:text-[#5E548E] focus:text-red-700 transition duration-200 ease-in-out">
-                        Daftar {"Di sini"}
+                         {"Daftar"}
                       </button>
                     </Link>
 										</p>
