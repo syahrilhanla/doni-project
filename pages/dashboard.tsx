@@ -1,5 +1,5 @@
+import Link from "next/link";
 import React from "react";
-
 const Dashboard = () => {
   return (
     <div>
@@ -9,7 +9,9 @@ const Dashboard = () => {
             <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-2 md:mb-0 rounded-2xl bg-white">
               <form>
                 <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
-                  <p className="text-center text-[#5E548E] font-semibold mx-4 mb-0 text-4xl">Login</p>
+                  <p className="text-center text-[#5E548E] font-semibold mx-4 mb-0 text-4xl">
+                    Login
+                  </p>
                 </div>
                 <div className="mb-6">
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -58,12 +60,11 @@ const Dashboard = () => {
                 <div className="text-center">
                   <p className="text-sm font-semibold mt-2 pt-1 mb-0">
                     Belum punya akun?
-                    <a
-                      href="#!"
-                      className="text-[#BE95C4] hover:text-[#5E548E] focus:text-red-700 transition duration-200 ease-in-out"
-                    >
-                      Register
-                    </a>
+                    <Link href="/register">
+                      <button className="text-[#BE95C4] hover:text-[#5E548E] focus:text-red-700 transition duration-200 ease-in-out">
+                        Register
+                      </button>
+                    </Link>
                   </p>
                 </div>
               </form>
