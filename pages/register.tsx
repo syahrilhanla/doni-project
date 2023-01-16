@@ -1,7 +1,6 @@
 import Link from "next/link";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import Navbar from "../components/navbar/navbar";
 
 interface formInput {
   name: String;
