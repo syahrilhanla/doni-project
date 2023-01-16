@@ -1,5 +1,7 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
+import Image from "next/image";
+import Link from "next/link";
+
 import Navbar from "../Navbar/Navbar";
 
 type DashboardLayoutProps = {
@@ -27,26 +29,35 @@ const menuItems = [
 
 export default function Layout({ children }: DashboardLayoutProps) {
   const router = useRouter();
+
   return (
-    <div className="text-center flex flex-col min-h-screen color-red-50">
-      <Navbar></Navbar>
-      <div className="flex flex-1">
+    <div className="text-center flex flex-col min-h-screen relative">
+      <Navbar />
+      <div className="flex flex-1 z-50 absolute top-0 min-h-screen">
         {/* sidebar  */}
-        <div className="bg-[#F0EBF8] p-2 w-[20vw]">
+        <div className="bg-[#F0EBF8] p-2 min-w-[300px]">
           <ul className="space-y-2 mt-5">
             <li>
-              <div className=" h-50 ml-2 mr-2  rounded-2xl bg-[#faf8fd]  shadow-lg py-4 mb-5">
+              <div className="flex flex-col gap-4 h-50 ml-2 mr-2 rounded-xl
+                shadow-sm bg-[#faf8fd] py-12 mb-5 text-[#9F86C0]">
                 <div className="flex justify-center items-center">
-                  <div className="hidden h-24 w-24 rounded-full sm:block object-cover mr-2 border-4 border-[#9F86C0]" />
+                  <div className="h-32 w-32 rounded-full relative
+                    overflow-hidden mr-2">
+                    <Image
+                      alt="student picture"
+                      src={"/reminz.jfif"}
+                      fill
+                      className="rounded-full"
+                    />
+                  </div>
                 </div>
-                <div className="flex justify-center items-center">
-                  <p className="font-bold text-base text-[#9F86C0] mt-5 ">
-                    Mahasiswa
+                <div className="flex flex-col gap-2 justify-center items-center
+                  font-semibold text-lg">
+                  <p>
+                    Muhammad Ridhoni
                   </p>
-                </div>
-                <div className="flex justify-center items-center mb-10">
-                  <p className="font-bold text-base text-[#9F86C0] ">
-                    NIM 1910131310029
+                  <p>
+                    1910131310029
                   </p>
                 </div>
               </div>
@@ -57,8 +68,11 @@ export default function Layout({ children }: DashboardLayoutProps) {
               <li key={title}>
                 <Link href={href}>
                   <div
-                    className={`flex justify-center bg-violet-10 items-center text-[#683ab7d5] p-2 text-base font-normal hover:text-[#683ab7d5] rounded-lg  hover:bg-[#683ab722] ${router.asPath === href && "bg-[#683ab753] text-white"
-                      //   router.asPath === href && 'bg-fuchsia-600 text-white'
+                    className={`
+                      flex justify-center bg-violet-10 items-center text-[#683ab7d5] 
+                      p-2 text-base font-normal hover:text-[#683ab7d5] rounded-lg
+                      hover:bg-[#683ab722] 
+                      ${router.asPath === href && "bg-[#683ab753] text-white"
                       }`}
                   >
                     <span className="">{title}</span>
@@ -67,34 +81,9 @@ export default function Layout({ children }: DashboardLayoutProps) {
               </li>
             ))}
           </ul>
-          <ul>
-            <li>
-              <Link href="/#">
-                <div className="flex justify-center bg-violet-10 items-center text-white p-2 text-base font-normal hover:text-[#9F86C0] rounded-lg  hover:bg-gray-100 mt-10">
-                  <div className="w-5 h-5">
-                    <svg
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
-                      ></path>
-                    </svg>
-                  </div>
-                  <span className="text-[#683ab7d5]">Keluar</span>
-                </div>
-              </Link>
-            </li>
-          </ul>
         </div>
         {/* sidebar  */}
-        <div className="p-5 w-4/5">{children}</div>
+        {/* <div className="p-5 w-4/5">{children}</div> */}
       </div>
     </div>
   );

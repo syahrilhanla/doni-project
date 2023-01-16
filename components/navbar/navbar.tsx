@@ -26,7 +26,7 @@ export default function Navbar() {
   ];
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col -z-10 top-12">
       <div className="flex justify-end items-center text-white p-8 gap-10 bg-patternTwo h-20 overflow-hidden">
         <div
           onClick={() => setOpen(!open)}
