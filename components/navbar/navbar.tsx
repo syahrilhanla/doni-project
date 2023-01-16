@@ -46,7 +46,10 @@ export default function Navbar() {
           )}
         </button>
         <Link href="/dashboard">
-          <button className="rounded-full p-2.5 hover:bg-purple-200">
+          <button
+            className="cursor-pointer hover:bg-white
+          hover:text-patternTwo p-2 rounded-full duration-200"
+          >
             <RiLogoutBoxRLine className="text-2xl" />
           </button>
         </Link>
