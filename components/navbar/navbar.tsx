@@ -6,16 +6,19 @@ export default function Navbar() {
 
   const notificationData = [
     {
+      id: 1,
       title: "title 1",
       text: "Text 1",
       isRead: true,
     },
     {
+      id: 2,
       title: "title 2",
       text: "text 2",
       isRead: false,
     },
     {
+      id: 3,
       title: "title 3",
       text: "text 3",
       isRead: false,
@@ -69,15 +72,18 @@ export default function Navbar() {
             : "hidden"
         }
       >
-        {notificationData.map((datas) => (
-          <div className="flex flex-col  gap-4 text-white text-justify mt-2">
+        {notificationData.map((data) => (
+          <div
+            key={data.id}
+            className="flex flex-col  gap-4 text-white text-justify mt-2"
+          >
             <span className="flex items-center gap-2">
-              {datas.isRead && (
-                <p className=" p-1.5 h-1.5 w-1.5 rounded-full bg-red-600"></p>
+              {data.isRead && (
+                <span className="p-1.5 h-1.5 w-1.5 rounded-full bg-red-600" />
               )}
-              <p>Judul: {datas.title}</p>
+              <p>Judul: {data.title}</p>
             </span>
-            <p>Teks: {datas.text}</p>
+            <p>Teks: {data.text}</p>
             <hr />
           </div>
         ))}
