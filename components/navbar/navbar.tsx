@@ -5,7 +5,7 @@ import { RiLogoutBoxRLine } from "react-icons/ri";
 import { TfiBell } from "react-icons/tfi";
 import NotificationList, { NotificationData } from "../Notification/NotificationList";
 
-export default function Navbar() {
+const Navbar = () => {
   const [openNotification, setOpenNotification] = useState(false);
 
   const notificationData: NotificationData[] = [
@@ -75,3 +75,5 @@ export default function Navbar() {
     </div>
   );
 }
+
+export default Navbar;
