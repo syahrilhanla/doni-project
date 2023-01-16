@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Navbar from "../navbar/navbar";
+import Navbar from "../Navbar/Navbar";
 
 type DashboardLayoutProps = {
   children: React.ReactNode;
@@ -57,10 +57,9 @@ export default function Layout({ children }: DashboardLayoutProps) {
               <li key={title}>
                 <Link href={href}>
                   <div
-                    className={`flex justify-center bg-violet-10 items-center text-[#683ab7d5] p-2 text-base font-normal hover:text-[#683ab7d5] rounded-lg  hover:bg-[#683ab722] ${
-                      router.asPath === href && "bg-[#683ab753] text-white"
+                    className={`flex justify-center bg-violet-10 items-center text-[#683ab7d5] p-2 text-base font-normal hover:text-[#683ab7d5] rounded-lg  hover:bg-[#683ab722] ${router.asPath === href && "bg-[#683ab753] text-white"
                       //   router.asPath === href && 'bg-fuchsia-600 text-white'
-                    }`}
+                      }`}
                   >
                     <span className="">{title}</span>
                   </div>
