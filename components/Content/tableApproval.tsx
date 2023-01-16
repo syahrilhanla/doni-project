@@ -24,19 +24,19 @@ const tableApproval = () => {
                     </div>
                 </th>
                 <th scope="col" className="px-6 py-3">
-                    Product name
+                   {" Product name"}
                 </th>
                 <th scope="col" className="px-6 py-3">
-                    Color
+                    {"Color"}
                 </th>
                 <th scope="col" className="px-6 py-3">
-                    Category
+                   {" Category"}
                 </th>
                 <th scope="col" className="px-6 py-3">
-                    Price
+                    {"Price"}
                 </th>
                 <th scope="col" className="px-6 py-3">
-                    Action
+                    {"Action"}
                 </th>
             </tr>
         </thead>
@@ -49,16 +49,16 @@ const tableApproval = () => {
                     </div>
                 </td>
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Apple MacBook Pro 17"
+                    {"Apple MacBook Pro 17"}
                 </th>
                 <td className="px-6 py-4">
-                    Sliver
+                    {"Sliver"}
                 </td>
                 <td className="px-6 py-4">
-                    Laptop
+                    {"Laptop"}
                 </td>
                 <td className="px-6 py-4">
-                    $2999
+                    {"$2999"}
                 </td>
                 <td className="px-6 py-4">
                     <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
@@ -164,7 +164,7 @@ const tableApproval = () => {
                     </div>
                 </td>
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Apple iMac 27"
+                    {"Apple iMac 27"}
                 </th>
                 <td className="px-6 py-4">
                     Silver

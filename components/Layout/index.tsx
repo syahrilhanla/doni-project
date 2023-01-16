@@ -38,9 +38,9 @@ export default function Layout({ children }: DashboardLayoutProps) {
 						<li>
 							<div className=" h-50 ml-2 mr-2  rounded-2xl bg-stone-100 py-4 mb-5">
 								<div className="flex justify-center items-center">
-									<img
+									<div
 										className="hidden h-24 w-24 rounded-full sm:block object-cover mr-2 border-4 border-[#9F86C0]"
-										alt="Profile"
+									
 									/>
 								</div>
 								<div className="flex justify-center items-center">
