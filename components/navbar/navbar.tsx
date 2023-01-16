@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Link from "next/link";
+
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { TfiBell } from "react-icons/tfi";
-
+import NotificationList from "../Notification/NotificationList";
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
+  const [openNotification, setOpenNotification] = useState(false);
 
   const notificationData = [
     {
@@ -32,49 +33,25 @@ export default function Navbar() {
     <div className="flex flex-col top-12">
       <div className="flex justify-end items-center text-white p-8 shadow-md 
         gap-6 bg-patternTwo h-16 overflow-hidden">
-        <div
-          onClick={() => setOpen(!open)}
-          className="relative cursor-pointer hover:bg-white hover:text-patternTwo p-2 rounded-md"
+        <button
+          onClick={() => setOpenNotification(!open)}
+          className="relative cursor-pointer hover:bg-white
+          hover:text-patternTwo p-2 rounded-full duration-200"
         >
           <TfiBell className="text-2xl" />
-
-          {notificationData.map((datas) =>
-            datas.isRead ? (
-              <p className="absolute top-2 right-2 p-1.5 rounded-full bg-red-600"></p>
-            ) : (
-              ""
+          {notificationData.map((data) =>
+            data.isRead && (
+              <span className="absolute top-1 right-2 p-1.5 rounded-full bg-red-600" />
             )
           )}
-        </div>
+        </button>
         <Link href="/dashboard">
           <button className="rounded-full p-2.5 hover:bg-purple-200">
             <RiLogoutBoxRLine className="text-2xl" />
           </button>
         </Link>
       </div>
-      <div
-        className={
-          open
-            ? " absolute h-52 border-1 border-white overflow-auto rounded-b-lg bg-patternTwo p-2 top-20 w-64 right-0 z-50"
-            : "hidden"
-        }
-      >
-        {notificationData.map((data) => (
-          <div
-            key={data.id}
-            className="flex flex-col  gap-4 text-white text-justify mt-2"
-          >
-            <span className="flex items-center gap-2">
-              {data.isRead && (
-                <span className="p-1.5 h-1.5 w-1.5 rounded-full bg-red-600" />
-              )}
-              <p>Judul: {data.title}</p>
-            </span>
-            <p>Teks: {data.text}</p>
-            <hr />
-          </div>
-        ))}
-      </div>
+      {openNotification && <NotificationList notificationData={notificationData} />}
     </div>
   );
 }
