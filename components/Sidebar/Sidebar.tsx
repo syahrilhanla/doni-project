@@ -26,7 +26,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="flex flex-1 z-50 absolute top-0 min-h-screen">
+    <div className="flex flex-1 z-50 min-h-full">
       {/* sidebar  */}
       <div className="bg-[#F0EBF8] p-2 min-w-[300px]">
         <ul className="space-y-2 mt-5">

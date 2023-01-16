@@ -6,13 +6,18 @@ type DashboardLayoutProps = {
   children: React.ReactNode;
 };
 
-export default function Layout({ children }: DashboardLayoutProps) {
+const Layout = ({ children }: DashboardLayoutProps) => {
   return (
     <div className="text-center flex flex-col min-h-screen relative">
       <Navbar />
-      <span className="hidden sm:block">
-        <Sidebar />
-      </span>
+      <div className="w-full min-h-[90vh] flex flex-row">
+        <span className="hidden sm:block">
+          <Sidebar />
+        </span>
+        <div className="w-full">{children}</div>
+      </div>
     </div>
   );
 }
+
+export default Layout;
