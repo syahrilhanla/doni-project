@@ -10,7 +10,7 @@ interface NotificationData {
 const NotificationList = ({ notificationData }: NotificationData) => {
   return (
     <div
-      className="absolute h-52 border-1 border-white
+      className="absolute border-1 border-white
        overflow-auto rounded-b-lg bg-patternTwo 
        p-2 top-20 w-64 right-0 z-50"
     >

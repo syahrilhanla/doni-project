@@ -34,27 +34,30 @@ export default function Navbar() {
       <div className="flex justify-end items-center text-white p-8 shadow-md 
         gap-6 bg-patternTwo h-16 overflow-hidden">
         <button
-          onClick={() => setOpenNotification(!open)}
-          className="relative cursor-pointer hover:bg-white
+          onClick={() => setOpenNotification(!openNotification)}
+          className="relative cursor-pointer hover:bg-white hover:font-extrabold
           hover:text-patternTwo p-2 rounded-full duration-200"
         >
           <TfiBell className="text-2xl" />
           {notificationData.map((data) =>
             data.isRead && (
-              <span className="absolute top-1 right-2 p-1.5 rounded-full bg-red-600" />
+              <span className="absolute top-1 right-2 p-1.5 rounded-full bg-red-500" />
             )
           )}
         </button>
         <Link href="/dashboard">
           <button
-            className="cursor-pointer hover:bg-white
+            className="cursor-pointer hover:bg-white hover:font-extrabold
           hover:text-patternTwo p-2 rounded-full duration-200"
           >
             <RiLogoutBoxRLine className="text-2xl" />
           </button>
         </Link>
       </div>
-      {openNotification && <NotificationList notificationData={notificationData} />}
+
+      {openNotification && (
+        <NotificationList notificationData={notificationData} />
+      )}
     </div>
   );
 }
