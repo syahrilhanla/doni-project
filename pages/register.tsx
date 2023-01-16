@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import Navbar from "../components/navbar/navbar";
 
 interface formInput {
   name: String;
@@ -22,6 +23,7 @@ export default function Register() {
     window.alert("Data berhasil disimpan");
   return (
     <div>
+      <Navbar></Navbar>
       <section className="h-screen overflow-auto bg-gradient-to-t from-patternThree via-patternTwo to-patternOne  text-gray-900">
         <div className=" bg-white p-4 flex flex-col mx-2 sm:mx-10 md:mx-20 lg:mx-80 my-10 rounded-lg h-max">
           <form onSubmit={handleSubmit(onSubmit)}>
