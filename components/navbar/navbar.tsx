@@ -3,12 +3,12 @@ import Link from "next/link";
 
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { TfiBell } from "react-icons/tfi";
-import NotificationList from "../Notification/NotificationList";
+import NotificationList, { NotificationData } from "../Notification/NotificationList";
 
 export default function Navbar() {
   const [openNotification, setOpenNotification] = useState(false);
 
-  const notificationData = [
+  const notificationData: NotificationData[] = [
     {
       id: 1,
       title: "title 1",
