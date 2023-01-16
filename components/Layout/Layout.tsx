@@ -71,9 +71,8 @@ export default function Layout({ children }: DashboardLayoutProps) {
                     className={`
                       flex justify-center bg-violet-10 items-center text-[#683ab7d5] 
                       p-2 text-base font-normal hover:text-[#683ab7d5] rounded-lg
-                      hover:bg-[#683ab722] 
-                      ${router.asPath === href && "bg-[#683ab753] text-white"
-                      }`}
+                      hover:bg-[#683ab715] 
+                      ${router.asPath === href && "bg-[#683ab715] text-white"}`}
                   >
                     <span className="">{title}</span>
                   </div>
