@@ -12,22 +12,23 @@ interface Props {
 const NotificationList = ({ notificationData }: Props) => {
   return (
     <div
-      className="absolute border-1 border-white
-       overflow-auto rounded-lg  bg-[#F0EBF8] 
-       p-2 top-16 w-64 right-0 z-50"
+      className="absolute w-64 max-h-[268px] py-2 px-5
+       gap-4 overflow-auto rounded-2xl bg-[#F0EBF8] 
+        top-[68px] right-20 z-50"
     >
       {notificationData.map((data: any) => (
         <div
           key={data.id}
-          className="flex flex-col  gap-4 text-[#683ab7d5]  text-justify mt-2"
+          className="flex flex-col text-[#683ab7d5] text-justify
+            w-full gap-1.5 py-1.5"
         >
           <span className="flex items-center gap-1">
             {data.isRead && (
               <span className="p-1 h-1 w-1 rounded-full bg-red-600" />
             )}
-            <p>Judul: {data.title}</p>
+            <p>{data.title}</p>
           </span>
-          <p>Teks: {data.text}</p>
+          <p>{data.text}</p>
           <hr />
         </div>
       ))}

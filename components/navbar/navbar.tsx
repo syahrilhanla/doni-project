@@ -22,9 +22,27 @@ export default function Navbar() {
       isRead: false,
     },
     {
-      id: 3,
-      title: "title 3",
-      text: "text 3",
+      id: 11,
+      title: "title 1",
+      text: "Text 1",
+      isRead: true,
+    },
+    {
+      id: 22,
+      title: "title 2",
+      text: "text 2",
+      isRead: false,
+    },
+    {
+      id: 115,
+      title: "title 1",
+      text: "Text 1",
+      isRead: true,
+    },
+    {
+      id: 22,
+      title: "title 2",
+      text: "text 2",
       isRead: false,
     },
   ];
