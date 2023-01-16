@@ -57,11 +57,7 @@ export default function Navbar() {
           hover:text-patternTwo p-2 rounded-full duration-200"
         >
           <TfiBell className="text-2xl" />
-          {notificationData.map((data) =>
-            data.isRead && (
-              <span className="absolute top-1 right-2 p-1.5 rounded-full bg-red-500" />
-            )
-          )}
+          <span className="absolute top-1 right-2 p-1.5 rounded-full bg-red-500" />
         </button>
         <Link href="/dashboard">
           <button
