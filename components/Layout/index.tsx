@@ -33,10 +33,10 @@ export default function Layout({ children }: DashboardLayoutProps) {
 			<Header />
 			<div className="flex flex-1">
 			{/* sidebar  */}
-      <div className="bg-gradient-to-r from-violet-500 via-[#9F86C0] to-[#BE95C4] w-2/5">
+      <div className="bg-[#F0EBF8] p-2 w-[20vw]">
 					<ul className="space-y-2 mt-5">
 						<li>
-							<div className=" h-50 ml-2 mr-2  rounded-2xl bg-stone-100 py-4 mb-5">
+							<div className=" h-50 ml-2 mr-2  rounded-2xl bg-[#faf8fd] rounded-lg shadow-lg py-4 mb-5">
 								<div className="flex justify-center items-center">
 									<div
 										className="hidden h-24 w-24 rounded-full sm:block object-cover mr-2 border-4 border-[#9F86C0]"
@@ -60,8 +60,9 @@ export default function Layout({ children }: DashboardLayoutProps) {
              {menuItems.map(({href, title})=>(   
             <li key={title}>
                 <Link href={href}>
-								<div className={`flex justify-center bg-violet-10 items-center text-white p-2 text-base font-normal hover:text-[#9F86C0] rounded-lg  hover:bg-gray-100 ${
-                  router.asPath === href && 'bg-fuchsia-600 text-white'
+								<div className={`flex justify-center bg-violet-10 items-center text-[#683ab7d5] p-2 text-base font-normal hover:text-[#683ab7d5] rounded-lg  hover:bg-[#683ab722] ${
+                  router.asPath === href && 'bg-[#683ab753] text-white'
+                //   router.asPath === href && 'bg-fuchsia-600 text-white'
                 }`}>
 									<span className="">{title}</span>
 								</div>
@@ -89,7 +90,7 @@ export default function Layout({ children }: DashboardLayoutProps) {
 											></path>
 										</svg>
 									</div>
-									<span className="">Keluar</span>
+									<span className="text-[#683ab7d5]">Keluar</span>
 								</div>
 							</Link>
 						</li>
