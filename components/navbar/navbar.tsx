@@ -7,20 +7,17 @@ export default function Navbar() {
   const notificationData = [
     {
       title: "title 1",
-      text:
-        "Scelerisque urna sociis malesuada. Dapibus, quisque sodales. Euismod. Eleifend. Cubilia erat mi tincidunt vulputate nullam. Quis et rutrum. Maecenas vestibulum, fringilla malesuada gravida scelerisque etiam magna lacinia eget fusce molestie.",
+      text: "Text 1",
       isRead: true,
     },
     {
-      title: "title 1",
-      text:
-        "Ullamcorper dignissim suscipit dictum sociosqu Litora nec dui mus sociis eros, aliquet praesent adipiscing non bibendum. Ad urna. Cum laoreet at phasellus ac elit dapibus tempor pharetra cras pharetra Scelerisque.",
+      title: "title 2",
+      text: "text 2",
       isRead: false,
     },
     {
-      title: "title 1",
-      text:
-        "Ac. Augue tincidunt platea erat habitasse dis torquent urna eleifend. Ridiculus hac, suspendisse lacinia erat elementum. Lacus libero per lectus nonummy euismod platea lacinia, dui duis. Adipiscing praesent convallis integer.",
+      title: "title 3",
+      text: "text 3",
       isRead: false,
     },
   ];
@@ -68,20 +65,20 @@ export default function Navbar() {
       <div
         className={
           open
-            ? "flex flex-col bg-gray-200 ml-96 mr-96 p-2 items-end"
+            ? " absolute h-52 border-1 border-white overflow-auto rounded-b-lg bg-patternTwo p-2 top-20 w-64 right-0"
             : "hidden"
         }
       >
         {notificationData.map((datas) => (
-          <div className="flex flex-col  gap-8 text-gray-800 mt-2">
+          <div className="flex flex-col  gap-4 text-white text-justify mt-2">
             <span className="flex items-center gap-2">
               {datas.isRead && (
                 <p className=" p-1.5 h-1.5 w-1.5 rounded-full bg-red-600"></p>
               )}
               <p>Judul: {datas.title}</p>
             </span>
-
             <p>Teks: {datas.text}</p>
+            <hr />
           </div>
         ))}
       </div>
