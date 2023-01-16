@@ -32,10 +32,11 @@ const Sidebar = () => {
         <ul className="space-y-2 mt-5">
           <li>
             <div className="flex flex-col gap-4 h-50 ml-2 mr-2 rounded-xl
-                shadow-sm bg-[#faf8fd] py-12 mb-5 text-[#9F86C0]">
+              shadow-sm bg-[#faf8fd] py-12 mb-5 text-[#9F86C0]"
+            >
               <div className="flex justify-center items-center">
                 <div className="h-32 w-32 rounded-full relative
-                    overflow-hidden mr-2">
+                  overflow-hidden mr-2">
                   <Image
                     alt="student picture"
                     src={"/reminz.jfif"}
@@ -56,16 +57,16 @@ const Sidebar = () => {
             </div>
           </li>
         </ul>
-        <ul>
+        <ul className="flex flex-col gap-0 px-1.5">
           {menuItems.map(({ href, title }) => (
             <li key={title}>
               <Link href={href}>
                 <div
                   className={`
-                      flex justify-center bg-violet-10 items-center text-[#683ab7d5] 
-                      p-2 text-base font-normal hover:text-[#683ab7d5] rounded-lg
-                      hover:bg-[#683ab715] 
-                      ${router.asPath === href && "bg-[#683ab715] text-white"}`}
+                    flex justify-center bg-violet-10 items-center text-[#683ab7d5] 
+                    px-2 py-4 text-base font-normal hover:text-[#683ab7d5] rounded-lg
+                    hover:bg-[#683ab715] 
+                    ${router.asPath === href && "bg-[#683ab715] text-white"}`}
                 >
                   <span className="">{title}</span>
                 </div>
