@@ -10,8 +10,8 @@ type DashboardLayoutProps = {
 
 const menuItems = [
   {
-    href: "/approv",
-    title: "Approv",
+    href: "/dashboard",
+    title: "Dashboard",
   },
   {
     href: "/berkas",
@@ -19,11 +19,11 @@ const menuItems = [
   },
   {
     href: "/seminar",
-    title: "Seminar",
+    title: "Seminar Hasil",
   },
   {
     href: "/sidang",
-    title: "Sidang",
+    title: "Sidang Akhir",
   },
 ];
 
@@ -52,11 +52,11 @@ export default function Layout({ children }: DashboardLayoutProps) {
                   </div>
                 </div>
                 <div className="flex flex-col gap-2 justify-center items-center
-                  font-semibold text-lg">
+                  font-normal text-lg">
                   <p>
                     Muhammad Ridhoni
                   </p>
-                  <p>
+                  <p className="text-base font-normal">
                     1910131310029
                   </p>
                 </div>
