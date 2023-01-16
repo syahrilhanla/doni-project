@@ -10,7 +10,9 @@ export default function Layout({ children }: DashboardLayoutProps) {
   return (
     <div className="text-center flex flex-col min-h-screen relative">
       <Navbar />
-      <Sidebar />
+      <span className="hidden sm:block">
+        <Sidebar />
+      </span>
     </div>
   );
 }

@@ -16,7 +16,7 @@ const NotificationList = ({ notificationData }: Props) => {
         gap-4 overflow-auto rounded-xl bg-[#F0EBF8] 
         top-[68px] right-20 z-50"
     >
-      {notificationData.map((data: any) => (
+      {notificationData.map((data: NotificationData) => (
         <div
           key={data.id}
           className="flex flex-col text-[#683ab7d5] text-justify border-b
