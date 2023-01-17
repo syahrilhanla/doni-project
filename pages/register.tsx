@@ -54,6 +54,10 @@ export default function Register() {
                     value: 13,
                     message: "NIM maksimal 13 karakter",
                   },
+                  minLength: {
+                    value: 13,
+                    message: "NIM minimal 13 karakter",
+                  },
                 })}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 placeholder="Contoh: 2012012019920"
@@ -144,7 +148,7 @@ export default function Register() {
             <div className="text-center">
               <p className="text-sm font-semibold mt-2 pt-1 mb-4">
                 Sudah punya akun?{" "}
-                <Link href="/dashboard">
+                <Link href="/login">
                   <button className=" text-patternThree hover:text-patternOne focus:text-red-700 transition duration-200 ease-in-out ">
                     Masuk
                   </button>
