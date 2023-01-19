@@ -13,6 +13,9 @@ module.exports = {
         patternFour: "#231942",
         patternFive: "#E0B1CB",
       },
+      screens: {
+        'xxs': '440px',
+      },
     },
   },
   plugins: [],

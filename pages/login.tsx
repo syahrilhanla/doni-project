@@ -27,8 +27,8 @@ const Dashboard = () => {
     <div>
       <section className="bg-gradient-to-r from-[#5E548E] via-[#9F86C0] to-[#BE95C4] h-screen">
         <div className="px-6 h-full text-gray-800">
-          <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
-            <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-2 md:mb-0 rounded-2xl bg-white">
+          <div className="flex xl:justify-center lg:justify-center justify-center items-center flex-wrap h-full g-6">
+            <div className="xl:ml-20 xl:w-5/12 lg:w-8/12 md:w-8/12 mb-2 md:mb-0 rounded-2xl bg-white">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mx-5">
                   <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
