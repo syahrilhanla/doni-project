@@ -14,7 +14,7 @@ module.exports = {
         patternFive: "#E0B1CB",
       },
       screens: {
-        'xxs': '440px',
+        'xxs': '340px',
       },
     },
   },
