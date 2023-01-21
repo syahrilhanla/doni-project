@@ -9,7 +9,7 @@ const Dashboard = () => {
 	const [ajukan, setAjukan] = useState(false);
 	return (
 		<Layout>
-			<div className="h-screen px-4">
+			<div className="h-screen px-4 overflow-auto py-4">
 				<div className="flex lg:space-between xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col  mt-5 mb-2 mx-4">
 					<div className="grid justify-items-start xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-1/3 h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
 						<div className=" text-lg text-center">Selamat Datang</div>

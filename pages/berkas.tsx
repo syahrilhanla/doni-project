@@ -5,9 +5,8 @@ import Layout from "../components/Layout/Layout";
 const berkas = () => {
 	return (
 		<Layout>
-			<div className="flex h-full flex-col justify-center items-center">
-				<h1 className="text-4xl mb-5 font-bold">Berkas</h1>
-				<FileUpload />
+			<div className="flex h-full py-4 justify-center items-center">
+			<FileUpload />
 			</div>
 		</Layout>
 	);
