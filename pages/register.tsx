@@ -1,6 +1,8 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import * as yup from "yup";
 
 interface formInput {
   name: String;
@@ -12,12 +14,41 @@ interface formInput {
   confirmPassword: String;
 }
 
+const schema = yup.object().shape({
+  name: yup.string().required("Nama lengkap diperlukan"),
+  username: yup
+    .string()
+    .min(13, "NIM minimal 13 karakter")
+    .max(13, "NIM maksimal 13 karakter")
+    .required("NIM diperlukan"),
+  email: yup
+    .string()
+    .email("Harus email yang tepat")
+    .required("Email diperlukan"),
+  phoneNumber: yup.string().required("No HP/WA diperlukan"),
+  generation: yup
+    .string()
+    .min(4, "Minimal 4 angka")
+    .max(4, "Maksimal 4 angka")
+    .required("Informasi angkatan diperlukan"),
+  password: yup
+    .string()
+    .min(6, "Kata sandi harus memiliki minimal 6 karakter")
+    .required("Kata sandi diperlukan"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Konfirmasi kata sandi tidak sama")
+    .required("Konfirmasi kata sandi diperlukan"),
+});
+
 export default function Register() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<formInput>();
+  } = useForm<formInput>({
+    resolver: yupResolver(schema),
+  });
   const onSubmit: SubmitHandler<formInput> = (data) =>
     window.alert("Data berhasil disimpan");
   return (
@@ -35,9 +66,7 @@ export default function Register() {
                 Nama
               </label>
               <input
-                {...register("name", {
-                  required: "Nama lengkap diperlukan",
-                })}
+                {...register("name")}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 placeholder="Nama Lengkap"
               />
@@ -48,13 +77,7 @@ export default function Register() {
                 NIM
               </label>
               <input
-                {...register("username", {
-                  required: "NIM diperlukan",
-                  maxLength: {
-                    value: 13,
-                    message: "NIM maksimal 13 karakter",
-                  },
-                })}
+                {...register("username")}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 placeholder="Contoh: 2012012019920"
               />
@@ -66,7 +89,7 @@ export default function Register() {
               </label>
               <input
                 type="email"
-                {...register("email", { required: "Email diperlukan" })}
+                {...register("email")}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 placeholder="email@gmail.com"
               />
@@ -78,9 +101,7 @@ export default function Register() {
               </label>
               <input
                 type="number"
-                {...register("phoneNumber", {
-                  required: "No HP/WA diperlukan",
-                })}
+                {...register("phoneNumber")}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               />
               <p className="text-red-500">{errors.phoneNumber?.message}</p>
@@ -91,13 +112,7 @@ export default function Register() {
               </label>
               <input
                 type="number"
-                {...register("generation", {
-                  required: "Informasi angkatan diperlukan",
-                  maxLength: {
-                    value: 4,
-                    message: "Maksimal 4 angka",
-                  },
-                })}
+                {...register("generation")}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 placeholder="Contoh: 2020"
               />
@@ -109,13 +124,7 @@ export default function Register() {
               </label>
               <input
                 type="password"
-                {...register("password", {
-                  required: "Kata diperlukan",
-                  minLength: {
-                    value: 6,
-                    message: "Kata sandi harus memiliki minimal 6 karakter",
-                  },
-                })}
+                {...register("password")}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               />
               <p className="text-red-500">{errors.password?.message}</p>
@@ -126,9 +135,7 @@ export default function Register() {
               </label>
               <input
                 type="password"
-                {...register("confirmPassword", {
-                  required: "Konfirmasi kata sandi diperlukan",
-                })}
+                {...register("confirmPassword")}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               />
               <p className="text-red-500">{errors.confirmPassword?.message}</p>
@@ -144,7 +151,7 @@ export default function Register() {
             <div className="text-center">
               <p className="text-sm font-semibold mt-2 pt-1 mb-4">
                 Sudah punya akun?{" "}
-                <Link href="/dashboard">
+                <Link href="/login">
                   <button className=" text-patternThree hover:text-patternOne focus:text-red-700 transition duration-200 ease-in-out ">
                     Masuk
                   </button>
