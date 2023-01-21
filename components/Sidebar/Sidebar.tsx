@@ -66,7 +66,7 @@ const Sidebar = () => {
                     flex justify-center bg-violet-10 items-center text-[#683ab7d5] 
                     px-2 py-4 text-base font-normal hover:text-[#683ab7d5] rounded-lg
                     hover:bg-[#683ab715] 
-                    ${router.asPath === href && "bg-[#683ab715] text-white"}`}
+                    ${router.asPath === href && "bg-[#683ab715] "}`}
                 >
                   <span className="">{title}</span>
                 </div>

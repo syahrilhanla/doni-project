@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { BsFillPersonFill } from "react-icons/bs";
 const FileSeminar = () => {
 	
@@ -8,13 +9,13 @@ const FileSeminar = () => {
 			<div className="py-4">
 				<div className="flex justify-center">
 					{jadwal ? (
-						<div className="flex bg-[#91dab9] text-[#fffcfc] flex-col justify-center my-3 items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-1/3 h-24  rounded-lg shadow-md">
-							<div className=" text-lg text-center">Tanggal Seminar Hasil</div>
+						<div className="flex bg-[#f1e8f252] border-4 border-[#caf3e0] text-[#707070] flex-col justify-center my-3 items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-1/3 h-24  rounded-lg shadow-md">
+							<div className=" flex justify-between items-center"> <p className="items-center mr-3"> Tanggal Seminar Hasil </p> <AiFillCheckCircle className="fill-[#72ea8c] items-center"  /></div>
 							<div className=" text-2xl text-center"> 27 Januari 2023</div>
 						</div>
 					) : (
-						<div className="flex flex-col bg-[#f25b5e] text-[#fffcfc] justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-1/3 h-24  rounded-lg shadow-md">
-							<div className=" text-lg text-center">Tanggal Seminar Hasil</div>
+						<div className="flex flex-col bg-[#f1e8f252] border-4 border-[#ebb4b4] text-[#707070] justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-1/3 h-24  rounded-lg shadow-md">
+							<div className=" flex justify-between items-center"> <p className="items-center mr-3"> Tanggal Seminar Hasil </p> <AiFillCloseCircle className="fill-[#d25858] items-center"  /></div>
 							<div className=" text-2xl text-center italic"> Belum Ada</div>
 						</div>
 					)}
@@ -42,7 +43,7 @@ const FileSeminar = () => {
 					</div>
 				</div>
 				<div className="flex flex-col mt-10  justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
-					<label className="block mb-2 text-2xl font-medium text-gray-900 dark:text-white">
+					<label className="block mb-2 text-2xl font-medium text-gray-900 ">
 						Upload File Semhas Kamu
 					</label>
 
@@ -50,6 +51,7 @@ const FileSeminar = () => {
 						className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 "
 						aria-describedby="file_input_help"
 						id="file_input"
+						accept="application/pdf"
 						type="file"
 					/>
 				</div>

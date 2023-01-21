@@ -11,7 +11,7 @@ const FileUpload= () => {
         <div className="flex flex-col mt-2 mb-3 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md
 
         ">
-				<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+				<label className="block mb-2 text-sm font-medium text-gray-900 ">
 					BAB 1
 				</label>
 				<input
@@ -19,10 +19,11 @@ const FileUpload= () => {
 					aria-describedby="file_input_help"
 					id="file_input"
 					type="file"
+					accept="application/pdf"
 				/>
         </div>
         <div className="flex flex-col mt-2 mb-3 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
-				<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+				<label className="block mb-2 text-sm font-medium text-gray-900 ">
 					BAB 2
 				</label>
 				<input
@@ -30,47 +31,57 @@ const FileUpload= () => {
 					aria-describedby="file_input_help"
 					id="file_input"
 					type="file"
+					accept="application/pdf"
 				/>
         </div>
         <div className="flex flex-col mt-2 mb-3 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
-				<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+				<label className="block mb-2 text-sm font-medium text-gray-900 ">
 					BAB 3
 				</label>
 				<input
-					className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 "
+					className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 disabled:opacity-50 "
 					aria-describedby="file_input_help"
 					id="file_input"
-					type="file"
+						type="file"
+						accept="application/pdf"
+						disabled
 				/>
         </div>
         <div className="flex flex-col mt-2 mb-3 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
-				<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+				<label className="block mb-2 text-sm font-medium text-gray-900">
 					BAB 4
 				</label>
 				<input
-					className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 "
+						className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
+					disabled:opacity-50
+						"
 					aria-describedby="file_input_help"
 					id="file_input"
-					type="file"
+						type="file"
+						accept="application/pdf"
+						disabled
 				/>
-        </div>
-        <div className="flex flex-col mt-2 mb-3 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
-				<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+				</div>
+				
+				<div className="flex flex-col mt-2 mb-3 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md				">
+				<label className="block mb-2 text-sm font-medium text-gray-900 ">
 					BAB 5
 				</label>
 				<input
-					className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 "
+					className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 disabled:opacity-50"
 					aria-describedby="file_input_help"
 					id="file_input"
-					type="file"
+						type="file"
+						accept="application/pdf"
+						disabled
 				/>
         </div>
 				
 				<p
-					className="mt-1 text-sm text-gray-500 dark:text-gray-300"
+					className="mt-1 text-sm text-gray-500 "
 					id="file_input_help"
 				>
-					PDF (MAX. 2MB).
+					Hanya Bisa PDF (MAX. 2MB).
 				</p>
 			</div>
 		</div>
