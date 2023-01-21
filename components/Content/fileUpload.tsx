@@ -1,6 +1,6 @@
 import React from "react";
 
-const fileUpload = () => {
+const FileUpload= () => {
 	return (
 		<div className="h-screen px-4 w-5/6 overflow-auto py-4">
 			<div className="flex justify-center items-center font-extralight text-3xl">
@@ -77,4 +77,4 @@ const fileUpload = () => {
 	);
 };
 
-export default fileUpload;
+export default FileUpload;

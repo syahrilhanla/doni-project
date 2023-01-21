@@ -1,5 +1,5 @@
 import React from "react";
-import FileUpload from "../components/Content/fileUpload";
+import FileUpload from "../components/Content/FileUpload";
 import Layout from "../components/Layout/Layout";
 
 const berkas = () => {

@@ -1,5 +1,5 @@
 import React from "react";
-import FileSidang from "../components/Content/fileSidang";
+import FileSidang from "../components/Content/FileSidang";
 import Layout from "../components/Layout/Layout";
 
 const sidang = () => {

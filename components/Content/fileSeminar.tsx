@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { BsFillPersonFill } from "react-icons/bs";
-const fileSeminar = () => {
+const FileSeminar = () => {
+	
 	const [jadwal, setJadwal] = useState(false);
-
 	return (
 		<div className="h-screen px-4 w-5/6  overflow-auto py-4">
 			<div className="py-4">
@@ -58,4 +58,4 @@ const fileSeminar = () => {
 	);
 };
 
-export default fileSeminar;
+export default FileSeminar;
