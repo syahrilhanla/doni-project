@@ -81,7 +81,7 @@ const FileUpload= () => {
 					className="mt-1 text-sm text-gray-500 "
 					id="file_input_help"
 				>
-					Hanya Bisa PDF (MAX. 2MB).
+					Hanya Bisa PDF (MAX. 2Mb).
 				</p>
 			</div>
 		</div>
