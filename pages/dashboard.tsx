@@ -37,7 +37,7 @@ const Dashboard = () => {
 											className="text-white  bg-patternTwo hover:text-gray-900 hover:bg-[#c9c2d2] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
 											onClick={() => setAjukan(!ajukan)}
 										>
-											Ajukan
+											Ajukan Judul
 										</button>
                   </div>
              
