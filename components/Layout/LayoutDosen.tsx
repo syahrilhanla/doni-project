@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../Navbar/Navbar";
 import SidebarDosen from "../Sidebar/SidebarDosen";
+import FilterSection from "./FilterSection";
 
 export default function LayoutDosen(props: any) {
   return (
@@ -10,7 +11,11 @@ export default function LayoutDosen(props: any) {
         <span className="hidden sm:block">
           <SidebarDosen />
         </span>
-        <div className="w-full">{props.children}</div>
+        <div className="w-full flex flex-col items-center">
+          <FilterSection />
+          {props.children}
+        </div>
+       
       </div>
     </div>
   );

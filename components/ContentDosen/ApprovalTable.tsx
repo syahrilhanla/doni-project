@@ -1,6 +1,7 @@
 import React from "react";
 import { RiSortDesc } from "react-icons/ri";
 
+
 interface dataTable {
   id: number;
   name: string;
@@ -49,7 +50,7 @@ export default function ApprovalTable() {
   ];
   return (
     <div>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg max-h-[500px] ">
+          <div className="relative overflow-x-auto shadow-md sm:rounded-lg max-h-[500px] ">
         <table className="text-sm text-left text-gray-900 w-full ">
           <thead className="text-xs text-white uppercase bg-patternTwo sticky top-0 z-50 ">
             <tr>
