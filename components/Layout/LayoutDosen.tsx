@@ -11,11 +11,10 @@ export default function LayoutDosen(props: any) {
         <span className="hidden sm:block">
           <SidebarDosen />
         </span>
-        <div className="w-full flex flex-col items-center">
+        <div className="w-full flex flex-col items-center p-4">
           <FilterSection />
           {props.children}
         </div>
-       
       </div>
     </div>
   );

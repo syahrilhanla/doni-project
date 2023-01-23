@@ -7,6 +7,7 @@ interface dataTable {
   title: string;
   file: string;
   generation: number;
+  seminarDate: string;
 }
 
 export default function SeminarList() {
@@ -15,56 +16,67 @@ export default function SeminarList() {
       id: 1,
       name: "nama 1",
       title: "title 1",
-      file: "here",
+      file: "cek",
       generation: 1,
+      seminarDate: "23 Jan 2023",
     },
     {
       id: 2,
       name: "nama 12",
       title: "title 12",
-      file: "here",
+      file: "cek",
       generation: 2,
+      seminarDate: "23 Jan 2023",
     },
     {
       id: 3,
       name: "nama 13",
       title: "title 13",
-      file: "here",
+      file: "cek",
       generation: 3,
+      seminarDate: "23 Jan 2023",
     },
     {
       id: 4,
       name: "nama 14",
       title: "title 14",
-      file: "here",
+      file: "cek",
       generation: 4,
+      seminarDate: "23 Jan 2023",
     },
     {
       id: 5,
       name: "nama 15",
       title: "title 15",
-      file: "here",
+      file: "cek",
       generation: 5,
+      seminarDate: "23 Jan 2023",
     },
     {
       id: 6,
       name: "nama 16",
       title: "title 16",
-      file: "here",
+      file: "cek",
       generation: 6,
+      seminarDate: "23 Jan 2023",
     },
   ];
   return (
     <div>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg max-h-[500px] ">
-        <table className="text-sm text-left text-gray-900 w-full ">
+      <div className=" inline-block overflow-x-auto shadow-md sm:rounded-lg max-h-[500px] max-w-[350px] sm:max-w-full">
+        <table className="text-sm text-left text-gray-900 ">
           <thead className="text-xs text-white uppercase bg-patternTwo sticky top-0 z-50 ">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Nama
+                <div className="flex items-center gap-2">
+                  Nama
+                  <a href="#">
+                    <RiSortDesc></RiSortDesc>
+                  </a>
+                </div>
               </th>
               <th scope="col" className="px-6 py-3">
-                <div className="flex items-center">
+                <div className="flex items-center gap-2">
                   Judul
                   <a href="#">
                     <RiSortDesc></RiSortDesc>
@@ -72,7 +84,7 @@ export default function SeminarList() {
                 </div>
               </th>
               <th scope="col" className="px-6 py-3">
-                <div className="flex items-center">
+                <div className="flex items-center gap-2">
                   Angkatan
                   <a href="#">
                     <RiSortDesc></RiSortDesc>
@@ -80,20 +92,10 @@ export default function SeminarList() {
                 </div>
               </th>
               <th scope="col" className="px-6 py-3">
-                <div className="flex items-center">
-                  Berkas
-                  <a href="#">
-                    <RiSortDesc></RiSortDesc>
-                  </a>
-                </div>
+                <div className="flex items-center">Berkas</div>
               </th>
               <th scope="col" className="px-6 py-3">
-                <div className="flex items-center">
-                  Aksi
-                  <a href="#">
-                    <RiSortDesc></RiSortDesc>
-                  </a>
-                </div>
+                <div className="flex items-center justify-center">Aksi</div>
               </th>
             </tr>
           </thead>
@@ -102,19 +104,22 @@ export default function SeminarList() {
               <tr key={data.id} className="bg-gray-200 border-b ">
                 <th
                   scope="row"
-                  className="px-6 py-4 font-medium   whitespace-nowrap "
+                  className="px-6 py-4 font-medium   whitespace-nowrap max-w-[20%] "
                 >
                   {data.name}
                 </th>
-                <td className="px-6 py-4">{data.title}</td>
-                <td className="px-6 py-4">{data.generation}</td>
+                <td className="px-6 py-4 max-w-[20%]">{data.title}</td>
+                <td className="px-6 py-4 text-center">{data.generation}</td>
                 <td className="px-6 py-4">
-                  <a
-                    className="hover:underline hover:text-black underline text-blue-400"
-                    href=""
-                  >
-                    {data.file}
-                  </a>
+                  <div className="flex flex-col gap-2 items-center">
+                    {data.seminarDate}
+                    <a
+                      className="hover:underline hover:text-black underline text-blue-400"
+                      href=""
+                    >
+                      {data.file}
+                    </a>
+                  </div>
                 </td>
 
                 <td className="px-6 py-4 text-right flex gap-2">
