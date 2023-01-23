@@ -8,7 +8,7 @@ export default function progresMahasiswa() {
       <h1 className="text-4xl uppercase font-bold">
         Progres Skripsi Mahasiswa
       </h1>
-      <div className="flex h-screen flex-col justify-center items-center">
+      <div className="flex p-4 flex-col justify-center items-center">
         <ProgresList></ProgresList>
       </div>
     </LayoutDosen>

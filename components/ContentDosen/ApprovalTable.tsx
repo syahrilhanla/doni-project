@@ -50,8 +50,8 @@ export default function ApprovalTable() {
   return (
     <div>
       <div className="inline-block overflow-x-auto shadow-md sm:rounded-lg sm:max-w-full max-w-[350px] max-h-[500px] ">
-        <table className="text-sm text-left text-gray-900 ">
-          <thead className="text-xs text-white uppercase bg-patternTwo sticky top-0 z-50 ">
+        <table className="text-sm text-left text-gray-900 capitalize ">
+          <thead className="text-xs text-white bg-patternTwo sticky top-0 z-50 ">
             <tr>
               <th scope="col" className="px-6 py-3 max-w-[20%]">
                 <div className="flex items-center gap-2">
@@ -84,17 +84,20 @@ export default function ApprovalTable() {
           </thead>
           <tbody>
             {content.map((data) => (
-              <tr key={data.id} className="bg-gray-200 border-b ">
+              <tr
+                key={data.id}
+                className="even:bg-[#f0ebf8d7] odd:bg-white border-b "
+              >
                 <th
                   scope="row"
-                  className="px-6 py-4 font-medium   whitespace-nowrap max-w-[20%] "
+                  className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
                 >
                   {data.name}
                 </th>
-                <td className="px-6 py-4 max-w-[20%]">{data.title}</td>
-                <td className="px-6 py-4">{data.generation}</td>
+                <td className="px-6 py-2 max-w-[20%]">{data.title}</td>
+                <td className="px-6 py-2">{data.generation}</td>
 
-                <td className="px-6 py-4 text-right flex gap-2">
+                <td className="px-6 py-2 text-right flex gap-2">
                   <a
                     href="#"
                     className="font-medium text-white hover:bg-white hover:text-green-500 bg-green-500 p-2 rounded-md"
