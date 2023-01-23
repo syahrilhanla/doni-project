@@ -9,7 +9,7 @@ export default function SidebarDosen() {
   const menuItems = [
     {
       href: "/approval",
-      title: "Approval",
+      title: "Persetujuan Judul",
     },
     {
       href: "/progresMahasiswa",
