@@ -194,9 +194,7 @@ export default function ProgresList() {
                 <td scope="row" className="px-4 py-2 font-medium   w-[20%]">
                   {data.name}
                 </td>
-                <td className=" px-2 py-2 w-[20%] text-center">
-                  "{data.title}"
-                </td>
+                <td className=" px-2 py-2 w-[20%] text-center">{data.title}</td>
                 <td className=" text-center px-2 py-2 w-[5%]">
                   {data.generation}
                 </td>
