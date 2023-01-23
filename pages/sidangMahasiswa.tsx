@@ -9,7 +9,7 @@ export default function sidangMahasiswa() {
       <h1 className="text-4xl uppercase font-bold">
         File Skripsi Sidang Akhir
       </h1>
-      <div className="flex h-screen flex-col justify-center items-center">
+      <div className="flex p-4 flex-col justify-center items-center">
         <SidangList></SidangList>
       </div>
     </LayoutDosen>

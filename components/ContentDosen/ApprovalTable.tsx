@@ -1,7 +1,6 @@
 import React from "react";
 import { RiSortDesc } from "react-icons/ri";
 
-
 interface dataTable {
   id: number;
   name: string;
@@ -50,15 +49,20 @@ export default function ApprovalTable() {
   ];
   return (
     <div>
-          <div className="relative overflow-x-auto shadow-md sm:rounded-lg max-h-[500px] ">
-        <table className="text-sm text-left text-gray-900 w-full ">
-          <thead className="text-xs text-white uppercase bg-patternTwo sticky top-0 z-50 ">
+      <div className="inline-block overflow-x-auto shadow-md sm:rounded-lg sm:max-w-full max-w-[350px] max-h-[500px] ">
+        <table className="text-sm text-left text-gray-900 capitalize ">
+          <thead className="text-xs text-white bg-patternTwo sticky top-0 z-50 ">
             <tr>
-              <th scope="col" className="px-6 py-3">
-                Nama
+              <th scope="col" className="px-6 py-3 max-w-[20%]">
+                <div className="flex items-center gap-2">
+                  Nama
+                  <a href="#">
+                    <RiSortDesc></RiSortDesc>
+                  </a>
+                </div>
               </th>
               <th scope="col" className="px-6 py-3">
-                <div className="flex items-center">
+                <div className="flex items-center gap-2">
                   Judul
                   <a href="#">
                     <RiSortDesc></RiSortDesc>
@@ -66,7 +70,7 @@ export default function ApprovalTable() {
                 </div>
               </th>
               <th scope="col" className="px-6 py-3">
-                <div className="flex items-center">
+                <div className="flex items-center gap-2">
                   Angkatan
                   <a href="#">
                     <RiSortDesc></RiSortDesc>
@@ -74,28 +78,26 @@ export default function ApprovalTable() {
                 </div>
               </th>
               <th scope="col" className="px-6 py-3">
-                <div className="flex items-center">
-                  Aksi
-                  <a href="#">
-                    <RiSortDesc></RiSortDesc>
-                  </a>
-                </div>
+                <div className="flex items-center justify-center">Aksi</div>
               </th>
             </tr>
           </thead>
           <tbody>
             {content.map((data) => (
-              <tr key={data.id} className="bg-gray-200 border-b ">
+              <tr
+                key={data.id}
+                className="even:bg-[#f0ebf8d7] odd:bg-white border-b "
+              >
                 <th
                   scope="row"
-                  className="px-6 py-4 font-medium   whitespace-nowrap "
+                  className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
                 >
                   {data.name}
                 </th>
-                <td className="px-6 py-4">{data.title}</td>
-                <td className="px-6 py-4">{data.generation}</td>
+                <td className="px-6 py-2 max-w-[20%]">{data.title}</td>
+                <td className="px-6 py-2">{data.generation}</td>
 
-                <td className="px-6 py-4 text-right flex gap-2">
+                <td className="px-6 py-2 text-right flex gap-2">
                   <a
                     href="#"
                     className="font-medium text-white hover:bg-white hover:text-green-500 bg-green-500 p-2 rounded-md"
