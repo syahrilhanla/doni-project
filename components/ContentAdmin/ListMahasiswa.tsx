@@ -2,13 +2,17 @@ import React, { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCheckLg, BsTrash } from "react-icons/bs";
 import { RiSortDesc, RiCloseLine } from "react-icons/ri";
+import { FaTrash } from "react-icons/fa";
+import FilterSection from "../Layout/FilterSection";
 
 interface dataTable {
   id: number;
   name: string;
   nim: string;
-  seminar: boolean;
-  sidang: boolean;
+  dosenSatu: string;
+  dosenDua: string;
+  seminar: string;
+  sidang: string;
 }
 
 export default function ListMahasiswa() {
@@ -17,48 +21,61 @@ export default function ListMahasiswa() {
     {
       id: 1,
       name: "nama 1",
-      nim: "nim 1",
-      seminar: true,
-      sidang: false,
+      nim: "1719201018173",
+      dosenSatu: "dosen 1",
+      dosenDua: "dosen 2",
+      seminar: "seminar 1",
+      sidang: "sidang 1",
     },
     {
       id: 2,
       name: "nama 12",
-      nim: "nim 12",
-      seminar: true,
-      sidang: false,
+      nim: "1929182723111",
+      dosenSatu: "dosen 1",
+      dosenDua: "dosen 2",
+      seminar: "seminar 1",
+      sidang: "sidang 1",
     },
     {
       id: 3,
       name: "nama 13",
-      nim: "nim 13",
-      seminar: false,
-      sidang: false,
+      nim: "2019182722222",
+      dosenSatu: "dosen 1",
+      dosenDua: "dosen 2",
+      seminar: "seminar 1",
+      sidang: "sidang 1",
     },
     {
       id: 4,
       name: "nama 14",
-      nim: "nim 14",
-      seminar: true,
-      sidang: true,
+      nim: "2192992822223",
+      dosenSatu: "dosen 1",
+      dosenDua: "dosen 2",
+      seminar: "seminar 1",
+      sidang: "sidang 1",
     },
     {
       id: 5,
       name: "nama 15",
-      nim: "nim 15",
-      seminar: true,
-      sidang: true,
+      nim: "2209390029222",
+      dosenSatu: "dosen 1",
+      dosenDua: "dosen 2",
+      seminar: "seminar 1",
+      sidang: "sidang 1",
     },
     {
       id: 6,
       name: "nama 16",
-      nim: "nim 16",
-      seminar: false,
-      sidang: true,
+      nim: "1821122222313",
+      dosenSatu: "dosen 1",
+      dosenDua: "dosen 2",
+      seminar: "seminar 1",
+      sidang: "sidang 1",
     },
   ];
   return (
     <div>
+      <FilterSection />
       {hapus && (
         <div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
           <div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />
@@ -116,13 +133,33 @@ export default function ListMahasiswa() {
                   </a>
                 </div>
               </th>
-
               <th scope="col" className="px-6 py-3">
-                <div className="flex items-center justify-center">Seminar</div>
+                <div className="flex items-center gap-2">
+                  Dosen Pembimbing 1
+                  <a href="#">
+                    <RiSortDesc />
+                  </a>
+                </div>
+              </th>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center gap-2">
+                  Dosen Pembimbing 2
+                  <a href="#">
+                    <RiSortDesc />
+                  </a>
+                </div>
               </th>
 
               <th scope="col" className="px-6 py-3">
-                <div className="flex items-center justify-center">Sidang</div>
+                <div className="flex items-center justify-center">
+                  Seminar Hasil
+                </div>
+              </th>
+
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center justify-center">
+                  Sidang Akhir
+                </div>
               </th>
               <th scope="col" className="px-6 py-3">
                 <div className="flex items-center justify-center">Aksi</div>
@@ -142,35 +179,21 @@ export default function ListMahasiswa() {
                   {data.name}
                 </th>
                 <td className="px-6 py-2 max-w-[20%]">{data.nim}</td>
+                <td className="px-6 py-2 max-w-[20%]">{data.dosenSatu}</td>
+                <td className="px-6 py-2 max-w-[20%]">{data.dosenDua}</td>
 
-                <td className="px-6 py-2 justify-center items-center flex gap-2">
-                  {data.seminar ? (
-                    <button className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white  hover:text-green-500 bg-green-500 p-2 rounded-md">
-                      <BsCheckLg />
-                    </button>
-                  ) : (
-                    <button className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md">
-                      <AiOutlineClose />
-                    </button>
-                  )}
+                <td className="px-6 py-2 text-center">
+                  {data.seminar ? <p>tanggal</p> : <p>belum</p>}
                 </td>
-                <td className="px-6 py-2 ">
-                  {data.sidang ? (
-                    <button className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white  hover:text-green-500 bg-green-500 p-2 rounded-md">
-                      <BsCheckLg />
-                    </button>
-                  ) : (
-                    <button className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md">
-                      <AiOutlineClose />
-                    </button>
-                  )}
+                <td className="px-6 py-2 text-center ">
+                  {data.sidang ? <p>tanggal</p> : <p>belum</p>}
                 </td>
                 <td className="px-6 py-2">
                   <button
                     onClick={() => setHapus(!hapus)}
-                    className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
+                    className="font-medium text-white hover:opacity-50 duration-150 bg-[#D0312D] p-2 rounded-md"
                   >
-                    <BsTrash />
+                    <FaTrash />
                   </button>
                 </td>
               </tr>
