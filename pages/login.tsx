@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import Router from "next/router";
 interface IFormInput {
   username: string;
   password: string;
@@ -21,8 +22,16 @@ const Dashboard = () => {
   } = useForm<IFormInput>({
     resolver: yupResolver(schema),
   });
-  const onSubmit = (data: IFormInput) => window.alert("Login Berhasil");
   // const onSubmit: SubmitHandler<IFormInput> = data => console.log(data);
+  const onSubmit = (data: IFormInput) => {
+    if (data.username.includes("@mhs.ulm.ac.id")){
+      console.log(data.username);
+            
+    }
+    else {
+      return
+    }
+  }
   return (
     <div>
       <section className="bg-gradient-to-r from-[#5E548E] via-[#9F86C0] to-[#BE95C4] h-screen">
