@@ -6,25 +6,21 @@ import { RiCheckFill } from "react-icons/ri";
 import { GiProgression, GiFinishLine } from "react-icons/gi";
 import { HiOutlinePresentationChartBar } from "react-icons/hi";
 
-export default function SidebarDosen() {
+export default function SidebarAdmin() {
   const router = useRouter();
 
   const menuItems = [
     {
-      href: "/approval",
-      title: "Persetujuan Judul",
+      href: "/request",
+      title: "Permintaan Pendaftaran Mahasiswa",
     },
     {
-      href: "/progresMahasiswa",
-      title: "Progres Mahasiswa",
+      href: "/daftarMahasiswa",
+      title: "Daftar Mahasiswa Skripsi",
     },
     {
-      href: "/seminarMahasiswa",
-      title: "Seminar Hasil Mahasiswa",
-    },
-    {
-      href: "/sidangMahasiswa",
-      title: "Sidang Akhir Mahasiswa",
+      href: "/daftarDosen",
+      title: "Daftar Dosen Pembimbing",
     },
   ];
   return (

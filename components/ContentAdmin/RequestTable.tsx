@@ -1,66 +1,54 @@
 import React, { useState } from "react";
-import { RiCloseLine, RiSortDesc } from "react-icons/ri";
+import { AiOutlineClose } from "react-icons/ai";
+import { BsCheckLg } from "react-icons/bs";
+import { RiSortDesc, RiCloseLine } from "react-icons/ri";
 
 interface dataTable {
   id: number;
   name: string;
-  title: string;
-  file: string;
-  generation: number;
-  seminarDate: string;
+  nim: string;
+  status: boolean;
 }
 
-export default function SeminarList() {
+export default function RequestTable() {
   const [setuju, setSetuju] = useState<any>(false);
   const [tolak, setTolak] = useState<any>(false);
   const content: dataTable[] = [
     {
       id: 1,
       name: "nama 1",
-      title: "title 1",
-      file: "cek",
-      generation: 1,
-      seminarDate: "23 Jan 2023",
+      nim: "nim 1",
+      status: true,
     },
     {
       id: 2,
       name: "nama 12",
-      title: "title 12",
-      file: "cek",
-      generation: 2,
-      seminarDate: "23 Jan 2023",
+      nim: "nim 12",
+      status: true,
     },
     {
       id: 3,
       name: "nama 13",
-      title: "title 13",
-      file: "cek",
-      generation: 3,
-      seminarDate: "23 Jan 2023",
+      nim: "nim 13",
+      status: true,
     },
     {
       id: 4,
       name: "nama 14",
-      title: "title 14",
-      file: "cek",
-      generation: 4,
-      seminarDate: "23 Jan 2023",
+      nim: "nim 14",
+      status: true,
     },
     {
       id: 5,
       name: "nama 15",
-      title: "title 15",
-      file: "cek",
-      generation: 5,
-      seminarDate: "23 Jan 2023",
+      nim: "nim 15",
+      status: true,
     },
     {
       id: 6,
       name: "nama 16",
-      title: "title 16",
-      file: "cek",
-      generation: 6,
-      seminarDate: "23 Jan 2023",
+      nim: "nim 16",
+      status: true,
     },
   ];
   return (
@@ -80,8 +68,7 @@ export default function SeminarList() {
 
               <div className="p-4 flex flex-col gap-2">
                 <p className="block text-xl mt-6 font-medium text-gray-900 ">
-                  Apakah anda ingin menyutujui seminar hasil untuk mahasiswa
-                  ini?
+                  Apakah anda ingin menyetujui permintaan ini?
                 </p>
                 <div className="p-4 flex gap-2 justify-end items-end">
                   <button
@@ -117,7 +104,7 @@ export default function SeminarList() {
 
               <div className="p-4 flex flex-col gap-2">
                 <p className="block text-xl mt-6 font-medium text-gray-900 ">
-                  Apakah anda ingin menolak seminar hasil untuk mahasiswa ini?
+                  Apakah anda ingin menolak permintaan ini?
                 </p>
                 <div className="p-4 flex gap-2 justify-end items-end">
                   <button
@@ -138,39 +125,30 @@ export default function SeminarList() {
           </div>
         </div>
       )}
-      <div className=" inline-block overflow-x-auto shadow-md sm:rounded-lg max-h-[500px] max-w-[350px] sm:max-w-full">
+
+      <div className="inline-block overflow-auto shadow-md sm:rounded-lg sm:max-w-full max-w-[350px] max-h-[500px] ">
         <table className="text-sm text-left text-gray-900 capitalize ">
-          <thead className="text-xs text-white  bg-patternTwo sticky top-0 z-auto ">
+          <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto ">
             <tr>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3 max-w-[20%]">
                 <div className="flex items-center gap-2">
                   Nama
                   <a href="#">
-                    <RiSortDesc />
+                    <RiSortDesc></RiSortDesc>
                   </a>
                 </div>
               </th>
               <th scope="col" className="px-6 py-3">
                 <div className="flex items-center gap-2">
-                  Judul
+                  NIM
                   <a href="#">
-                    <RiSortDesc />
+                    <RiSortDesc></RiSortDesc>
                   </a>
                 </div>
               </th>
+
               <th scope="col" className="px-6 py-3">
-                <div className="flex items-center gap-2">
-                  Angkatan
-                  <a href="#">
-                    <RiSortDesc />
-                  </a>
-                </div>
-              </th>
-              <th scope="col" className="px-6 py-3">
-                <div className="flex items-center">Berkas</div>
-              </th>
-              <th scope="col" className="px-6 py-3">
-                <div className="flex items-center justify-center">Aksi</div>
+                <div className="flex items-center justify-center">Status</div>
               </th>
             </tr>
           </thead>
@@ -178,7 +156,7 @@ export default function SeminarList() {
             {content.map((data) => (
               <tr
                 key={data.id}
-                className="even:bg-[#f0ebf8d7] odd:bg-white border-b "
+                className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
               >
                 <th
                   scope="row"
@@ -186,32 +164,20 @@ export default function SeminarList() {
                 >
                   {data.name}
                 </th>
-                <td className="px-6 py-2 max-w-[20%]">{data.title}</td>
-                <td className="px-6 py-2 text-center">{data.generation}</td>
-                <td className="py-1">
-                  <div className="flex flex-col items-center">
-                    {data.seminarDate}
-                    <a
-                      className="hover:underline hover:text-black underline text-blue-400"
-                      href=""
-                    >
-                      {data.file}
-                    </a>
-                  </div>
-                </td>
+                <td className="px-6 py-2 max-w-[20%]">{data.nim}</td>
 
                 <td className="px-6 py-2 text-right flex gap-2">
                   <button
                     onClick={() => setSetuju(!setuju)}
-                    className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white hover:text-green-500 bg-green-500 p-2 rounded-md"
+                    className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white  hover:text-green-500 bg-green-500 p-2 rounded-md"
                   >
-                    Setuju
+                    <BsCheckLg className="" />
                   </button>
                   <button
                     onClick={() => setTolak(!tolak)}
                     className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
                   >
-                    Tolak
+                    <AiOutlineClose />
                   </button>
                 </td>
               </tr>
