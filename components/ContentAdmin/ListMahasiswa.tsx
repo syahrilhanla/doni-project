@@ -17,6 +17,8 @@ interface dataTable {
 
 export default function ListMahasiswa() {
   const [hapus, setHapus] = useState<any>(false);
+  const [dosenacc1, setDosenacc1] = useState("27 February 2023")
+  const [dosenacc2, setDosenacc2] = useState("27 Maret 2023")
   const content: dataTable[] = [
     {
       id: 1,
@@ -24,8 +26,8 @@ export default function ListMahasiswa() {
       nim: "1719201018173",
       dosenSatu: "dosen 1",
       dosenDua: "dosen 2",
-      seminar: "seminar 1",
-      sidang: "sidang 1",
+      seminar: "27 February 2023",
+      sidang: "27 Maret 2023",
     },
     {
       id: 2,
@@ -33,8 +35,8 @@ export default function ListMahasiswa() {
       nim: "1929182723111",
       dosenSatu: "dosen 1",
       dosenDua: "dosen 2",
-      seminar: "seminar 1",
-      sidang: "sidang 1",
+      seminar: "Ajukan",
+      sidang: "Belum",
     },
     {
       id: 3,
@@ -42,8 +44,8 @@ export default function ListMahasiswa() {
       nim: "2019182722222",
       dosenSatu: "dosen 1",
       dosenDua: "dosen 2",
-      seminar: "seminar 1",
-      sidang: "sidang 1",
+      seminar: "27 February 2023",
+      sidang: "Ajukan",
     },
     {
       id: 4,
@@ -51,8 +53,8 @@ export default function ListMahasiswa() {
       nim: "2192992822223",
       dosenSatu: "dosen 1",
       dosenDua: "dosen 2",
-      seminar: "seminar 1",
-      sidang: "sidang 1",
+      seminar: "Belum",
+      sidang: "Belum",
     },
     {
       id: 5,
@@ -60,8 +62,8 @@ export default function ListMahasiswa() {
       nim: "2209390029222",
       dosenSatu: "dosen 1",
       dosenDua: "dosen 2",
-      seminar: "seminar 1",
-      sidang: "sidang 1",
+      seminar: "Belum",
+      sidang: "Belum",
     },
     {
       id: 6,
@@ -69,8 +71,8 @@ export default function ListMahasiswa() {
       nim: "1821122222313",
       dosenSatu: "dosen 1",
       dosenDua: "dosen 2",
-      seminar: "seminar 1",
-      sidang: "sidang 1",
+      seminar: "Belum",
+      sidang: "Belum",
     },
   ];
   return (
@@ -183,10 +185,26 @@ export default function ListMahasiswa() {
                 <td className="px-6 py-2 max-w-[20%]">{data.dosenDua}</td>
 
                 <td className="px-6 py-2 text-center">
-                  {data.seminar ? <p>tanggal</p> : <p>belum</p>}
+                  {data.seminar === "Belum" ? <p>belum</p>
+                    : data.seminar === dosenacc1 ? dosenacc1
+                      : 
+                  <button
+                    className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
+                  >
+                    Tanggal Seminar
+                  </button>
+                  }
                 </td>
                 <td className="px-6 py-2 text-center ">
-                  {data.sidang ? <p>tanggal</p> : <p>belum</p>}
+                 {data.sidang === "Belum" ? <p>belum</p>
+                    : data.sidang === dosenacc2 ? dosenacc2
+                      : 
+                  <button
+                    className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
+                  >
+                    Tanggal Sidang
+                  </button>
+                  }
                 </td>
                 <td className="px-6 py-2">
                   <button
