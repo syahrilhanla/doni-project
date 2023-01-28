@@ -121,7 +121,7 @@ export default function ProgresList() {
                 <div className="flex items-center gap-2 justify-center">
                   Nama
                   <a href="#">
-                    <RiSortDesc></RiSortDesc>
+                    <RiSortDesc />
                   </a>
                 </div>
               </th>
@@ -129,7 +129,7 @@ export default function ProgresList() {
                 <div className="flex items-center gap-2 justify-center">
                   Judul
                   <a href="#">
-                    <RiSortDesc></RiSortDesc>
+                    <RiSortDesc />
                   </a>
                 </div>
               </th>
@@ -137,7 +137,7 @@ export default function ProgresList() {
                 <div className="flex items-center gap-2">
                   Angkatan
                   <a href="#">
-                    <RiSortDesc></RiSortDesc>
+                    <RiSortDesc />
                   </a>
                 </div>
               </th>
@@ -154,7 +154,7 @@ export default function ProgresList() {
                 <div className="flex items-center text-center gap-2">
                   Seminar Hasil
                   <a href="#">
-                    <RiSortDesc></RiSortDesc>
+                    <RiSortDesc />
                   </a>
                 </div>
               </th>
@@ -162,7 +162,7 @@ export default function ProgresList() {
                 <div className="flex items-center text-center gap-2">
                   Sidang Akhir
                   <a href="#">
-                    <RiSortDesc></RiSortDesc>
+                    <RiSortDesc />
                   </a>
                 </div>
               </th>

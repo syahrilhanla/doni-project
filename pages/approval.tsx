@@ -10,7 +10,7 @@ export default function approval() {
       </h1>
 
       <div className="flex p-4 flex-col justify-center items-center">
-        <ApprovalTable></ApprovalTable>
+        <ApprovalTable />
       </div>
     </LayoutDosen>
   );
