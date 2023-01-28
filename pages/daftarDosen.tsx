@@ -7,7 +7,7 @@ export default function daftarDosen() {
     <LayoutAdmin>
       <h1 className="text-4xl uppercase font-bold">Daftar Dosen Pembimbing</h1>
 
-      <div className="flex p-4 flex-col justify-center items-center">
+      <div className="flex p-4 flex-col justify-center items-center my-auto">
         <ListDosen />
       </div>
     </LayoutAdmin>
