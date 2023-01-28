@@ -3,11 +3,13 @@ import Layout from "../components/Layout/Layout";
 import { BsFillPersonFill } from "react-icons/bs";
 import { RiCloseLine } from "react-icons/ri";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const Dashboard = () => {
 	const [judul, setJudul] = useState(false);
 	const [ajukan, setAjukan] = useState(false);
 	return (
+		<ProtectedRoute>
 		<Layout>
 			<div className="h-screen px-4 overflow-auto py-4">
 				<div className="flex lg:space-between xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col  mt-5 mb-2 mx-4">
@@ -128,7 +130,8 @@ const Dashboard = () => {
 				</div>
 
 			</div>
-		</Layout>
+			</Layout>
+				</ProtectedRoute>
 	);
 };
 

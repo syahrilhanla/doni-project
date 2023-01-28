@@ -1,8 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
+import { useAuth } from "../components/Context/AuthContext";
+
 
 interface formInput {
   name: String;
@@ -42,6 +45,8 @@ const schema = yup.object().shape({
 });
 
 export default function Register() {
+  const { signUp } = useAuth();
+const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -49,8 +54,15 @@ export default function Register() {
   } = useForm<formInput>({
     resolver: yupResolver(schema),
   });
-  const onSubmit: SubmitHandler<formInput> = (data) =>
-    window.alert("Data berhasil disimpan");
+
+  const onSubmit : SubmitHandler<formInput>= async (data) => {
+  try {
+    await signUp(data.email, data.password)
+    router.push("/dashboard");
+  } catch (error: any) {
+    console.log(error.message);
+  }
+};
   return (
     <div>
       <section className="h-screen overflow-auto bg-gradient-to-t from-patternThree via-patternTwo to-patternOne  text-gray-900">

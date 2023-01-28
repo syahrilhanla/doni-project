@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useAuth } from "../components/Context/AuthContext";
+import { useRouter } from "next/router";
 interface IFormInput {
   username: string;
   password: string;
@@ -21,7 +23,17 @@ const Dashboard = () => {
   } = useForm<IFormInput>({
     resolver: yupResolver(schema),
   });
-  const onSubmit = (data: IFormInput) => window.alert("Login Berhasil");
+  const { logIn } = useAuth();
+  const router = useRouter();
+  const onSubmit = async (data: IFormInput) => {
+    try {
+      await logIn(data.username, data.password);
+      router.push("/dashboard");
+    } catch (error: any) {
+      console.log(error.message);
+    }
+ };
+  
   // const onSubmit: SubmitHandler<IFormInput> = data => console.log(data);
   return (
     <div>
