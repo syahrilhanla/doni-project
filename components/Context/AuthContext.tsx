@@ -4,13 +4,16 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  Auth,
 } from "firebase/auth";
 import  { auth, db } from "../Store/firebase";
 import {
-  collection,
+
   getFirestore,
   setDoc,
   doc,
+  getDoc,
+  DocumentSnapshot,
 } from "firebase/firestore";
 
 
@@ -46,9 +49,11 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
   
  const signUp = (email: string, password: string, username:string, name:string, phoneNumber:string,generation:string) => {
    return createUserWithEmailAndPassword(auth, email, password)
-     .then(() => {
+     .then((response) => {
+       const user1 = response.user.uid
        try {
-         const studentsCol = setDoc(doc(collection(db, 'studentsList')),  {
+         const studentsCol = setDoc(doc(db, 'studentsList', user1), {
+          uid: user1,
            email: email,
            password: password,
            username: username,
@@ -71,7 +76,18 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
   };
 
   const logIn = (email: string, password: string) => {
-    return signInWithEmailAndPassword(auth, email, password);
+    return signInWithEmailAndPassword(auth, email, password)
+      .then((response) => {
+        setUser(response.user);
+        getDoc(doc(db, "studentsList", response.user.uid))
+          .then((userData:any) => {
+            if (userData.data()) {
+            setUser(userData.data())
+          }
+        })
+         return response.user
+      })
+      ;
   };
 
   const logOut = async () => {

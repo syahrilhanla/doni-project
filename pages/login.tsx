@@ -27,14 +27,14 @@ const Dashboard = () => {
   const router = useRouter();
   const [elogin, setElogin] = useState(false);
   const onSubmit = async (data: IFormInput) => {
-    try {
-      await logIn(data.username, data.password);
-      router.push("/dashboard");
+  try {
+        await logIn(data.username, data.password);
+        router.push("/dashboard");
     } catch (error: any) {
       setElogin(true)
     }
- };
-  
+  };
+
   // const onSubmit: SubmitHandler<IFormInput> = data => console.log(data);
   return (
     <div>
@@ -49,10 +49,10 @@ const Dashboard = () => {
                       Masuk
                     </p>
                   </div>
-                  {elogin && 
-                   <p className="bg-red-100 mt-1 mb-4 text-center text-red-900 text-sm rounded-lg block w-full p-2.5 font-semibold">
-                        {"Kamu belum terdaftar !"}
-                      </p>
+                  {elogin &&
+                    <p className="bg-red-100 mt-1 mb-4 text-center text-red-900 text-sm rounded-lg block w-full p-2.5 font-semibold">
+                      {"Kamu belum terdaftar !"}
+                    </p>
                   }
                   <div className="mb-6">
                     <label className="block mb-2 text-sm font-medium text-gray-900 ">
@@ -99,7 +99,7 @@ const Dashboard = () => {
                   <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5" />
                   <div className="text-center">
                     <p className="text-sm font-semibold mt-2 pt-1 mb-6">
-                      Belum punya akun? 
+                      Belum punya akun?
                       <Link href="/register">
                         <button className="text-[#BE95C4] ml-1 hover:text-[#5E548E] focus:text-red-700 transition duration-200 ease-in-out">
                           {" Daftar"}
