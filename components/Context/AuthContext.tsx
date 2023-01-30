@@ -5,7 +5,15 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { auth } from "../Store/firebase";
+import  { auth, db } from "../Store/firebase";
+import {
+  collection,
+  getFirestore,
+  setDoc,
+  doc,
+} from "firebase/firestore";
+
+
 
 interface UserType {
   email: string | null;
@@ -35,10 +43,31 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
 
     return () => unsubscribe();
   }, []);
-
-
- const signUp = (email: string, password: string) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+  
+ const signUp = (email: string, password: string, username:string, name:string, phoneNumber:string,generation:string) => {
+   return createUserWithEmailAndPassword(auth, email, password)
+     .then(() => {
+       try {
+         const studentsCol = setDoc(doc(collection(db, 'studentsList')),  {
+           email: email,
+           password: password,
+           username: username,
+           phoneNumber: phoneNumber,
+           name: name,
+           generation: generation,
+           profOne: "",
+           profTwo: "",
+           profilePict: "",
+           note: "",
+           statusApprove: "",
+           progresStatus: "",
+           
+         })
+       } catch (e) {
+         console.log(e);
+         
+       }
+     })
   };
 
   const logIn = (email: string, password: string) => {

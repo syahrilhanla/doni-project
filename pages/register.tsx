@@ -57,8 +57,8 @@ const router = useRouter();
 
   const onSubmit : SubmitHandler<formInput>= async (data) => {
   try {
-    await signUp(data.email, data.password)
-    router.push("/dashboard");
+    await signUp(data.email, data.password, data.username, data.name, data.phoneNumber, data.generation)
+    router.push("/login");
   } catch (error: any) {
     console.log(error.message);
   }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -25,12 +25,13 @@ const Dashboard = () => {
   });
   const { logIn } = useAuth();
   const router = useRouter();
+  const [elogin, setElogin] = useState(false);
   const onSubmit = async (data: IFormInput) => {
     try {
       await logIn(data.username, data.password);
       router.push("/dashboard");
     } catch (error: any) {
-      console.log(error.message);
+      setElogin(true)
     }
  };
   
@@ -48,6 +49,11 @@ const Dashboard = () => {
                       Masuk
                     </p>
                   </div>
+                  {elogin && 
+                   <p className="bg-red-100 mt-1 mb-4 text-center text-red-900 text-sm rounded-lg block w-full p-2.5 font-semibold">
+                        {"Kamu belum terdaftar !"}
+                      </p>
+                  }
                   <div className="mb-6">
                     <label className="block mb-2 text-sm font-medium text-gray-900 ">
                       {"NIM/Username"}
