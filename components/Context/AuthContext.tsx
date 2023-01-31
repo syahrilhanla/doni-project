@@ -89,13 +89,40 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
       })
       ;
   };
-
+ const logInDosen = (email: string, password: string) => {
+    return signInWithEmailAndPassword(auth, email, password)
+      .then((response) => {
+        setUser(response.user);
+        getDoc(doc(db, "professorList", response.user.uid))
+          .then((userData:any) => {
+            if (userData.data()) {
+            setUser(userData.data())
+          }
+        })
+         return response.user
+      })
+      ;
+  };
+ const logInAdmin = (email: string, password: string) => {
+    return signInWithEmailAndPassword(auth, email, password)
+      .then((response) => {
+        setUser(response.user);
+        getDoc(doc(db, "adminList", response.user.uid))
+          .then((userData:any) => {
+            if (userData.data()) {
+            setUser(userData.data())
+          }
+        })
+         return response.user
+      })
+      ;
+  };
   const logOut = async () => {
     setUser({ email: null, uid: null });
     await signOut(auth);
   };
   return (
-<AuthContext.Provider value={{ user, signUp, logIn, logOut }}>
+<AuthContext.Provider value={{ user, signUp, logIn, logOut, logInDosen, logInAdmin }}>
       {loading ? null : children}
     </AuthContext.Provider>
   );

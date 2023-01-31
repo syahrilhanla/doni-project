@@ -23,16 +23,36 @@ const Dashboard = () => {
   } = useForm<IFormInput>({
     resolver: yupResolver(schema),
   });
-  const { logIn } = useAuth();
+  const { logIn, logInDosen, logInAdmin } = useAuth();
   const router = useRouter();
   const [elogin, setElogin] = useState(false);
   const onSubmit = async (data: IFormInput) => {
-  try {
+    if (data.username.includes("@mhs.ulm.ac.id")) {
+      try {
         await logIn(data.username, data.password);
         router.push("/dashboard");
-    } catch (error: any) {
+      } catch (error: any) {
+        setElogin(true)
+      }
+    } else if (data.username.includes("@dosen.ulm.ac.id")) {
+         try {
+        await logInDosen(data.username, data.password);
+        router.push("/approval");
+      } catch (error: any) {
+        setElogin(true)
+      }
+      
+    } else if (data.username.includes("@admin.ulm.ac.id")) {
+       try {
+        await logInAdmin(data.username, data.password);
+        router.push("/request");
+      } catch (error: any) {
+        setElogin(true)
+      }
+    } else {
       setElogin(true)
     }
+
   };
 
   // const onSubmit: SubmitHandler<IFormInput> = data => console.log(data);

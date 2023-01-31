@@ -1,10 +1,12 @@
 import React from "react";
 import Navbar from "../Navbar/Navbar";
+import ProtectedRoute from "../ProtectedRoute";
 import SidebarAdmin from "../Sidebar/SidebarAdmin";
 import FilterSection from "./FilterSection";
 
 export default function LayoutAdmin(props: any) {
   return (
+    <ProtectedRoute>
     <div className="text-center flex flex-col min-h-screen relative">
       <Navbar />
       <div className="w-full min-h-[90vh] flex flex-row">
@@ -16,5 +18,6 @@ export default function LayoutAdmin(props: any) {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 }

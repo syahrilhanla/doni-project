@@ -1,10 +1,12 @@
 import React from "react";
 import Navbar from "../Navbar/Navbar";
+import ProtectedRoute from "../ProtectedRoute";
 import SidebarDosen from "../Sidebar/SidebarDosen";
 import FilterSection from "./FilterSection";
 
 export default function LayoutDosen(props: any) {
   return (
+    <ProtectedRoute>
     <div className="text-center flex flex-col min-h-screen relative">
       <Navbar />
       <div className="w-full min-h-[90vh] flex flex-row">
@@ -17,5 +19,6 @@ export default function LayoutDosen(props: any) {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 }
