@@ -5,10 +5,11 @@ import React from "react";
 import { RiCheckFill } from "react-icons/ri";
 import { GiProgression, GiFinishLine } from "react-icons/gi";
 import { HiOutlinePresentationChartBar } from "react-icons/hi";
+import { useAuth } from "../Context/AuthContext";
 
 export default function SidebarDosen() {
   const router = useRouter();
-
+const { user } = useAuth();
   const menuItems = [
     {
       href: "/approval",
@@ -31,6 +32,34 @@ export default function SidebarDosen() {
     <div className="flex flex-1 z-50 min-h-full">
       {/* sidebar  */}
       <div className="bg-[#F0EBF8] min-w-[300px] flex flex-col justify-center p-2 ">
+        <ul className="space-y-2 mt-5">
+          <li>
+            <div className="flex flex-col gap-4 h-50 ml-2 mr-2 rounded-xl
+              shadow-sm bg-[#faf8fd] py-12 mb-5 text-[#9F86C0]"
+            >
+              <div className="flex justify-center items-center">
+                <div className="h-32 w-32 rounded-full relative
+                  overflow-hidden mr-2">
+                  <Image
+                    alt="student picture"
+                    src={"/reminz.jfif"}
+                    fill
+                    className="rounded-full"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-2 justify-center items-center
+                  font-normal text-lg">
+                <p>
+                  {user.name}
+                </p>
+                <p className="text-base font-normal">
+                  {user.username}
+                </p>
+              </div>
+            </div>
+          </li>
+        </ul>
         <ul className="flex flex-col gap-2 px-1.5">
           {menuItems.map(({ href, title }) => (
             <li key={title}>

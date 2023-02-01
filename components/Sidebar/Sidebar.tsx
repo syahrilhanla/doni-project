@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { useRouter } from "next/router";
+import { useAuth } from "../Context/AuthContext";
 
 const Sidebar = () => {
   const router = useRouter();
@@ -24,7 +25,7 @@ const Sidebar = () => {
       title: "Sidang Akhir",
     },
   ];
-
+ const { user } = useAuth();
   return (
     <div className="flex flex-1 z-50 min-h-full">
       {/* sidebar  */}
@@ -48,10 +49,10 @@ const Sidebar = () => {
               <div className="flex flex-col gap-2 justify-center items-center
                   font-normal text-lg">
                 <p>
-                  Muhammad Ridhoni
+                  {user.name}
                 </p>
                 <p className="text-base font-normal">
-                  1910131310029
+                  {user.username}
                 </p>
               </div>
             </div>
