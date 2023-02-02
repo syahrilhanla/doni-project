@@ -3,17 +3,22 @@ import Layout from "../components/Layout/Layout";
 import { BsFillPersonFill } from "react-icons/bs";
 import { RiCloseLine } from "react-icons/ri";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
+import { useAuth } from "../components/Context/AuthContext";
 
 const Dashboard = () => {
 	const [judul, setJudul] = useState(false);
 	const [ajukan, setAjukan] = useState(false);
+	  const { user } = useAuth();
+	console.log(user);
+	
 	return (
+	
 		<Layout>
 			<div className="h-screen px-4 overflow-auto py-4">
 				<div className="flex lg:space-between xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col  mt-5 mb-2 mx-4">
 					<div className="grid justify-items-start xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 py-4 px-3 w-2/5 h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
-						<div className=" text-lg text-center font-sans">Selamat Datang Muhammad Ridhoni </div>
-						<div className="font-black ">1910131310039</div>
+						<div className=" text-lg text-center font-sans">Selamat Datang {user.name?user.name:""} </div>
+						<div className="font-black ">{user.username}</div>
 					</div>
 					<div className="flex justify-center xxs:w-full items-center sm:max-md:w-full  md:max-lg:w-full  md:max-lg:mt-3 w-3/5 h-24 bg-[#f2e8f24f] text-[#683ab7d5] rounded-lg shadow-md">
 						{judul ? (
@@ -128,7 +133,8 @@ const Dashboard = () => {
 				</div>
 
 			</div>
-		</Layout>
+			</Layout>
+				
 	);
 };
 

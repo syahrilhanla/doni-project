@@ -6,6 +6,8 @@ import { TfiBell } from "react-icons/tfi";
 import NotificationList, {
   NotificationData,
 } from "../Notification/NotificationList";
+import { useAuth } from "../Context/AuthContext";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
   const [openNotification, setOpenNotification] = useState(false);
@@ -48,7 +50,16 @@ const Navbar = () => {
       isRead: false,
     },
   ];
-
+  const { user, logOut } = useAuth();
+  const router = useRouter();
+   const handleLogout = async () => {
+    try {
+      await logOut();
+      router.push("/login");
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
   return (
     <div className="flex flex-col top-12">
       <div
@@ -63,14 +74,23 @@ const Navbar = () => {
           <TfiBell className="text-2xl" />
           <span className="absolute top-1 right-2 p-1.5 rounded-full bg-red-500" />
         </button>
-        <Link href="/login">
+        
+        <button
+          onClick={handleLogout}
+            className="cursor-pointer hover:bg-white hover:font-extrabold
+          hover:text-patternTwo p-2 rounded-full duration-200"
+          >
+            <RiLogoutBoxRLine className="text-2xl" />
+          </button>
+        
+        {/* <Link href="/login">
           <button
             className="cursor-pointer hover:bg-white hover:font-extrabold
           hover:text-patternTwo p-2 rounded-full duration-200"
           >
             <RiLogoutBoxRLine className="text-2xl" />
           </button>
-        </Link>
+        </Link> */}
       </div>
 
       {openNotification && (

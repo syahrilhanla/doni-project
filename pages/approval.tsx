@@ -4,6 +4,7 @@ import ApprovalTable from "../components/ContentDosen/ApprovalTable";
 
 export default function approval() {
   return (
+    
     <LayoutDosen>
       <h1 className="text-4xl uppercase font-bold">
         Persetujuan Judul Skripsi
