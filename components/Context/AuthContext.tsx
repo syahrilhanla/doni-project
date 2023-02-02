@@ -6,7 +6,7 @@ import {
   signOut,
   Auth,
 } from "firebase/auth";
-import  { auth, db } from "../Store/firebase";
+import { auth, db } from "../Store/firebase";
 import {
 
   getFirestore,
@@ -46,33 +46,47 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
 
     return () => unsubscribe();
   }, []);
-  
- const signUp = (email: string, password: string, username:string, name:string, phoneNumber:string,generation:string) => {
-   return createUserWithEmailAndPassword(auth, email, password)
-     .then((response) => {
-       const user1 = response.user.uid
-       try {
-         const studentsCol = setDoc(doc(db, 'studentsList', user1), {
-          uid: user1,
-           email: email,
-           password: password,
-           username: username,
-           phoneNumber: phoneNumber,
-           name: name,
-           generation: generation,
-           profOne: "",
-           profTwo: "",
-           profilePict: "",
-           note: "",
-           statusApprove: "",
-           progresStatus: "",
-           
-         })
-       } catch (e) {
-         console.log(e);
-         
-       }
-     })
+
+  const signUp = (email: string, password: string, username: string, name: string, phoneNumber: string, generation: string) => {
+    return createUserWithEmailAndPassword(auth, email, password)
+      .then((response) => {
+        const user1 = response.user.uid;
+        const emailType = user.email?.split("@")[1];
+        const userRole = (emailType: string) => {
+          console.log(emailType);
+
+          switch (emailType) {
+            case "mhs.ulm.ac.id":
+              return "mhs";
+            case "dosen.ulm.ac.id":
+              return "dosen";
+            default:
+              return "admin";
+          }
+        }
+
+        try {
+          const studentsCol = setDoc(doc(db, 'studentsList', user1), {
+            uid: user1,
+            email: email,
+            password: password,
+            username: username,
+            phoneNumber: phoneNumber,
+            name: name,
+            generation: generation,
+            profOne: "",
+            profTwo: "",
+            profilePict: "",
+            note: "",
+            statusApprove: "",
+            progressStatus: "",
+            role: userRole(String(emailType))
+          })
+        } catch (e) {
+          console.log(e);
+
+        }
+      })
   };
 
   const logIn = (email: string, password: string) => {
@@ -80,40 +94,40 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
       .then((response) => {
         setUser(response.user);
         getDoc(doc(db, "studentsList", response.user.uid))
-          .then((userData:any) => {
+          .then((userData: any) => {
             if (userData.data()) {
-            setUser(userData.data())
-          }
-        })
-         return response.user
+              setUser(userData.data())
+            }
+          })
+        return response.user
       })
       ;
   };
- const logInDosen = (email: string, password: string) => {
+  const logInDosen = (email: string, password: string) => {
     return signInWithEmailAndPassword(auth, email, password)
       .then((response) => {
         setUser(response.user);
         getDoc(doc(db, "professorList", response.user.uid))
-          .then((userData:any) => {
+          .then((userData: any) => {
             if (userData.data()) {
-            setUser(userData.data())
-          }
-        })
-         return response.user
+              setUser(userData.data())
+            }
+          })
+        return response.user
       })
       ;
   };
- const logInAdmin = (email: string, password: string) => {
+  const logInAdmin = (email: string, password: string) => {
     return signInWithEmailAndPassword(auth, email, password)
       .then((response) => {
         setUser(response.user);
         getDoc(doc(db, "adminList", response.user.uid))
-          .then((userData:any) => {
+          .then((userData: any) => {
             if (userData.data()) {
-            setUser(userData.data())
-          }
-        })
-         return response.user
+              setUser(userData.data())
+            }
+          })
+        return response.user
       })
       ;
   };
@@ -122,7 +136,7 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
     await signOut(auth);
   };
   return (
-<AuthContext.Provider value={{ user, signUp, logIn, logOut, logInDosen, logInAdmin }}>
+    <AuthContext.Provider value={{ user, signUp, logIn, logOut, logInDosen, logInAdmin }}>
       {loading ? null : children}
     </AuthContext.Provider>
   );
