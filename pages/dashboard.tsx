@@ -9,8 +9,7 @@ const Dashboard = () => {
 	const [judul, setJudul] = useState(false);
 	const [ajukan, setAjukan] = useState(false);
 	  const { user } = useAuth();
-	console.log(user);
-	
+
 	return (
 	
 		<Layout>
