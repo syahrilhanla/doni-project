@@ -49,9 +49,10 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
       .then((response) => {
         const user1 = response.user.uid;
         const emailType = user.email?.split("@")[1];
-        const userRole = (emailType: string) => {
-          console.log(emailType);
 
+        if (!emailType) return;
+
+        const userRole = (emailType: string) => {
           switch (emailType) {
             case "mhs.ulm.ac.id":
               return "mhs";
@@ -63,6 +64,7 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
         }
 
         try {
+          user.email
           const studentsCol = setDoc(doc(db, 'studentsList', user1), {
             uid: user1,
             email: email,
@@ -80,28 +82,28 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
             role: userRole(String(emailType)),
             files: [
               {
-                chapterOne:"",
-                chapterTwo:"",
-                chapterThree:"",
-                chapterFour:"",
-                chapterFive:"",
+                chapterOne: "",
+                chapterTwo: "",
+                chapterThree: "",
+                chapterFour: "",
+                chapterFive: "",
               }
             ],
             notifications: [{
               id: user1,
               isRead: true,
-              text:"",
-              tittle:""
+              text: "",
+              tittle: ""
             }],
             seminarDate: [{
-              dateToBe:"",
-              feedbackNote:"",
-              isApproved:true
+              dateToBe: "",
+              feedbackNote: "",
+              isApproved: true
             }],
             title: [{
               feedBackNote: "",
               isApproved: false,
-              tittleText:""
+              tittleText: ""
             }]
           })
         } catch (e) {
