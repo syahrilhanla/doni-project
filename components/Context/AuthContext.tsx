@@ -8,12 +8,9 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../Store/firebase";
 import {
-
-  getFirestore,
   setDoc,
   doc,
   getDoc,
-  DocumentSnapshot,
 } from "firebase/firestore";
 
 
@@ -80,7 +77,32 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
             note: "",
             statusApprove: "",
             progressStatus: "",
-            role: userRole(String(emailType))
+            role: userRole(String(emailType)),
+            files: [
+              {
+                chapterOne:"",
+                chapterTwo:"",
+                chapterThree:"",
+                chapterFour:"",
+                chapterFive:"",
+              }
+            ],
+            notifications: [{
+              id: user1,
+              isRead: true,
+              text:"",
+              tittle:""
+            }],
+            seminarDate: [{
+              dateToBe:"",
+              feedbackNote:"",
+              isApproved:true
+            }],
+            title: [{
+              feedBackNote: "",
+              isApproved: false,
+              tittleText:""
+            }]
           })
         } catch (e) {
           console.log(e);
