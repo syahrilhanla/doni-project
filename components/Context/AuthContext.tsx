@@ -7,7 +7,13 @@ import {
   Auth,
 } from "firebase/auth";
 import { auth, db } from "../Store/firebase";
-import { getFirestore, setDoc, doc, getDoc } from "firebase/firestore";
+import {
+  setDoc,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+
+
 
 interface UserType {
   email: string | null;
@@ -69,7 +75,8 @@ export const AuthContextProvider = ({
         };
 
         try {
-          const studentsCol = setDoc(doc(db, "studentsList", user1), {
+          user.email
+          const studentsCol = setDoc(doc(db, 'studentsList', user1), {
             uid: user1,
             email: email,
             password: password,
@@ -84,7 +91,32 @@ export const AuthContextProvider = ({
             statusApprove: "",
             progressStatus: "",
             role: userRole(String(emailType)),
-          });
+            files: [
+              {
+                chapterOne: "",
+                chapterTwo: "",
+                chapterThree: "",
+                chapterFour: "",
+                chapterFive: "",
+              }
+            ],
+            notifications: [{
+              id: user1,
+              isRead: true,
+              text: "",
+              tittle: ""
+            }],
+            seminarDate: [{
+              dateToBe: "",
+              feedbackNote: "",
+              isApproved: true
+            }],
+            title: [{
+              feedBackNote: "",
+              isApproved: false,
+              tittleText: ""
+            }]
+          })
         } catch (e) {
           console.log(e);
         }
