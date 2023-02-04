@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 // import { VscCloudUpload } from "react-icons/vsc"
 import { BsFillPersonFill } from "react-icons/bs";
+import { useAuth } from "../Context/AuthContext";
 const FileSeminar = () => {
+	const [jadwal, setJadwal] = useState(false);
+	const { user } = useAuth();
 	// const [dragActive, setDragActive] = useState(false)
 	// const inputRef = React.useRef<HTMLInputElement>(null);
-	const [jadwal, setJadwal] = useState(false);
 
 	// function handleFiles(files: any) {
 	// 	alert("Number of files: " + files.length);

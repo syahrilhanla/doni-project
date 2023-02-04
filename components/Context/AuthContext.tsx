@@ -76,6 +76,8 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
             profOne: "",
             profTwo: "",
             profilePict: "",
+            fileSeminar: "",
+            fileSidang:"",
             note: "",
             statusApprove: "",
             progressStatus: "",

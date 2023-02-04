@@ -6,10 +6,11 @@ import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../components/Context/AuthContext";
 
 const Dashboard = () => {
-	const [judul, setJudul] = useState(false);
 	const [ajukan, setAjukan] = useState(false);
-	  const { user } = useAuth();
-
+	const { user } = useAuth();
+	const [judul, setJudul] = useState(false);
+	
+		
 	return (
 	
 		<Layout>
@@ -17,10 +18,11 @@ const Dashboard = () => {
 				<div className="flex lg:space-between xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col  mt-5 mb-2 mx-4">
 					<div className="grid justify-items-start xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 py-4 px-3 w-2/5 h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
 						<div className=" text-lg text-center font-sans">Selamat Datang {user.name?user.name:""} </div>
-						<div className="font-black ">{user.username}</div>
+						<div className="font-black ">{user.username}
+						</div>
 					</div>
 					<div className="flex justify-center xxs:w-full items-center sm:max-md:w-full  md:max-lg:w-full  md:max-lg:mt-3 w-3/5 h-24 bg-[#f2e8f24f] text-[#683ab7d5] rounded-lg shadow-md">
-						{judul ? (
+						{judul? (
 							<>
 								<div className="flex justify-items-center font-sans italic">
 									<p>
@@ -96,8 +98,8 @@ const Dashboard = () => {
 							<BsFillPersonFill className="text-3xl" />
 						<div className="text-2xl">Dosen Pembimbing 1</div>
 						</div>
-						<div className="text-center font-bold text-4xl">
-							{"Dr. Wicaksono Tirtanto, M. Pd."}
+						<div className={`text-center font-bold ${user.profOne===""?"text-sm italic text-gray-400" :"text-4xl"}`}>
+							{user.profOne === "" ? "Kamu Belum Mendapatkan Dosen Pembimbing 1" : user.profOne}
 						</div>
 					</div>
 					<div className="grid justify-center xxs:max-sm:w-full xxs:max-sm:my-2 md:max-lg:w-full md:max-lg:mt-3 sm:max-md:w-full  py-6 px-4 w-2/3 h-80 bg-[#f1e8f252] text-[#707070] rounded-2xl shadow-xl">
@@ -105,7 +107,8 @@ const Dashboard = () => {
 							<div><BsFillPersonFill className="text-3xl" /></div>
 						<div className="text-2xl">Dosen Pembimbing 2</div>
 						</div>
-						<div className="text-center font-bold text-4xl">{"Suparni Maul, M. T."}</div>
+						<div className={`text-center font-bold ${user.profTwo === "" ? "text-sm italic text-gray-400" : "text-4xl"}`}>
+							{user.profOne === "" ? "Kamu Belum Mendapatkan Dosen Pembimbing 2" : user.profTwo}</div>
 					</div>
 				</div>
         {/* dospem */}
