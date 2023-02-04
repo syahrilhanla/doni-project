@@ -9,9 +9,11 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../components/Store/firebase";
+import { set } from "react-hook-form/dist/utils";
 
 const Dashboard = () => {
   const [title, setTitle] = useState<string>();
+  const [displayedTitle, setDisplayTitle] = useState("");
   const [isOpenModal, setIsOpenModal] = useState<any>(false);
   const { user } = useAuth();
 
@@ -40,12 +42,12 @@ const Dashboard = () => {
 
   const handleChange = (value: string) => {
     // setTitle(value);
-    console.log(value);
     setTitle(value);
   }
 
   const updateTitle = (titleValue: any) => {
     console.log(titleValue);
+    setDisplayTitle(titleValue);
     setIsOpenModal(false)
   }
 
@@ -61,7 +63,7 @@ const Dashboard = () => {
           </div>
           <div className="flex justify-center xxs:w-full items-center sm:max-md:w-full  md:max-lg:w-full  md:max-lg:mt-3 w-3/5 h-24 bg-[#f2e8f24f] text-[#683ab7d5] rounded-lg shadow-md">
             {
-              title &&
+              title && !isOpenModal &&
               <>
                 <div className="w-full text-left px-4">
                   {user.title[0].tittleText !== "" ? user.title[0].tittleText : title}
@@ -69,65 +71,70 @@ const Dashboard = () => {
               </>
             }
 
-            {!title && (
-              <>
-                <div className="flex justify-between w-full mx-7">
-                  <div className="text-lg items-center text-gray-500  font-sans">
-                    Belum ada judul
-                  </div>
-                  <div>
-                    <button
-                      className="text-white  bg-patternTwo hover:text-gray-900 hover:bg-[#c9c2d2] 
-                          font-medium rounded-lg text-sm px-5 py-2.5 text-center "
-                      onClick={() => setIsOpenModal(true)}
-                    >
-                      Ajukan Judul
-                    </button>
-                  </div>
-
-
-                  {isOpenModal && (
+            <>
+              <div className="flex justify-between w-full mx-7">
+                {
+                  !displayedTitle && (
                     <>
-                      <div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
-                        <div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />
-                        <div className="gap-4 relative  w-3/5 h-full  flex justify-center items-center">
-                          <div className="relative bg-white border-purple-600 rounded-2xl shadow w-3/5 xxs:max-md:w-full md:max-lg:w-full min-h-fit ">
+                      <div className="text-lg items-center text-gray-500  font-sans">
+                        Belum ada judul
+                      </div>
+                      <div>
+                        <button
+                          className="text-white  bg-patternTwo hover:text-gray-900 
+                          font-medium rounded-lg text-sm px-5 py-2.5 text-center 
+                        hover:bg-[#c9c2d2]"
+                          onClick={() => setIsOpenModal(true)}
+                        >
+                          Ajukan Judul
+                        </button>
+                      </div>
+                    </>
+                  )
+                }
+
+
+                {isOpenModal && (
+                  <>
+                    <div className="flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
+                      <div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />
+                      <div className="gap-4 relative  w-3/5 h-full  flex justify-center items-center">
+                        <div className="relative bg-white border-purple-600 rounded-2xl shadow w-3/5 xxs:max-md:w-full md:max-lg:w-full min-h-fit ">
+                          <button
+                            onClick={() => setIsOpenModal(false)}
+                            type="button"
+                            className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-red-500 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                          >
+                            <RiCloseLine className="text-black hover:text-white" />
+                          </button>
+                          <label className="block text-xl mt-4 font-medium text-gray-900 ">
+                            Judul Skripsi
+                          </label>
+                          <div className="px-8 py-7 flex flex-col items-center">
+                            <form action="" className="px-2 w-full">
+                              <textarea
+                                placeholder="Masukkan Judul Skripsi"
+                                value={title}
+                                onChange={(e) => handleChange(e.target.value)}
+                                className="min-h-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:outline-none block w-full p-2.5"
+                                required
+                              />
+                            </form>
                             <button
-                              onClick={() => setIsOpenModal(false)}
+                              onClick={() => updateTitle(title)}
                               type="button"
-                              className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-red-500 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                              className=" text-white bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-white focus:z-10"
                             >
-                              <RiCloseLine className="text-black hover:text-white" />
+                              Ajukan
                             </button>
-                            <label className="block text-xl mt-4 font-medium text-gray-900 ">
-                              Judul Skripsi
-                            </label>
-                            <div className="px-8 py-7 flex flex-col items-center">
-                              <form action="" className="px-2 w-full">
-                                <textarea
-                                  placeholder="Masukkan Judul Skripsi"
-                                  value={title}
-                                  onChange={(e) => handleChange(e.target.value)}
-                                  className="min-h-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:outline-none block w-full p-2.5"
-                                  required
-                                />
-                              </form>
-                              <button
-                                onClick={() => updateTitle(title)}
-                                type="button"
-                                className=" text-white bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-white focus:z-10"
-                              >
-                                Ajukan
-                              </button>
-                            </div>
                           </div>
                         </div>
                       </div>
-                    </>
-                  )}
-                </div>
-              </>
-            )}
+                    </div>
+                  </>
+                )}
+              </div>
+            </>
 
           </div>
         </div>
