@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout/Layout";
 import { BsFillPersonFill } from "react-icons/bs";
 import { RiCloseLine } from "react-icons/ri";
@@ -9,7 +9,9 @@ const Dashboard = () => {
 	const [ajukan, setAjukan] = useState(false);
 	const { user } = useAuth();
 	const [judul, setJudul] = useState(false);
-	
+	useEffect(() => {
+		
+	},[user])
 		
 	return (
 	
@@ -108,7 +110,7 @@ const Dashboard = () => {
 						<div className="text-2xl">Dosen Pembimbing 2</div>
 						</div>
 						<div className={`text-center font-bold ${user.profTwo === "" ? "text-sm italic text-gray-400" : "text-4xl"}`}>
-							{user.profOne === "" ? "Kamu Belum Mendapatkan Dosen Pembimbing 2" : user.profTwo}</div>
+							{user.profTwo === "" ? "Kamu Belum Mendapatkan Dosen Pembimbing 2" : user.profTwo}</div>
 					</div>
 				</div>
         {/* dospem */}

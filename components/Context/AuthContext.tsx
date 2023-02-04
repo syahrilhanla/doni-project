@@ -75,6 +75,8 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
             generation: generation,
             profOne: "",
             profTwo: "",
+            examinerOne:"",
+            examinerTwo:"",
             profilePict: "",
             fileSeminar: "",
             fileSidang:"",
@@ -98,6 +100,11 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
               tittle: ""
             }],
             seminarDate: [{
+              dateToBe: "",
+              feedbackNote: "",
+              isApproved: true
+            }],
+            sidangDate: [{
               dateToBe: "",
               feedbackNote: "",
               isApproved: true

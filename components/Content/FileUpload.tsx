@@ -8,15 +8,30 @@ const FileUpload = () => {
 	const { user } = useAuth();
 	const [chapter1, setChapter1] = useState<String>();
 	const [chapter2, setChapter2] = useState<String>();
+	const [chapter3, setChapter3] = useState<String>();
+	const [chapter4, setChapter4] = useState<String>();
+	const [chapter5, setChapter5] = useState<String>();
 	const [link1, setLink1] = useState("")
 	const [link2, setLink2] = useState("")
+	const [link3, setLink3] = useState("")
+	const [link4, setLink4] = useState("")
+	const [link5, setLink5] = useState("")
 	useEffect(() => {
-		if (user.files) setChapter1(user.files[0].chapterOne)
-		if (user.files) setChapter2(user.files[0].chapterTwo)
+		if (user.files) {
+			setChapter1(user.files[0].chapterOne)
+			setChapter2(user.files[0].chapterTwo)
+			setChapter3(user.files[0].chapterThree)
+			setChapter4(user.files[0].chapterFour)
+			setChapter5(user.files[0].chapterFive)
+		}
+
 		onSnapshot(doc(db, "studentsList", user.uid), (doc) => {
-		setChapter1(doc.data()?.files[0].chapterOne)
-		setChapter2(doc.data()?.files[0].chapterTwo)
-	})
+			setChapter1(doc.data()?.files[0].chapterOne)
+			setChapter2(doc.data()?.files[0].chapterTwo)
+			setChapter3(doc.data()?.files[0].chapterThree)
+			setChapter4(doc.data()?.files[0].chapterFour)
+			setChapter5(doc.data()?.files[0].chapterFive)
+		})
 	}, [user.files])
 
 	const handleLink1 = async () => {
@@ -52,6 +67,54 @@ const FileUpload = () => {
 		await updateDoc(docRef, chapter2Value)
 		setLink2("")
 	}
+	const handleLink3 = async () => {
+		const docRef = doc(db, "studentsList", user.uid);
+		const chapter3Value = {
+			files: [
+				{
+					chapterOne: user.files[0].chapterOne,
+					chapterTwo: user.files[0].chapterTwo,
+					chapterThree: link3,
+					chapterFour: user.files[0].chapterFour,
+					chapterFive: user.files[0].chapterFive,
+				}
+			]
+		}
+		await updateDoc(docRef, chapter3Value)
+		setLink3("")
+	}
+	const handleLink4 = async () => {
+		const docRef = doc(db, "studentsList", user.uid);
+		const chapter4Value = {
+			files: [
+				{
+					chapterOne: user.files[0].chapterOne,
+					chapterTwo: user.files[0].chapterTwo,
+					chapterThree: user.files[0].chapterThree,
+					chapterFour: link4,
+					chapterFive: user.files[0].chapterFive,
+				}
+			]
+		}
+		await updateDoc(docRef, chapter4Value)
+		setLink4("")
+	}
+	const handleLink5 = async () => {
+		const docRef = doc(db, "studentsList", user.uid);
+		const chapter5Value = {
+			files: [
+				{
+					chapterOne: user.files[0].chapterOne,
+					chapterTwo: user.files[0].chapterTwo,
+					chapterThree: user.files[0].chapterThree,
+					chapterFour: user.files[0].chapterFour,
+					chapterFive: link5,
+				}
+			]
+		}
+		await updateDoc(docRef, chapter5Value)
+		setLink5("")
+	}
 
 
 	return (
@@ -63,12 +126,12 @@ const FileUpload = () => {
 			<div className="py-4">
 				<div className="flex flex-col my-4 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-full py-2 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
 					{!chapter1 &&
-						<label className="block mt-2 text-sm font-medium text-gray-900 ">
+						<label className="block mt-2 text-sm font-medium text-gray-500 ">
 							File Belum Ada
 						</label>
 					}
 					{chapter1 &&
-						<Link target="_blank" href={`${user.files[0].chapterOne}`} className="block mt-2 text-sm font-medium text-gray-900 ">
+						<Link target="_blank" href={`${chapter1}`} className="block mt-2 text-sm font-medium text-gray-900 hover:text-[#835876]">
 							Silahkan Di Cek
 						</Link>
 					}
@@ -94,12 +157,12 @@ const FileUpload = () => {
 				</div>
 				<div className="flex flex-col my-4 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-full py-2 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
 					{!chapter2 &&
-						<label className="block mt-2 text-sm font-medium text-gray-900 ">
+						<label className="block mt-2 text-sm font-medium text-gray-500 ">
 							File Belum Ada
 						</label>
 					}
 					{chapter2 &&
-						<Link target="_blank" href={`${user.files[0].chapterTwo}`} className="block mt-2 text-sm font-medium text-gray-900 ">
+						<Link target="_blank" href={`${chapter2}`} className="block mt-2 text-sm font-medium text-gray-900 hover:text-[#835876] ">
 							Silahkan Di Cek
 						</Link>
 					}
@@ -124,27 +187,49 @@ const FileUpload = () => {
 						</button>
 					</div>
 				</div>
-				<div className="flex flex-col my-4 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
+				<div className="flex flex-col my-4 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-full py-2 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
+					{!chapter3 &&
+						<label className="block mt-2 text-sm font-medium text-gray-500 ">
+							File Belum Ada
+						</label>
+					}
+					{chapter3 &&
+						<Link target="_blank" href={`${chapter3}`} className="block mt-2 hover:text-[#835876] text-sm font-medium text-gray-900 ">
+							Silahkan Di Cek
+						</Link>
+					}
 					<label className="block mt-1 text-md font-medium text-gray-900 ">
 						BAB 3
 					</label>
 					<div className="flex justify-between items-center w-full">
 						<input
 							className="bg-gray-50 disabled:opacity-50 items-center border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
+							value={link3}
+							onChange={(e) => setLink3(e.target.value)}
 							type="text"
 							placeholder="Link Google Drive"
 							required
 							disabled
 						/>
 						<button
-							type="button"
+							onClick={handleLink3}
 							className=" text-white disabled:opacity-50 items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
 							disabled>
 							Simpan
 						</button>
 					</div>
 				</div>
-				<div className="flex flex-col my-4 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
+				<div className="flex flex-col my-4 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-full py-2 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
+					{!chapter4 &&
+						<label className="block mt-2 text-sm font-medium text-gray-500 ">
+							File Belum Ada
+						</label>
+					}
+					{chapter4 &&
+						<Link target="_blank" href={`${chapter4}`} className="block mt-2 text-sm hover:text-[#835876] font-medium text-gray-900 ">
+							Silahkan Di Cek
+						</Link>
+					}
 					<label className="block mt-1 text-md font-medium text-gray-900 ">
 						BAB 4
 					</label>
@@ -152,19 +237,31 @@ const FileUpload = () => {
 						<input
 							className="bg-gray-50 disabled:opacity-50 items-center border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
 							type="text"
+							value={link4}
+							onChange={(e) => setLink4(e.target.value)}
 							placeholder="Link Google Drive"
 							required
 							disabled
 						/>
 						<button
-							type="button"
+							onClick={handleLink4}
 							className=" text-white disabled:opacity-50 items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
 							disabled>
 							Simpan
 						</button>
 					</div>
 				</div>
-				<div className="flex flex-col my-4 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
+				<div className="flex flex-col my-4 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-full py-2 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
+					{!chapter5 &&
+						<label className="block mt-2 text-sm font-medium text-gray-500 ">
+							File Belum Ada
+						</label>
+					}
+					{chapter5 &&
+						<Link target="_blank" href={`${chapter5}`} className="block mt-2 text-sm font-medium hover:text-[#835876] text-gray-900 ">
+							Silahkan Di Cek
+						</Link>
+					}
 					<label className="block mt-1 text-md font-medium text-gray-900 ">
 						BAB 5
 					</label>
@@ -174,12 +271,14 @@ const FileUpload = () => {
 				 			disabled:opacity-50
 							border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
 							type="text"
+							value={link5}
+							onChange={(e) => setLink5(e.target.value)}
 							placeholder="Link Google Drive"
 							required
 							disabled
 						/>
 						<button
-							type="button"
+							onClick={handleLink5}
 							className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10
 				disabled:opacity-50
 				"
