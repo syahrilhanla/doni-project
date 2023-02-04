@@ -7,13 +7,7 @@ import {
   Auth,
 } from "firebase/auth";
 import { auth, db } from "../Store/firebase";
-import {
-  getFirestore,
-  setDoc,
-  doc,
-  getDoc,
-  DocumentSnapshot,
-} from "firebase/firestore";
+import { getFirestore, setDoc, doc, getDoc } from "firebase/firestore";
 
 interface UserType {
   email: string | null;
@@ -60,9 +54,10 @@ export const AuthContextProvider = ({
       (response) => {
         const user1 = response.user.uid;
         const emailType = user.email?.split("@")[1];
-        const userRole = (emailType: string) => {
-          console.log(emailType);
 
+        if (!emailType) return;
+
+        const userRole = (emailType: string) => {
           switch (emailType) {
             case "mhs.ulm.ac.id":
               return "mhs";
@@ -88,7 +83,6 @@ export const AuthContextProvider = ({
             note: "",
             statusApprove: "",
             progressStatus: "",
-            title: "",
             role: userRole(String(emailType)),
           });
         } catch (e) {

@@ -4,36 +4,42 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { RiCloseLine } from "react-icons/ri";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../components/Context/AuthContext";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../components/Store/firebase";
 
 interface DataType {
   title: string;
-  uid: string;
 }
 const Dashboard = () => {
-  const [judul, setJudul] = useState(false);
-  const [ID, setID] = useState(null);
-  const [data, setData] = useState<DataType>({});
-  const [ajukan, setAjukan] = useState(false);
+  const [title, setTitle] = useState<any>();
+  const [ajukan, setAjukan] = useState<any>(false);
   const { user } = useAuth();
   console.log(user);
 
-  useEffect(() => {
-    const koleksiKkm = collection(db, "studentsList");
-
-    const q = query(koleksiKkm, orderBy("uid", "asc"));
-
-    const ambilData = onSnapshot(q, (querySnapshot) => {
-      setData(
-        querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
-          uid: doc.uid,
-        }))
-      );
-    });
-    return ambilData;
-  }, []);
+  const getTitle = (title: DataType) => {
+    // setTitle(title);
+    setAjukan(!ajukan);
+  };
+  const updateTitle = (title: DataType) => {
+    let fieldEdit = doc(db, "studentsList");
+    updateDoc(fieldEdit, {
+      title: title,
+    })
+      .then(() => {
+        alert("Judul berhasil ditambahkan");
+        setAjukan(!ajukan);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <Layout>
@@ -46,25 +52,22 @@ const Dashboard = () => {
             <div className="font-black ">{user.username}</div>
           </div>
           <div className="flex justify-center xxs:w-full items-center sm:max-md:w-full  md:max-lg:w-full  md:max-lg:mt-3 w-3/5 h-24 bg-[#f2e8f24f] text-[#683ab7d5] rounded-lg shadow-md">
-            {judul ? (
+            {title ? (
               <>
                 <div className="flex justify-items-center font-sans italic">
-                  <p>
-                    Judul Skripsi Pengembangan Media Pembelajaran Berbasis Web
-                    dengan Pendekatan Blablablabla
-                  </p>
+                  <p>{user.title}</p>
                 </div>
               </>
             ) : (
               <>
                 <div className="flex justify-between w-full mx-7">
                   <div className="text-lg items-center text-gray-500  font-sans">
-                    Judul Skripsi Belum Ada
+                    {user.title}
                   </div>
                   <div>
                     <button
                       className="text-white  bg-patternTwo hover:text-gray-900 hover:bg-[#c9c2d2] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
-                      onClick={() => setAjukan(!ajukan)}
+                      onClick={() => getTitle(user.title)}
                     >
                       Ajukan Judul
                     </button>
@@ -90,11 +93,14 @@ const Dashboard = () => {
                               <form action="" className="px-2 w-full">
                                 <textarea
                                   placeholder="Masukkan Judul Skripsi"
+                                  value={title}
+                                  onChange={(e) => setTitle(e.target.value)}
                                   className="min-h-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:outline-none block w-full p-2.5"
                                   required
                                 />
                               </form>
                               <button
+                                onClick={() => updateTitle}
                                 type="button"
                                 className=" text-white bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-white focus:z-10"
                               >

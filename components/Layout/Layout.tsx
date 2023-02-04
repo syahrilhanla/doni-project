@@ -1,4 +1,6 @@
 
+import Router from "next/router";
+import { useAuth } from "../Context/AuthContext";
 import Navbar from "../Navbar/Navbar";
 import ProtectedRoute from "../ProtectedRoute";
 import Sidebar from "../Sidebar/Sidebar";
@@ -8,6 +10,13 @@ type DashboardLayoutProps = {
 };
 
 const Layout = ({ children }: DashboardLayoutProps) => {
+    const { user } = useAuth();
+  if (user.role === "admin") {
+     Router.push("/request")
+    }
+    else if (user.role === "dosen") {
+     Router.push("/approval")   
+  }
   return (
     <ProtectedRoute>
 
