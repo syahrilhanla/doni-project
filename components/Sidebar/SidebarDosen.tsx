@@ -1,35 +1,37 @@
 import Image from "next/image";
 import Link from "next/link";
-
 import { useRouter } from "next/router";
+import React from "react";
+import { RiCheckFill } from "react-icons/ri";
+import { GiProgression, GiFinishLine } from "react-icons/gi";
+import { HiOutlinePresentationChartBar } from "react-icons/hi";
 import { useAuth } from "../Context/AuthContext";
 
-const Sidebar = () => {
+export default function SidebarDosen() {
   const router = useRouter();
-
+const { user } = useAuth();
   const menuItems = [
     {
-      href: "/dashboard",
-      title: "Dashboard",
+      href: "/approval",
+      title: "Persetujuan Judul",
     },
     {
-      href: "/berkas",
-      title: "Berkas",
+      href: "/progresMahasiswa",
+      title: "Progres Mahasiswa",
     },
     {
-      href: "/seminar",
-      title: "Seminar Hasil",
+      href: "/seminarMahasiswa",
+      title: "Seminar Hasil Mahasiswa",
     },
     {
-      href: "/sidang",
-      title: "Sidang Akhir",
+      href: "/sidangMahasiswa",
+      title: "Sidang Akhir Mahasiswa",
     },
   ];
- const { user } = useAuth();
   return (
     <div className="flex flex-1 z-50 min-h-full">
       {/* sidebar  */}
-      <div className="bg-[#F0EBF8] p-2 min-w-[300px]">
+      <div className="bg-[#F0EBF8] min-w-[300px] flex flex-col justify-center p-2 ">
         <ul className="space-y-2 mt-5">
           <li>
             <div className="flex flex-col gap-4 h-50 ml-2 mr-2 rounded-xl
@@ -58,27 +60,24 @@ const Sidebar = () => {
             </div>
           </li>
         </ul>
-        <ul className="flex flex-col gap-0 px-1.5">
+        <ul className="flex flex-col gap-2 px-1.5">
           {menuItems.map(({ href, title }) => (
             <li key={title}>
               <Link href={href}>
                 <div
                   className={`
-                    flex justify-center bg-violet-10 items-center text-[#683ab7d5] 
-                    px-2 py-4 text-base font-normal hover:text-[#683ab7d5] rounded-lg
-                    hover:bg-[#683ab715] 
-                    ${router.asPath === href && "bg-[#683ab715] "}`}
+                  flex justify-center bg-violet-10 items-center text-[#683ab7d5] 
+                  px-2 py-4 text-base font-normal hover:text-[#683ab7d5] rounded-lg
+                  hover:bg-[#683ab715]
+                    ${router.asPath === href && "bg-[#683ab715]"}`}
                 >
-                  <span className="">{title}</span>
+                  <span>{title}</span>
                 </div>
               </Link>
             </li>
           ))}
         </ul>
       </div>
-      {/* sidebar  */}
-      {/* <div className="p-5 w-4/5">{children}</div> */}
-    </div>)
+    </div>
+  );
 }
-
-export default Sidebar
