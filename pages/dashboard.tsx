@@ -4,10 +4,7 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { RiCloseLine } from "react-icons/ri";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../components/Context/AuthContext";
-import {
-  doc,
-  updateDoc,
-} from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../components/Store/firebase";
 import { set } from "react-hook-form/dist/utils";
 
@@ -16,11 +13,6 @@ const Dashboard = () => {
   const [displayedTitle, setDisplayTitle] = useState("");
   const [isOpenModal, setIsOpenModal] = useState<any>(false);
   const { user } = useAuth();
-
-  const getTitle = (title: string) => {
-    // setTitle(title);
-    // setAjukan(!ajukan);
-  };
 
   // const updateTitle = (title: string) => {
   //   let fieldEdit = doc(db, "studentsList");
@@ -37,19 +29,34 @@ const Dashboard = () => {
   // };
 
   useEffect(() => {
-    // if (user.title) setTitle(user.title[0].tittleText)
-  }, [user]);
+    if (user.title) {
+      setTitle(user.title[0].tittleText);
+    }
+    onSnapshot(doc(db, "studentsList", user.uid), (doc) => {
+      setTitle(doc.data()?.title[0].tittleText);
+    });
+  }, [user.title]);
 
   const handleChange = (value: string) => {
     // setTitle(value);
     setTitle(value);
-  }
+  };
 
-  const updateTitle = (titleValue: any) => {
-    console.log(titleValue);
-    setDisplayTitle(titleValue);
-    setIsOpenModal(false)
-  }
+  const updateTitle = async (titleValue: any) => {
+    // console.log(titleValue);
+    const docRef = doc(db, "studentsList", user.uid);
+    const titleTextValue = {
+      title: [
+        {
+          feedbackNote: "",
+          isApproved: false,
+          tittleText: titleValue,
+        },
+      ],
+    };
+    await updateDoc(docRef, titleTextValue);
+    setIsOpenModal(false);
+  };
 
   return (
     <Layout>
@@ -62,37 +69,36 @@ const Dashboard = () => {
             <div className="font-black ">{user.username}</div>
           </div>
           <div className="flex justify-center xxs:w-full items-center sm:max-md:w-full  md:max-lg:w-full  md:max-lg:mt-3 w-3/5 h-24 bg-[#f2e8f24f] text-[#683ab7d5] rounded-lg shadow-md">
-            {
-              title && !isOpenModal &&
+            {title && !isOpenModal && (
               <>
-                <div className="w-full text-left px-4">
-                  {user.title[0].tittleText !== "" ? user.title[0].tittleText : title}
+                <div className="w-full text-left px-4  text-[#707070] font-black">
+                  {user.title[0].tittleText !== "" &&
+                  user.title[0].isApproved !== false
+                    ? user.title[0].tittleText + " (Disetujui) "
+                    : user.title[0].tittleText + " (Belum disetujui)"}
                 </div>
               </>
-            }
+            )}
 
             <>
               <div className="flex justify-between w-full mx-7">
-                {
-                  !displayedTitle && (
-                    <>
-                      <div className="text-lg items-center text-gray-500  font-sans">
-                        Belum ada judul
-                      </div>
-                      <div>
-                        <button
-                          className="text-white  bg-patternTwo hover:text-gray-900 
+                {!title && (
+                  <>
+                    <div className="text-lg items-center text-gray-500  font-sans">
+                      Belum ada judul
+                    </div>
+                    <div>
+                      <button
+                        className="text-white  bg-patternTwo hover:text-gray-900 
                           font-medium rounded-lg text-sm px-5 py-2.5 text-center 
                         hover:bg-[#c9c2d2]"
-                          onClick={() => setIsOpenModal(true)}
-                        >
-                          Ajukan Judul
-                        </button>
-                      </div>
-                    </>
-                  )
-                }
-
+                        onClick={() => setIsOpenModal(true)}
+                      >
+                        Ajukan Judul
+                      </button>
+                    </div>
+                  </>
+                )}
 
                 {isOpenModal && (
                   <>
@@ -135,7 +141,6 @@ const Dashboard = () => {
                 )}
               </div>
             </>
-
           </div>
         </div>
         {/* dospem */}
