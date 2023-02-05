@@ -1,12 +1,16 @@
+import { doc, onSnapshot } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
 
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useAuth } from "../Context/AuthContext";
+import { db } from "../Store/firebase";
 
 const Sidebar = () => {
   const router = useRouter();
-
+const [name, setName] = useState(null)
+	const [username, setUsername] = useState(null)
   const menuItems = [
     {
       href: "/dashboard",
@@ -25,7 +29,13 @@ const Sidebar = () => {
       title: "Sidang Akhir",
     },
   ];
- const { user } = useAuth();
+  const { user } = useAuth();
+  	useEffect(() => {
+		onSnapshot(doc(db, "studentsList", user.uid), (doc) => {
+			setName(doc.data()?.name)
+			setUsername(doc.data()?.username)
+			})
+	}, [user])
   return (
     <div className="flex flex-1 z-50 min-h-full">
       {/* sidebar  */}
@@ -49,10 +59,10 @@ const Sidebar = () => {
               <div className="flex flex-col gap-2 justify-center items-center
                   font-normal text-lg">
                 <p>
-                  {user.name}
+                  {name}
                 </p>
                 <p className="text-base font-normal">
-                  {user.username}
+                  {username}
                 </p>
               </div>
             </div>
