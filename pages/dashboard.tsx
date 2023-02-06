@@ -1,4 +1,4 @@
-import React, { useEffect, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout/Layout";
 import { BsFillPersonFill } from "react-icons/bs";
 import { RiCloseLine } from "react-icons/ri";
@@ -7,8 +7,6 @@ import { useAuth } from "../components/Context/AuthContext";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../components/Store/firebase";
 import { set } from "react-hook-form/dist/utils";
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { db } from "../components/Store/firebase";
 
 const Dashboard = () => {
   const [ajukan, setAjukan] = useState(false);
