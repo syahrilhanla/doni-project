@@ -13,6 +13,7 @@ interface formInput {
   email: String;
   phoneNumber: Number;
   generation: Number;
+  proposalDate: String;
   password: String;
   confirmPassword: String;
 }
@@ -34,6 +35,8 @@ const schema = yup.object().shape({
     .min(4, "Minimal 4 angka")
     .max(4, "Maksimal 4 angka")
     .required("Informasi angkatan diperlukan"),
+  proposalDate: yup
+  .string(),
   password: yup
     .string()
     .min(6, "Kata sandi harus memiliki minimal 6 karakter")
@@ -57,7 +60,7 @@ const router = useRouter();
 
   const onSubmit : SubmitHandler<formInput>= async (data) => {
   try {
-    await signUp(data.email, data.password, data.username, data.name, data.phoneNumber, data.generation)
+    await signUp(data.email, data.password, data.username, data.name, data.phoneNumber, data.generation, data.proposalDate)
     router.push("/login");
   } catch (error: any) {
     console.log(error.message);
@@ -129,6 +132,18 @@ const router = useRouter();
                 placeholder="Contoh: 2020"
               />
               <p className="text-red-500">{errors.generation?.message}</p>
+            </div>
+            <div className="mb-6">
+              <label className="block mb-2 text-sm font-medium text-gray-900 ">
+                Tanggal Proposal
+              </label>
+              <input
+                type="text"
+                {...register("proposalDate")}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                placeholder="Contoh: 27 Januari 2023"
+              />
+              <p className="text-red-500">{errors.proposalDate?.message}</p>
             </div>
             <div className="mb-6">
               <label className="block mb-2 text-sm font-medium text-gray-900 ">

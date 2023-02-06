@@ -7,13 +7,7 @@ import {
   Auth,
 } from "firebase/auth";
 import { auth, db } from "../Store/firebase";
-import {
-  setDoc,
-  doc,
-  getDoc,
-} from "firebase/firestore";
-
-
+import { setDoc, doc, getDoc } from "firebase/firestore";
 
 interface UserType {
   email: string | null;
@@ -54,7 +48,8 @@ export const AuthContextProvider = ({
     username: string,
     name: string,
     phoneNumber: string,
-    generation: string
+    generation: string,
+    proposalDate: string
   ) => {
     return createUserWithEmailAndPassword(auth, email, password).then(
       (response) => {
@@ -75,8 +70,8 @@ export const AuthContextProvider = ({
         };
 
         try {
-          user.email
-          const studentsCol = setDoc(doc(db, 'studentsList', user1), {
+          user.email;
+          const studentsCol = setDoc(doc(db, "studentsList", user1), {
             uid: user1,
             email: email,
             password: password,
@@ -85,8 +80,13 @@ export const AuthContextProvider = ({
             name: name,
             generation: generation,
             profOne: "",
+            proposalDate: proposalDate,
             profTwo: "",
+            examinerOne: "",
+            examinerTwo: "",
             profilePict: "",
+            fileSeminar: "",
+            fileSidang: "",
             note: "",
             statusApprove: "",
             progressStatus: "",
@@ -98,25 +98,38 @@ export const AuthContextProvider = ({
                 chapterThree: "",
                 chapterFour: "",
                 chapterFive: "",
-              }
+              },
             ],
-            notifications: [{
-              id: user1,
-              isRead: true,
-              text: "",
-              tittle: ""
-            }],
-            seminarDate: [{
-              dateToBe: "",
-              feedbackNote: "",
-              isApproved: true
-            }],
-            title: [{
-              feedBackNote: "",
-              isApproved: false,
-              tittleText: ""
-            }]
-          })
+            notifications: [
+              {
+                id: user1,
+                isRead: true,
+                text: "",
+                tittle: "",
+              },
+            ],
+            seminarDate: [
+              {
+                dateToBe: "",
+                feedbackNote: "",
+                isApproved: true,
+              },
+            ],
+            sidangDate: [
+              {
+                dateToBe: "",
+                feedbackNote: "",
+                isApproved: true,
+              },
+            ],
+            title: [
+              {
+                feedBackNote: "",
+                isApproved: false,
+                tittleText: "",
+              },
+            ],
+          });
         } catch (e) {
           console.log(e);
         }
