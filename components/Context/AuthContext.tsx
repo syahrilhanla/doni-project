@@ -44,7 +44,7 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
     return () => unsubscribe();
   }, []);
 
-  const signUp = (email: string, password: string, username: string, name: string, phoneNumber: string, generation: string) => {
+  const signUp = (email: string, password: string, username: string, name: string, phoneNumber: string, generation: string, proposalDate:string) => {
     return createUserWithEmailAndPassword(auth, email, password)
       .then((response) => {
         const user1 = response.user.uid;
@@ -74,6 +74,7 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
             name: name,
             generation: generation,
             profOne: "",
+            proposalDate:proposalDate,
             profTwo: "",
             examinerOne:"",
             examinerTwo:"",

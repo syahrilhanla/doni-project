@@ -4,20 +4,29 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { RiCloseLine } from "react-icons/ri";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../components/Context/AuthContext";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../components/Store/firebase";
 
 const Dashboard = () => {
 	const [ajukan, setAjukan] = useState(false);
 	const { user } = useAuth();
-	const [judul, setJudul] = useState(false);
+	const [judul, setJudul] = useState(null);
+	const [terima, setTerima] = useState(null);
 	const [dosen1, setDosen1] = useState(null)
 	const [dosen2, setDosen2] = useState(null)
 	const [seminar, setSeminar] = useState(null)
 	const [sidang, setSidang] = useState(null)
 	const [name, setName] = useState(null)
 	const [username, setUsername] = useState(null)
+	const [newtitle, setNewtitle] = useState("")
+	const [feedback, setFeedback] = useState<String>()
 	useEffect(() => {
+		if (user.title) {
+			setJudul(user.title[0].tittleText)
+			setFeedback(user.title[0].feedbackNote)
+			setTerima(user.title[0].isApproved)
+
+		}
 		onSnapshot(doc(db, "studentsList", user.uid), (doc) => {
 			setName(doc.data()?.name)
 			setUsername(doc.data()?.username)
@@ -25,9 +34,27 @@ const Dashboard = () => {
 			setDosen2(doc.data()?.profTwo)
 			setSeminar(doc.data()?.seminarDate[0].dateToBe)
 			setSidang(doc.data()?.sidangDate[0].dateToBe)
+			setJudul(doc.data()?.title[0].tittleText)
+			setFeedback(doc.data()?.title[0].feedbackNote)
+			setTerima(doc.data()?.title[0].isApproved)
+
 		})
 	}, [user])
-
+	const handleNewTitle = async () => {
+		const docRef = doc(db, "studentsList", user.uid);
+		const titleValue = {
+			title: [
+				{
+					feedbackNote: user.title[0].feedbackNote,
+					isApproved: user.title[0].isApproved,
+					tittleText: newtitle
+				}
+			]
+		}
+		window.alert("Judul Skripsi Telah Diajukan")
+		await updateDoc(docRef, titleValue)
+		setNewtitle("")
+	}
 	return (
 
 		<Layout>
@@ -43,8 +70,7 @@ const Dashboard = () => {
 							<>
 								<div className="flex justify-items-center font-sans italic">
 									<p>
-										Judul Skripsi Pengembangan Media Pembelajaran Berbasis Web
-										dengan Pendekatan Blablablabla
+										{judul} {!terima && <p>{"(Menunggu Acc)"}</p>}
 									</p>
 								</div>
 							</>
@@ -86,11 +112,12 @@ const Dashboard = () => {
 																	placeholder="Masukkan Judul Skripsi"
 																	className="min-h-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:outline-none block w-full p-2.5"
 																	required
-
+																	value={newtitle}
+																	onChange={(e) => setNewtitle(e.target.value)}
 																/>
 															</form>
 															<button
-																type="button"
+																onClick={handleNewTitle}
 																className=" text-white bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-white focus:z-10"
 															>
 																Ajukan
