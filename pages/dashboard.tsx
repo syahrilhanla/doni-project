@@ -16,6 +16,7 @@ const Dashboard = () => {
 	const [dosen2, setDosen2] = useState(null)
 	const [seminar, setSeminar] = useState(null)
 	const [sidang, setSidang] = useState(null)
+	const [proposal, setProposal] = useState(null)
 	const [name, setName] = useState(null)
 	const [username, setUsername] = useState(null)
 	const [newtitle, setNewtitle] = useState("")
@@ -32,6 +33,7 @@ const Dashboard = () => {
 			setUsername(doc.data()?.username)
 			setDosen1(doc.data()?.profOne)
 			setDosen2(doc.data()?.profTwo)
+			setProposal(doc.data()?.proposalDate)
 			setSeminar(doc.data()?.seminarDate[0].dateToBe)
 			setSidang(doc.data()?.sidangDate[0].dateToBe)
 			setJudul(doc.data()?.title[0].tittleText)
@@ -159,9 +161,13 @@ const Dashboard = () => {
 				{/* dospem */}
 				{/* sempro,seminar,sidang  */}
 				<div className="flex justify-center xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col mt-7 mx-3">
-					<div className="grid justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full mr-2 py-6 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 border-[#caf3e0] text-[#707070] rounded-2xl shadow-xl">
-						<div className=" text-xl flex justify-center items-center"><p className="mx-2">Tanggal Seminar Proposal</p> <AiFillCheckCircle className="fill-[#6bae8f]" /></div>
-						<p className="text-3xl font-light">20 Januari 2023</p>
+					<div className={`grid justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full mr-2 py-6 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${proposal ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"} text-[#707070] rounded-2xl shadow-xl`}>
+						<div className=" text-xl flex justify-center items-center"><p className="mx-2">Tanggal Seminar Proposal</p> {proposal ? <AiFillCheckCircle className="fill-[#6bae8f]" /> : <AiFillCloseCircle className="fill-[#d25858]" />}</div>
+							<p className={` ${proposal ? "text-3xl font-light" : "italic font-light"} `}>
+							{!proposal && "Anda belum mengajukan proposal"}
+							{proposal}
+
+						</p>
 					</div>
 					<div className={`grid justify-center xxs:max-sm:w-full xxs:max-sm:my-3 sm:max-md:w-full sm:max-md:my-3 md:max-lg:w-full md:max-lg:my-3 mr-2 py-5 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${seminar ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"}  text-[#707070] rounded-2xl shadow-xl`}>
 						<div className=" text-xl flex justify-center items-center "><p className="mx-2">Tanggal Seminar Hasil</p> {seminar ? <AiFillCheckCircle className="fill-[#6bae8f]" /> : <AiFillCloseCircle className="fill-[#d25858]" />}</div>
