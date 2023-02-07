@@ -7,13 +7,7 @@ import {
   Auth,
 } from "firebase/auth";
 import { auth, db } from "../Store/firebase";
-import {
-  setDoc,
-  doc,
-  getDoc,
-} from "firebase/firestore";
-
-
+import { setDoc, doc, getDoc } from "firebase/firestore";
 
 interface UserType {
   email: string | null;
@@ -24,7 +18,11 @@ const AuthContext = createContext({});
 
 export const useAuth = () => useContext<any>(AuthContext);
 
-export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthContextProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [user, setUser] = useState<UserType>({ email: null, uid: null });
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -44,9 +42,17 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
     return () => unsubscribe();
   }, []);
 
-  const signUp = (email: string, password: string, username: string, name: string, phoneNumber: string, generation: string, proposalDate:string) => {
-    return createUserWithEmailAndPassword(auth, email, password)
-      .then((response) => {
+  const signUp = (
+    email: string,
+    password: string,
+    username: string,
+    name: string,
+    phoneNumber: string,
+    generation: string,
+    proposalDate: string
+  ) => {
+    return createUserWithEmailAndPassword(auth, email, password).then(
+      (response) => {
         const user1 = response.user.uid;
         const emailType = user.email?.split("@")[1];
 
@@ -61,11 +67,11 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
             default:
               return "admin";
           }
-        }
+        };
 
         try {
-          user.email
-          const studentsCol = setDoc(doc(db, 'studentsList', user1), {
+          user.email;
+          const studentsCol = setDoc(doc(db, "studentsList", user1), {
             uid: user1,
             email: email,
             password: password,
@@ -74,13 +80,13 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
             name: name,
             generation: generation,
             profOne: "",
-            proposalDate:proposalDate,
+            proposalDate: proposalDate,
             profTwo: "",
-            examinerOne:"",
-            examinerTwo:"",
+            examinerOne: "",
+            examinerTwo: "",
             profilePict: "",
             fileSeminar: "",
-            fileSidang:"",
+            fileSidang: "",
             note: "",
             statusApprove: "",
             progressStatus: "",
@@ -92,85 +98,98 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
                 chapterThree: "",
                 chapterFour: "",
                 chapterFive: "",
-              }
+              },
             ],
-            notifications: [{
-              id: user1,
-              isRead: true,
-              text: "",
-              tittle: ""
-            }],
-            seminarDate: [{
-              dateToBe: "",
-              feedbackNote: "",
-              isApproved: true
-            }],
-            sidangDate: [{
-              dateToBe: "",
-              feedbackNote: "",
-              isApproved: true
-            }],
-            title: [{
-              feedBackNote: "",
-              isApproved: false,
-              tittleText: ""
-            }]
-          })
+            notifications: [
+              {
+                id: user1,
+                isRead: true,
+                text: "",
+                tittle: "",
+              },
+            ],
+            seminarDate: [
+              {
+                dateToBe: "",
+                feedbackNote: "",
+                isApproved: true,
+              },
+            ],
+            sidangDate: [
+              {
+                dateToBe: "",
+                feedbackNote: "",
+                isApproved: true,
+              },
+            ],
+            title: [
+              {
+                feedBackNote: "",
+                isApproved: false,
+                tittleText: "",
+              },
+            ],
+          });
         } catch (e) {
           console.log(e);
-
         }
-      })
+      }
+    );
   };
 
   const logIn = (email: string, password: string) => {
-    return signInWithEmailAndPassword(auth, email, password)
-      .then((response) => {
+    return signInWithEmailAndPassword(auth, email, password).then(
+      (response) => {
         setUser(response.user);
-        getDoc(doc(db, "studentsList", response.user.uid))
-          .then((userData: any) => {
+        getDoc(doc(db, "studentsList", response.user.uid)).then(
+          (userData: any) => {
             if (userData.data()) {
-              setUser(userData.data())
+              setUser(userData.data());
             }
-          })
-        return response.user
-      })
-      ;
+          }
+        );
+        return response.user;
+      }
+    );
   };
   const logInDosen = (email: string, password: string) => {
-    return signInWithEmailAndPassword(auth, email, password)
-      .then((response) => {
+    return signInWithEmailAndPassword(auth, email, password).then(
+      (response) => {
         setUser(response.user);
-        getDoc(doc(db, "professorList", response.user.uid))
-          .then((userData: any) => {
+        getDoc(doc(db, "professorList", response.user.uid)).then(
+          (userData: any) => {
             if (userData.data()) {
-              setUser(userData.data())
+              setUser(userData.data());
             }
-          })
-        return response.user
-      })
-      ;
+          }
+        );
+        return response.user;
+      }
+    );
   };
   const logInAdmin = (email: string, password: string) => {
-    return signInWithEmailAndPassword(auth, email, password)
-      .then((response) => {
+    return signInWithEmailAndPassword(auth, email, password).then(
+      (response) => {
         setUser(response.user);
-        getDoc(doc(db, "adminList", response.user.uid))
-          .then((userData: any) => {
+        getDoc(doc(db, "adminList", response.user.uid)).then(
+          (userData: any) => {
             if (userData.data()) {
-              setUser(userData.data())
+              setUser(userData.data());
             }
-          })
-        return response.user
-      })
-      ;
+          }
+        );
+        return response.user;
+      }
+    );
   };
   const logOut = async () => {
     setUser({ email: null, uid: null });
     await signOut(auth);
   };
   return (
-    <AuthContext.Provider value={{ user, signUp, logIn, logOut, logInDosen, logInAdmin }}>
+    <AuthContext.Provider
+      value={{ user, signUp, logIn, logOut, logInDosen, logInAdmin }}
+    >
       {loading ? null : children}
     </AuthContext.Provider>
   );

@@ -9,6 +9,7 @@ import { db } from "../components/Store/firebase";
 import { User } from "firebase/auth";
 
 
+import { set } from "react-hook-form/dist/utils";
 
 const Dashboard = () => {
 	const [ajukan, setAjukan] = useState(false);
@@ -104,104 +105,153 @@ const Dashboard = () => {
 										</button>
 									</div>
 
-									{ajukan && (
-										<>
-											<div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
-												<div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />
-												<div className="gap-4 relative  w-3/5 h-full  flex justify-center items-center">
-													<div className="relative bg-white border-purple-600 rounded-2xl shadow w-3/5 xxs:max-md:w-full md:max-lg:w-full min-h-fit ">
-														<button
-															onClick={() => setAjukan(!ajukan)}
-															type="button"
-															className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-red-500 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-														>
-															<RiCloseLine className="text-black hover:text-white" />
-														</button>
-														<label className="block text-xl mt-4 font-medium text-gray-900 ">
-															Judul Skripsi
-														</label>
-														<div className="px-8 py-7 flex flex-col items-center">
-															<form action="" className="px-2 w-full">
-																<textarea
-																	placeholder="Masukkan Judul Skripsi"
-																	className="min-h-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:outline-none block w-full p-2.5"
-																	required
-																	value={newtitle}
-																	onChange={(e) => setNewtitle(e.target.value)}
-																/>
-															</form>
-															<button
-																onClick={handleNewTitle}
-																className=" text-white bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-white focus:z-10"
-															>
-																Ajukan
-															</button>
-														</div>
-
-													</div>
-												</div>
-											</div>
-										</>
-									)}
-
-								</div>
-							</>
-						)}
-					</div>
-				</div>
-				{/* dospem */}
-				<div className="flex space-between xxs:max-sm:flex-col md:max-lg:flex-col sm:max-md:flex-col mt-5 mx-4">
-					<div className="grid justify-center xxs:max-sm:w-full md:max-lg:w-full sm:max-md:w-full mr-2 py-6 px-4 w-2/3 h-80 bg-[#f1e8f252] text-[#707070] rounded-2xl shadow-xl">
-						<div className="flex justify-center items-center">
-							<BsFillPersonFill className="text-3xl" />
-							<div className="text-2xl">Dosen Pembimbing 1</div>
-						</div>
-						<div className={`text-center font-bold ${dosen1 === "" ? "text-sm italic text-gray-400" : "text-4xl"}`}>
-							{!dosen1 && "Kamu Belum Mendapatkan Dosen Pembimbing 1"}
-							{dosen1}
-						</div>
-					</div>
-					<div className="grid justify-center xxs:max-sm:w-full xxs:max-sm:my-2 md:max-lg:w-full md:max-lg:mt-3 sm:max-md:w-full  py-6 px-4 w-2/3 h-80 bg-[#f1e8f252] text-[#707070] rounded-2xl shadow-xl">
-						<div className="flex justify-center items-center">
-							<div><BsFillPersonFill className="text-3xl" /></div>
-							<div className="text-2xl">Dosen Pembimbing 2</div>
-						</div>
-						<div className={`text-center font-bold ${dosen2 === "" ? "text-sm italic text-gray-400" : "text-4xl"}`}>
-							{!dosen2 && "Kamu Belum Mendapatkan Dosen Pembimbing 2"}{dosen2}</div>
-					</div>
-				</div>
-				{/* dospem */}
-				{/* sempro,seminar,sidang  */}
-				<div className="flex justify-center xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col mt-7 mx-3">
-					<div className={`grid justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full mr-2 py-6 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${proposal ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"} text-[#707070] rounded-2xl shadow-xl`}>
-						<div className=" text-xl flex justify-center items-center"><p className="mx-2">Tanggal Seminar Proposal</p> {proposal ? <AiFillCheckCircle className="fill-[#6bae8f]" /> : <AiFillCloseCircle className="fill-[#d25858]" />}</div>
-						<p className={` ${proposal ? "text-3xl font-light" : "italic font-light"} `}>
-							{!proposal && "Anda belum mengajukan proposal"}
-							{proposal}
-
-						</p>
-					</div>
-					<div className={`grid justify-center xxs:max-sm:w-full xxs:max-sm:my-3 sm:max-md:w-full sm:max-md:my-3 md:max-lg:w-full md:max-lg:my-3 mr-2 py-5 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${seminar ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"}  text-[#707070] rounded-2xl shadow-xl`}>
-						<div className=" text-xl flex justify-center items-center "><p className="mx-2">Tanggal Seminar Hasil</p> {seminar ? <AiFillCheckCircle className="fill-[#6bae8f]" /> : <AiFillCloseCircle className="fill-[#d25858]" />}</div>
-						<p className={` ${seminar ? "text-3xl font-light" : "italic font-light"} `}>
-							{!seminar && "Anda belum mengajukan seminar hasil, lengkapi file upload di halaman berkas terlebih dahulu"}
-							{seminar}
-
-						</p>
-					</div>
-					<div className="grid justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full mr-2 py-5 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 border-[#f3caca] text-[#707070] rounded-2xl shadow-xl">
-						<div className=" text-xl flex justify-center items-center "><p className="mx-2">Tanggal Sidang Akhir</p>  {sidang ? <AiFillCheckCircle className="fill-[#6bae8f]" /> : <AiFillCloseCircle className="fill-[#d25858]" />}</div>
-						<p className={` ${sidang ? "text-3xl font-light" : "italic font-light"} `}>
-							{!sidang && "	Anda belum mengajukan sidang akhir, lakukan seminar hasil terlebih dahulu."}
-							{sidang}
-						</p>
-					</div>
-				</div>
-
-			</div>
-		</Layout>
-
-	);
+                  {ajukan && (
+                    <>
+                      <div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
+                        <div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />
+                        <div className="gap-4 relative  w-3/5 h-full  flex justify-center items-center">
+                          <div className="relative bg-white border-purple-600 rounded-2xl shadow w-3/5 xxs:max-md:w-full md:max-lg:w-full min-h-fit ">
+                            <button
+                              onClick={() => setAjukan(!ajukan)}
+                              type="button"
+                              className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-red-500 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                            >
+                              <RiCloseLine className="text-black hover:text-white" />
+                            </button>
+                            <label className="block text-xl mt-4 font-medium text-gray-900 ">
+                              Judul Skripsi
+                            </label>
+                            <div className="px-8 py-7 flex flex-col items-center">
+                              <form action="" className="px-2 w-full">
+                                <textarea
+                                  placeholder="Masukkan Judul Skripsi"
+                                  className="min-h-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:outline-none block w-full p-2.5"
+                                  required
+                                  value={newtitle}
+                                  onChange={(e) => setNewtitle(e.target.value)}
+                                />
+                              </form>
+                              <button
+                                onClick={handleNewTitle}
+                                className=" text-white bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-white focus:z-10"
+                              >
+                                Ajukan
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+        {/* dospem */}
+        <div className="flex space-between xxs:max-sm:flex-col md:max-lg:flex-col sm:max-md:flex-col mt-5 mx-4">
+          <div className="grid justify-center xxs:max-sm:w-full md:max-lg:w-full sm:max-md:w-full mr-2 py-6 px-4 w-2/3 h-80 bg-[#f1e8f252] text-[#707070] rounded-2xl shadow-xl">
+            <div className="flex justify-center items-center">
+              <BsFillPersonFill className="text-3xl" />
+              <div className="text-2xl">Dosen Pembimbing 1</div>
+            </div>
+            <div
+              className={`text-center font-bold ${
+                dosen1 === "" ? "text-sm italic text-gray-400" : "text-4xl"
+              }`}
+            >
+              {!dosen1 && "Kamu Belum Mendapatkan Dosen Pembimbing 1"}
+              {dosen1}
+            </div>
+          </div>
+          <div className="grid justify-center xxs:max-sm:w-full xxs:max-sm:my-2 md:max-lg:w-full md:max-lg:mt-3 sm:max-md:w-full  py-6 px-4 w-2/3 h-80 bg-[#f1e8f252] text-[#707070] rounded-2xl shadow-xl">
+            <div className="flex justify-center items-center">
+              <div>
+                <BsFillPersonFill className="text-3xl" />
+              </div>
+              <div className="text-2xl">Dosen Pembimbing 2</div>
+            </div>
+            <div
+              className={`text-center font-bold ${
+                dosen2 === "" ? "text-sm italic text-gray-400" : "text-4xl"
+              }`}
+            >
+              {!dosen2 && "Kamu Belum Mendapatkan Dosen Pembimbing 2"}
+              {dosen2}
+            </div>
+          </div>
+        </div>
+        {/* dospem */}
+        {/* sempro,seminar,sidang  */}
+        <div className="flex justify-center xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col mt-7 mx-3">
+          <div
+            className={`grid justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full mr-2 py-6 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${
+              proposal ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"
+            } text-[#707070] rounded-2xl shadow-xl`}
+          >
+            <div className=" text-xl flex justify-center items-center">
+              <p className="mx-2">Tanggal Seminar Proposal</p>{" "}
+              {proposal ? (
+                <AiFillCheckCircle className="fill-[#6bae8f]" />
+              ) : (
+                <AiFillCloseCircle className="fill-[#d25858]" />
+              )}
+            </div>
+            <p
+              className={` ${
+                proposal ? "text-3xl font-light" : "italic font-light"
+              } `}
+            >
+              {!proposal && "Anda belum mengajukan proposal"}
+              {proposal}
+            </p>
+          </div>
+          <div
+            className={`grid justify-center xxs:max-sm:w-full xxs:max-sm:my-3 sm:max-md:w-full sm:max-md:my-3 md:max-lg:w-full md:max-lg:my-3 mr-2 py-5 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${
+              seminar ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"
+            }  text-[#707070] rounded-2xl shadow-xl`}
+          >
+            <div className=" text-xl flex justify-center items-center ">
+              <p className="mx-2">Tanggal Seminar Hasil</p>{" "}
+              {seminar ? (
+                <AiFillCheckCircle className="fill-[#6bae8f]" />
+              ) : (
+                <AiFillCloseCircle className="fill-[#d25858]" />
+              )}
+            </div>
+            <p
+              className={` ${
+                seminar ? "text-3xl font-light" : "italic font-light"
+              } `}
+            >
+              {!seminar &&
+                "Anda belum mengajukan seminar hasil, lengkapi file upload di halaman berkas terlebih dahulu"}
+              {seminar}
+            </p>
+          </div>
+          <div className="grid justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full mr-2 py-5 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 border-[#f3caca] text-[#707070] rounded-2xl shadow-xl">
+            <div className=" text-xl flex justify-center items-center ">
+              <p className="mx-2">Tanggal Sidang Akhir</p>{" "}
+              {sidang ? (
+                <AiFillCheckCircle className="fill-[#6bae8f]" />
+              ) : (
+                <AiFillCloseCircle className="fill-[#d25858]" />
+              )}
+            </div>
+            <p
+              className={` ${
+                sidang ? "text-3xl font-light" : "italic font-light"
+              } `}
+            >
+              {!sidang &&
+                "	Anda belum mengajukan sidang akhir, lakukan seminar hasil terlebih dahulu."}
+              {sidang}
+            </p>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
 };
 
 export default Dashboard;
