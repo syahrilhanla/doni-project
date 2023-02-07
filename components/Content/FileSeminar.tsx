@@ -1,3 +1,4 @@
+import { User } from "firebase/auth";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -12,10 +13,19 @@ const FileSeminar = () => {
 	const [link1, setLink1] = useState("")
 	useEffect(() => {
 		if(user.seminarDate) setJadwal(user.seminarDate[0].dateToBe)
+		const getDocs = async (user: User) => {
+			try {
 		onSnapshot(doc(db, "studentsList", user.uid), (doc) => {
 			setFile(doc.data()?.fileSeminar)
 			setJadwal(doc.data()?.seminarDate[0].dateToBe)
 		})
+		} catch (e) {
+				console.log(e);
+			}
+		};
+		if (user) {
+			getDocs(user!);
+		}
 	}, [user.fileSeminar])
 	const handleLink1 = async () => {
 		const docRef = doc(db, "studentsList", user.uid);
