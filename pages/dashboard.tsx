@@ -6,6 +6,9 @@ import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../components/Context/AuthContext";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../components/Store/firebase";
+import { User } from "firebase/auth";
+
+
 
 const Dashboard = () => {
 	const [ajukan, setAjukan] = useState(false);
@@ -21,6 +24,7 @@ const Dashboard = () => {
 	const [username, setUsername] = useState(null)
 	const [newtitle, setNewtitle] = useState("")
 	const [feedback, setFeedback] = useState<String>()
+
 	useEffect(() => {
 		if (user.title) {
 			setJudul(user.title[0].tittleText)
@@ -28,19 +32,27 @@ const Dashboard = () => {
 			setTerima(user.title[0].isApproved)
 
 		}
-		onSnapshot(doc(db, "studentsList", user.uid), (doc) => {
-			setName(doc.data()?.name)
-			setUsername(doc.data()?.username)
-			setDosen1(doc.data()?.profOne)
-			setDosen2(doc.data()?.profTwo)
-			setProposal(doc.data()?.proposalDate)
-			setSeminar(doc.data()?.seminarDate[0].dateToBe)
-			setSidang(doc.data()?.sidangDate[0].dateToBe)
-			setJudul(doc.data()?.title[0].tittleText)
-			setFeedback(doc.data()?.title[0].feedbackNote)
-			setTerima(doc.data()?.title[0].isApproved)
-
-		})
+		const getDocs = async (user: User) => {
+			try {
+				onSnapshot(doc(db, "studentsList", user.uid), (doc) => {
+					setName(doc.data()?.name)
+					setUsername(doc.data()?.username)
+					setDosen1(doc.data()?.profOne)
+					setDosen2(doc.data()?.profTwo)
+					setProposal(doc.data()?.proposalDate)
+					setSeminar(doc.data()?.seminarDate[0].dateToBe)
+					setSidang(doc.data()?.sidangDate[0].dateToBe)
+					setJudul(doc.data()?.title[0].tittleText)
+					setFeedback(doc.data()?.title[0].feedbackNote)
+					setTerima(doc.data()?.title[0].isApproved)
+				})
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		if (user) {
+			getDocs(user!);
+		}
 	}, [user])
 	const handleNewTitle = async () => {
 		const docRef = doc(db, "studentsList", user.uid);
@@ -163,7 +175,7 @@ const Dashboard = () => {
 				<div className="flex justify-center xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col mt-7 mx-3">
 					<div className={`grid justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full mr-2 py-6 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${proposal ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"} text-[#707070] rounded-2xl shadow-xl`}>
 						<div className=" text-xl flex justify-center items-center"><p className="mx-2">Tanggal Seminar Proposal</p> {proposal ? <AiFillCheckCircle className="fill-[#6bae8f]" /> : <AiFillCloseCircle className="fill-[#d25858]" />}</div>
-							<p className={` ${proposal ? "text-3xl font-light" : "italic font-light"} `}>
+						<p className={` ${proposal ? "text-3xl font-light" : "italic font-light"} `}>
 							{!proposal && "Anda belum mengajukan proposal"}
 							{proposal}
 
