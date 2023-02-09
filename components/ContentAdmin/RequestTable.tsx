@@ -18,7 +18,7 @@ interface dataTable {
 export default function RequestTable() {
   const [setuju, setSetuju] = useState<any>(false);
   const [tolak, setTolak] = useState<any>(false);
-  const [student, setStudent] = useState<any>(null);
+  const [student, setStudent] = useState<any>([]);
 
   const content: dataTable[] = [
     {
@@ -61,11 +61,11 @@ export default function RequestTable() {
   const getData = async () => {
     const studentRef = query(collection(db, "studentsList"), where("statusApprove", "==", false))
     try {
-      const data = await getDocs(studentRef)
-      data.forEach((doc) => {
-      //  console.log(doc.data().username)
-       setStudent(doc.data())
-      })
+       await getDocs(studentRef).then((data) => {
+        setStudent(data.docs.map((item) => {
+          return{...item.data(), id:item.id}
+        }))
+      })     
     } catch (e) {
       console.log(e)
     }
@@ -188,7 +188,7 @@ export default function RequestTable() {
                   >
                     {data.name}
                   </th>
-                  <td className="px-6 py-2 max-w-[20%]">{data.NIM}</td>
+                  <td className="px-6 py-2 max-w-[20%]">{data.username}</td>
 
                   <td className="px-6 py-2 text-right flex gap-2">
                     <button
