@@ -178,8 +178,9 @@ export default function RequestTable() {
             </thead>
             <tbody>
             {
-             student.map((data:any) => (
-                <tr
+             student.map((data:any, index:Key) => (
+               <tr
+                 key={index}
                   className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
                 >
                   <th

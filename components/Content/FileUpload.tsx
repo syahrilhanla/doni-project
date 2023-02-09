@@ -41,7 +41,7 @@ const getDocs = async (user: User) => {
 		if (user) {
 			getDocs(user!);
 		}
-	}, [user.files])
+	}, [user])
 
 	const handleLink1 = async () => {
 		const docRef = doc(db, "studentsList", user.uid);

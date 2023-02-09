@@ -28,7 +28,7 @@ const FileSidang = () => {
 		if (user) {
 			getDocs(user!);
 		}
-	}, [user.fileSidang])
+	}, [user])
 	const handleLink1 = async () => {
 		const docRef = doc(db, "studentsList", user.uid);
 		const link1Value = {

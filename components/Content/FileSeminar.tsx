@@ -26,7 +26,7 @@ const FileSeminar = () => {
 		if (user) {
 			getDocs(user!);
 		}
-	}, [user.fileSeminar])
+	}, [user])
 	const handleLink1 = async () => {
 		const docRef = doc(db, "studentsList", user.uid);
 		const link1Value = {
