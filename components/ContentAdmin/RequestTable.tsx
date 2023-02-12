@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import { User } from "firebase/auth";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import React, { Key, useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCheckLg } from "react-icons/bs";
 import { RiSortDesc, RiCloseLine } from "react-icons/ri";
+
 import FilterSection from "../Layout/FilterSection";
+import { db } from "../Store/firebase";
 
 interface dataTable {
   id: number;
@@ -14,6 +18,8 @@ interface dataTable {
 export default function RequestTable() {
   const [setuju, setSetuju] = useState<any>(false);
   const [tolak, setTolak] = useState<any>(false);
+  const [student, setStudent] = useState<any>([]);
+
   const content: dataTable[] = [
     {
       id: 1,
@@ -52,6 +58,21 @@ export default function RequestTable() {
       status: true,
     },
   ];
+  const getData = async () => {
+    const studentRef = query(collection(db, "studentsList"), where("statusApprove", "==", false))
+    try {
+       await getDocs(studentRef).then((data) => {
+        setStudent(data.docs.map((item) => {
+          return{...item.data(), id:item.id}
+        }))
+      })     
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  useEffect(() => {
+    getData()
+ },[])
   return (
     <>
       <FilterSection />
@@ -156,9 +177,10 @@ export default function RequestTable() {
               </tr>
             </thead>
             <tbody>
-              {content.map((data) => (
-                <tr
-                  key={data.id}
+            {
+             student.map((data:any, index:Key) => (
+               <tr
+                 key={index}
                   className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
                 >
                   <th
@@ -167,7 +189,7 @@ export default function RequestTable() {
                   >
                     {data.name}
                   </th>
-                  <td className="px-6 py-2 max-w-[20%]">{data.nim}</td>
+                  <td className="px-6 py-2 max-w-[20%]">{data.username}</td>
 
                   <td className="px-6 py-2 text-right flex gap-2">
                     <button
@@ -184,7 +206,11 @@ export default function RequestTable() {
                     </button>
                   </td>
                 </tr>
-              ))}
+              ))
+            }
+               
+             
+
             </tbody>
           </table>
         </div>

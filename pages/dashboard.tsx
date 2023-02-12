@@ -6,89 +6,102 @@ import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../components/Context/AuthContext";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../components/Store/firebase";
-import { set } from "react-hook-form/dist/utils";
+import { User } from "firebase/auth";
+
 
 const Dashboard = () => {
-  const [ajukan, setAjukan] = useState(false);
-  const { user } = useAuth();
-  const [judul, setJudul] = useState(null);
-  const [terima, setTerima] = useState(null);
-  const [dosen1, setDosen1] = useState(null);
-  const [dosen2, setDosen2] = useState(null);
-  const [seminar, setSeminar] = useState(null);
-  const [sidang, setSidang] = useState(null);
-  const [proposal, setProposal] = useState(null);
-  const [name, setName] = useState(null);
-  const [username, setUsername] = useState(null);
-  const [newtitle, setNewtitle] = useState("");
-  const [feedback, setFeedback] = useState<String>();
-  useEffect(() => {
-    if (user.title) {
-      setJudul(user.title[0].tittleText);
-      setFeedback(user.title[0].feedbackNote);
-      setTerima(user.title[0].isApproved);
-    }
-    onSnapshot(doc(db, "studentsList", user.uid), (doc) => {
-      setName(doc.data()?.name);
-      setUsername(doc.data()?.username);
-      setDosen1(doc.data()?.profOne);
-      setDosen2(doc.data()?.profTwo);
-      setProposal(doc.data()?.proposalDate);
-      setSeminar(doc.data()?.seminarDate[0].dateToBe);
-      setSidang(doc.data()?.sidangDate[0].dateToBe);
-      setJudul(doc.data()?.title[0].tittleText);
-      setFeedback(doc.data()?.title[0].feedbackNote);
-      setTerima(doc.data()?.title[0].isApproved);
-    });
-  }, [user]);
-  const handleNewTitle = async () => {
-    const docRef = doc(db, "studentsList", user.uid);
-    const titleValue = {
-      title: [
-        {
-          feedbackNote: user.title[0].feedbackNote,
-          isApproved: user.title[0].isApproved,
-          tittleText: newtitle,
-        },
-      ],
-    };
-    window.alert("Judul Skripsi Telah Diajukan");
-    await updateDoc(docRef, titleValue);
-    setNewtitle("");
-  };
-  return (
-    <Layout>
-      <div className="h-screen px-4 overflow-auto py-4">
-        <div className="flex lg:space-between xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col  mt-5 mb-2 mx-4">
-          <div className="grid justify-items-start xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 py-4 px-3 w-2/5 h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
-            <div className=" text-lg text-center font-sans">
-              Selamat Datang {name}
-            </div>
-            <div className="font-black ">{username}</div>
-          </div>
-          <div className="flex justify-center xxs:w-full items-center sm:max-md:w-full  md:max-lg:w-full  md:max-lg:mt-3 w-3/5 h-24 bg-[#f2e8f24f] text-[#683ab7d5] rounded-lg shadow-md">
-            {judul ? (
-              <>
-                <div className="flex justify-items-center font-sans italic">
-                  <p>
-                    {judul} {!terima && <p>{"(Menunggu Acc)"}</p>}
-                  </p>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="flex justify-between w-full mx-7">
-                  <div className="text-lg items-center text-gray-500  font-sans">
-                    Judul Skripsi Belum Ada
-                  </div>
-                  <div>
-                    <button
-                      className="text-white  bg-patternTwo hover:text-gray-900 hover:bg-[#c9c2d2] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
-                      onClick={() => setAjukan(!ajukan)}
-                    >
-                      Ajukan Judul
-                    </button>
-                  </div>
+	const [ajukan, setAjukan] = useState(false);
+	const { user } = useAuth();
+	const [judul, setJudul] = useState(null);
+	const [terima, setTerima] = useState(null);
+	const [dosen1, setDosen1] = useState(null)
+	const [dosen2, setDosen2] = useState(null)
+	const [seminar, setSeminar] = useState(null)
+	const [sidang, setSidang] = useState(null)
+	const [proposal, setProposal] = useState(null)
+	const [name, setName] = useState(null)
+	const [username, setUsername] = useState(null)
+	const [newtitle, setNewtitle] = useState("")
+	const [feedback, setFeedback] = useState<String>()
+
+	useEffect(() => {
+		if (user.title) {
+			setJudul(user.title[0].tittleText)
+			setFeedback(user.title[0].feedbackNote)
+			setTerima(user.title[0].isApproved)
+
+		}
+		const getDocs = async (user: User) => {
+			try {
+				onSnapshot(doc(db, "studentsList", user.uid), (doc) => {
+					setName(doc.data()?.name)
+					setUsername(doc.data()?.username)
+					setDosen1(doc.data()?.profOne)
+					setDosen2(doc.data()?.profTwo)
+					setProposal(doc.data()?.proposalDate)
+					setSeminar(doc.data()?.seminarDate[0].dateToBe)
+					setSidang(doc.data()?.sidangDate[0].dateToBe)
+					setJudul(doc.data()?.title[0].tittleText)
+					setFeedback(doc.data()?.title[0].feedbackNote)
+					setTerima(doc.data()?.title[0].isApproved)
+				})
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		if (user) {
+			getDocs(user!);
+		}
+	}, [user])
+	const handleNewTitle = async () => {
+		const docRef = doc(db, "studentsList", user.uid);
+		const titleValue = {
+			title: [
+				{
+					feedbackNote: user.title[0].feedbackNote,
+					isApproved: user.title[0].isApproved,
+					tittleText: newtitle
+				}
+			]
+		}
+		window.alert("Judul Skripsi Telah Diajukan")
+		await updateDoc(docRef, titleValue)
+		setNewtitle("")
+	}
+	return (
+
+		<Layout>
+			<div className="h-screen px-4 overflow-auto py-4">
+				<div className="flex lg:space-between xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col  mt-5 mb-2 mx-4">
+					<div className="grid justify-items-start xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 py-4 px-3 w-2/5 h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
+						<div className=" text-lg text-center font-sans">Selamat Datang {name}</div>
+						<div className="font-black ">{username}
+						</div>
+					</div>
+					<div className="flex justify-center xxs:w-full items-center sm:max-md:w-full  md:max-lg:w-full  md:max-lg:mt-3 w-3/5 h-24 bg-[#f2e8f24f] text-[#683ab7d5] rounded-lg shadow-md">
+						{judul ? (
+							<>
+								<div className="flex justify-items-center font-sans italic">
+									<p>
+										{judul} {!terima && <p>{"(Menunggu Acc)"}</p>}
+									</p>
+								</div>
+							</>
+						) : (
+							<>
+								<div className="flex justify-between w-full mx-7">
+
+									<div className="text-lg items-center text-gray-500  font-sans">
+										Judul Skripsi Belum Ada
+									</div>
+									<div>
+										<button
+											className="text-white  bg-patternTwo hover:text-gray-900 hover:bg-[#c9c2d2] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+											onClick={() => setAjukan(!ajukan)}
+										>
+											Ajukan Judul
+										</button>
+									</div>
 
                   {ajukan && (
                     <>

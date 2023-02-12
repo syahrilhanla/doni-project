@@ -3,6 +3,7 @@ import { useAuth } from "../Context/AuthContext";
 import { doc, updateDoc, onSnapshot } from "firebase/firestore"
 import { db } from "../Store/firebase"
 import Link from "next/link";
+import { User } from "firebase/auth";
 
 const FileUpload = () => {
 	const { user } = useAuth();
@@ -24,7 +25,8 @@ const FileUpload = () => {
 			setChapter4(user.files[0].chapterFour)
 			setChapter5(user.files[0].chapterFive)
 		}
-
+const getDocs = async (user: User) => {
+			try {
 		onSnapshot(doc(db, "studentsList", user.uid), (doc) => {
 			setChapter1(doc.data()?.files[0].chapterOne)
 			setChapter2(doc.data()?.files[0].chapterTwo)
@@ -32,7 +34,14 @@ const FileUpload = () => {
 			setChapter4(doc.data()?.files[0].chapterFour)
 			setChapter5(doc.data()?.files[0].chapterFive)
 		})
-	}, [user.files])
+		} catch (e) {
+				console.log(e);
+			}
+		};
+		if (user) {
+			getDocs(user!);
+		}
+	}, [user])
 
 	const handleLink1 = async () => {
 		const docRef = doc(db, "studentsList", user.uid);
