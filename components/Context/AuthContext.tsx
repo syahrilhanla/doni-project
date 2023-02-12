@@ -105,7 +105,7 @@ export const AuthContextProvider = ({
                 id: user1,
                 isRead: true,
                 text: "",
-                tittle: "",
+                title: "",
               },
             ],
             seminarDate: [
@@ -126,7 +126,7 @@ export const AuthContextProvider = ({
               {
                 feedBackNote: "",
                 isApproved: false,
-                tittleText: "",
+                titleText: "",
               },
             ],
           });
