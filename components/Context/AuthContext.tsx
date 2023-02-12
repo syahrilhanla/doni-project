@@ -104,7 +104,7 @@ export const AuthContextProvider = ({
               id: user1,
               isRead: true,
               text: "",
-              tittle: ""
+              title: ""
             }],
             seminarDate: [{
               dateToBe: "",
@@ -114,7 +114,7 @@ export const AuthContextProvider = ({
             title: [{
               feedBackNote: "",
               isApproved: false,
-              tittleText: ""
+              titleText: ""
             }]
           })
         } catch (e) {

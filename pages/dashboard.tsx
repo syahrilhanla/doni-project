@@ -37,11 +37,10 @@ const Dashboard = () => {
   // };
 
   useEffect(() => {
-    // if (user.title) setTitle(user.title[0].tittleText)
+    // if (user.title) setTitle(user.title[0].titleText)
   }, [user]);
 
   const handleChange = (value: string) => {
-    // setTitle(value);
     setTitle(value);
   }
 
@@ -66,7 +65,7 @@ const Dashboard = () => {
               title && !isOpenModal &&
               <>
                 <div className="w-full text-left px-4">
-                  {user.title[0].tittleText !== "" ? user.title[0].tittleText : title}
+                  {user.title[0].titleText !== "" ? user.title[0].titleText : title}
                 </div>
               </>
             }
