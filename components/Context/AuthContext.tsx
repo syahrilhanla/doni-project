@@ -88,7 +88,7 @@ export const AuthContextProvider = ({
             fileSeminar: "",
             fileSidang: "",
             note: "",
-            statusApprove: "",
+            statusApprove: false,
             progressStatus: "",
             role: userRole(String(emailType)),
             files: [
