@@ -15,7 +15,6 @@ interface UserType {
 }
 
 const AuthContext = createContext({});
-
 export const useAuth = () => useContext<any>(AuthContext);
 
 export const AuthContextProvider = ({
