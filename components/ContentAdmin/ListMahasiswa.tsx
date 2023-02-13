@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { Key, useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCheckLg, BsTrash } from "react-icons/bs";
 import { RiSortDesc, RiCloseLine } from "react-icons/ri";
 import { FaTrash } from "react-icons/fa";
 import FilterSection from "../Layout/FilterSection";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../Store/firebase";
 
 interface dataTable {
   id: number;
@@ -16,6 +18,7 @@ interface dataTable {
 }
 
 export default function ListMahasiswa() {
+  const [student, setStudent] = useState<any>([]);
   const [hapus, setHapus] = useState<any>(false);
   const [dosenacc1, setDosenacc1] = useState("27 February 2023");
   const [dosenacc2, setDosenacc2] = useState("27 Maret 2023");
@@ -75,6 +78,27 @@ export default function ListMahasiswa() {
       sidang: "Belum",
     },
   ];
+
+  const getData = async () => {
+    const studentRef = query(
+      collection(db, "studentsList"),
+      where("statusApprove", "==", true)
+    );
+    try {
+      await getDocs(studentRef).then((data) => {
+        setStudent(
+          data.docs.map((item) => {
+            return { ...item.data(), id: item.id };
+          })
+        );
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, [student]);
   return (
     <>
       <FilterSection />
@@ -170,9 +194,9 @@ export default function ListMahasiswa() {
               </tr>
             </thead>
             <tbody>
-              {content.map((data) => (
+              {student.map((data: any, index: any) => (
                 <tr
-                  key={data.id}
+                  key={index}
                   className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
                 >
                   <th
@@ -181,30 +205,26 @@ export default function ListMahasiswa() {
                   >
                     {data.name}
                   </th>
-                  <td className="px-6 py-2 max-w-[20%]">{data.nim}</td>
-                  <td className="px-6 py-2 max-w-[20%]">{data.dosenSatu}</td>
-                  <td className="px-6 py-2 max-w-[20%]">{data.dosenDua}</td>
+                  <td className="px-6 py-2 max-w-[20%]">{data.username}</td>
+                  <td className="px-6 py-2 max-w-[20%]">{data.profOne}</td>
+                  <td className="px-6 py-2 max-w-[20%]">{data.profTwo}</td>
 
-                  <td className="px-6 py-2 text-center">
-                    {data.seminar === "Belum" ? (
-                      <p>belum</p>
-                    ) : data.seminar === dosenacc1 ? (
-                      dosenacc1
-                    ) : (
+                  <td className="px-6 py-2 text-center ">
+                    {data.seminarDate[0].isApproved ? (
                       <button className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md">
                         Tanggal Seminar
                       </button>
+                    ) : (
+                      <p>Belum ditentukan</p>
                     )}
                   </td>
                   <td className="px-6 py-2 text-center ">
-                    {data.sidang === "Belum" ? (
-                      <p>belum</p>
-                    ) : data.sidang === dosenacc2 ? (
-                      dosenacc2
-                    ) : (
+                    {data.sidangDate[0].isApproved ? (
                       <button className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md">
                         Tanggal Sidang
                       </button>
+                    ) : (
+                      <p>Belum ditentukan</p>
                     )}
                   </td>
                   <td className="px-6 py-2">

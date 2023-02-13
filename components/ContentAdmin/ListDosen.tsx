@@ -93,19 +93,55 @@ export default function ListDosen() {
               </button>
 
               <div className="p-4 flex flex-col gap-2 ">
-                <h1 className="block text-xl mt-6 font-medium text-gray-900 ">
+                <h1 className="block text-xl my-2 font-medium text-gray-900 ">
                   Daftar mahasiswa yang dibimbing
                 </h1>
-                <ol className=" list-inside list-decimal border-gray-500 border-2 p-2 w-max sm:w-auto text-justify mx-5 flex flex-col gap-2">
-                  {dataMahasiswa.map((list) => (
-                    <li key={list.id}>
-                      {list.name}
 
-                      <p className="ml-4">{list.nim}</p>
-                      <p className="ml-4">{list.title}</p>
-                    </li>
-                  ))}
-                </ol>
+                <table className="text-sm text-left text-gray-900 capitalize ">
+                  <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto ">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 max-w-[20%]">
+                        <div className="flex items-center gap-2">
+                          Nama
+                          <a href="#">
+                            <RiSortDesc />
+                          </a>
+                        </div>
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        <div className="flex items-center gap-2">
+                          NIM
+                          <a href="#">
+                            <RiSortDesc />
+                          </a>
+                        </div>
+                      </th>
+
+                      <th scope="col" className="px-6 py-3">
+                        <div className="flex items-center justify-center">
+                          Judul
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dataMahasiswa.map((data) => (
+                      <tr
+                        key={data.id}
+                        className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
+                      >
+                        <th
+                          scope="row"
+                          className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+                        >
+                          {data.name}
+                        </th>
+                        <td className="px-6 py-2 max-w-[20%]">{data.nim}</td>
+                        <td className="px-6 py-2 max-w-[20%]">{data.title}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
