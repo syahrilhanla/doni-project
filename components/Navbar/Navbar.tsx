@@ -82,15 +82,6 @@ const Navbar = () => {
           >
             <RiLogoutBoxRLine className="text-2xl" />
           </button>
-        
-        {/* <Link href="/login">
-          <button
-            className="cursor-pointer hover:bg-white hover:font-extrabold
-          hover:text-patternTwo p-2 rounded-full duration-200"
-          >
-            <RiLogoutBoxRLine className="text-2xl" />
-          </button>
-        </Link> */}
       </div>
 
       {openNotification && (

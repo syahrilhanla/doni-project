@@ -1,3 +1,5 @@
+import { useAuth } from "../Context/AuthContext";
+
 export interface NotificationData {
   id: number,
   title: string,
@@ -8,7 +10,7 @@ export interface NotificationData {
 interface Props {
   notificationData: NotificationData[]
 }
-
+ const { user } = useAuth();
 const NotificationList = ({ notificationData }: Props) => {
   return (
     <div
