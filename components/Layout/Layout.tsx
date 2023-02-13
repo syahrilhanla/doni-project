@@ -1,12 +1,15 @@
 
 import Router from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../Context/AuthContext";
 import Navbar from "../Navbar/Navbar";
 import ProtectedRoute from "../ProtectedRoute";
 import Sidebar from "../Sidebar/Sidebar";
 
 import {TiWarningOutline} from "react-icons/ti"
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../Store/firebase";
+import { User } from "firebase/auth";
 
 type DashboardLayoutProps = {
   children: React.ReactNode;
@@ -20,12 +23,23 @@ const Layout = ({ children }: DashboardLayoutProps) => {
   else if (user.role === "dosen") {
     Router.push("/approval")
   }
-  const [approve, setApprove] = useState(user.statusApprove)
+  const [approve, setApprove] = useState(null)
+
+  useEffect(() => {
+    if (user.statusApprove) {
+      setApprove(user.statusApprove)
+    }
+    const getApprove = async (user: User) => {
+      onSnapshot(doc(db, "studentsList", user.uid), (doc) => {
+        setApprove(doc.data()?.statusApprove)
+      })
+    }
+  },[user])
   return (
     <ProtectedRoute>
 
       <div className="text-center flex flex-col min-h-screen relative">
-        {approve === true ?
+        {approve &&
           <>
             <Navbar />
             <div className="w-full min-h-[90vh] flex flex-row">
@@ -35,8 +49,9 @@ const Layout = ({ children }: DashboardLayoutProps) => {
               <div className="w-full">{children}</div>
             </div>
           </>
-          :
-          <>
+        }
+        {!approve &&
+          <>         
             <Navbar />
             <div className="w-full min-h-[100vh] flex flex-row">
               <span className="hidden sm:block">
@@ -56,7 +71,8 @@ const Layout = ({ children }: DashboardLayoutProps) => {
                 </div>
               </div>
             </div>
-          </>}
+            </>
+            }
       </div>
     </ProtectedRoute>
   );
