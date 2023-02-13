@@ -144,7 +144,7 @@ export default function RequestTable() {
                         >
                       <option selected>Dosen Pembimbing 1</option>                        
                         {prof.map((item: any, index: Key) => (
-                        <option value={item.name}>{item.name}</option>
+                        <option key={index} value={item.name}>{item.name}</option>
                         ))}
                     </select>
                     
@@ -157,7 +157,7 @@ export default function RequestTable() {
                     >
                       <option selected>Dosen Pembimbing 2</option>
                       {prof.map((item: any, index: Key) => (  
-                        <option value={item.name}>{item.name}</option>
+                        <option key={index} value={item.name}>{item.name}</option>
                       ))}
                     </select>
                   </div>
