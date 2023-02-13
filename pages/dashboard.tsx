@@ -8,43 +8,44 @@ import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../components/Store/firebase";
 import { User } from "firebase/auth";
 
-
 const Dashboard = () => {
   const [ajukan, setAjukan] = useState(false);
   const { user } = useAuth();
   const [judul, setJudul] = useState(null);
-  const [terima, setTerima] = useState(null);
-  const [dosen1, setDosen1] = useState(null)
-  const [dosen2, setDosen2] = useState(null)
-  const [seminar, setSeminar] = useState(null)
-  const [sidang, setSidang] = useState(null)
-  const [proposal, setProposal] = useState(null)
-  const [name, setName] = useState(null)
-  const [username, setUsername] = useState(null)
-  const [newtitle, setNewtitle] = useState("")
-  const [feedback, setFeedback] = useState<String>()
+  const [terimaProfSatu, setTerimaProfSatu] = useState(null);
+  const [terimaProfDua, setTerimaProfDua] = useState(null);
+  const [dosen1, setDosen1] = useState(null);
+  const [dosen2, setDosen2] = useState(null);
+  const [seminar, setSeminar] = useState(null);
+  const [sidang, setSidang] = useState(null);
+  const [proposal, setProposal] = useState(null);
+  const [name, setName] = useState(null);
+  const [username, setUsername] = useState(null);
+  const [newtitle, setNewtitle] = useState("");
+  const [feedback, setFeedback] = useState<String>();
 
   useEffect(() => {
     if (user.title) {
-      setJudul(user.title[0].titleText)
-      setFeedback(user.title[0].feedbackNote)
-      setTerima(user.title[0].isApproved)
-
+      setJudul(user.title[0].titleText);
+      setFeedback(user.title[0].feedbackNote);
+      setTerimaProfSatu(user.title[0].isApprovedByProfOne);
+      setTerimaProfDua(user.title[0].isApprovedByProfTwo);
     }
     const getDocs = async (user: User) => {
       try {
         onSnapshot(doc(db, "studentsList", user.uid), (doc) => {
-          setName(doc.data()?.name)
-          setUsername(doc.data()?.username)
-          setDosen1(doc.data()?.profOne)
-          setDosen2(doc.data()?.profTwo)
-          setProposal(doc.data()?.proposalDate)
-          setSeminar(doc.data()?.seminarDate[0].dateToBe)
-          setSidang(doc.data()?.sidangDate[0].dateToBe)
-          setJudul(doc.data()?.title[0].titleText)
-          setFeedback(doc.data()?.title[0].feedbackNote)
-          setTerima(doc.data()?.title[0].isApproved)
-        })
+          setName(doc.data()?.name);
+          setUsername(doc.data()?.username);
+          setDosen1(doc.data()?.profOne);
+          setDosen2(doc.data()?.profTwo);
+          setProposal(doc.data()?.proposalDate);
+          setSeminar(doc.data()?.seminarDate[0].dateToBe);
+          setSidang(doc.data()?.sidangDate[0].dateToBe);
+          setJudul(doc.data()?.title[0].titleText);
+          setFeedback(doc.data()?.title[0].feedbackNote);
+          setTerimaProfDua(doc.data()?.title[0].isApprovedByProfOne);
+          setTerimaProfSatu(doc.data()?.title[0].isApprovedByProfTwo);
+        });
       } catch (e) {
         console.log(e);
       }
@@ -52,45 +53,51 @@ const Dashboard = () => {
     if (user) {
       getDocs(user!);
     }
-  }, [user])
+  }, [user]);
   const handleNewTitle = async () => {
     const docRef = doc(db, "studentsList", user.uid);
     const titleValue = {
       title: [
         {
           feedbackNote: user.title[0].feedbackNote,
-          isApproved: user.title[0].isApproved,
-          titleText: newtitle
-        }
-      ]
-    }
-    window.alert("Judul Skripsi Telah Diajukan")
-    await updateDoc(docRef, titleValue)
-    setNewtitle("")
-  }
+          isApprovedByProfOne: user.title[0].isApprovedByProfOne,
+          isApprovedByProfTwo: user.title[0].isApprovedByProfTwo,
+          titleText: newtitle,
+        },
+      ],
+    };
+    window.alert("Judul Skripsi Telah Diajukan");
+    await updateDoc(docRef, titleValue);
+    setNewtitle("");
+  };
   return (
-
     <Layout>
       <div className="h-screen px-4 overflow-auto py-4">
         <div className="flex lg:space-between xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col  mt-5 mb-2 mx-4">
           <div className="grid justify-items-start xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 py-4 px-3 w-2/5 h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
-            <div className=" text-lg text-center font-sans">Selamat Datang {name}</div>
-            <div className="font-black ">{username}
+            <div className=" text-lg text-center font-sans">
+              Selamat Datang {name}
             </div>
+            <div className="font-black ">{username}</div>
           </div>
           <div className="flex justify-center xxs:w-full items-center sm:max-md:w-full  md:max-lg:w-full  md:max-lg:mt-3 w-3/5 h-24 bg-[#f2e8f24f] text-[#683ab7d5] rounded-lg shadow-md">
             {judul ? (
               <>
                 <div className="flex justify-items-center font-sans italic">
                   <p>
-                    {judul} {!terima && <p>{"(Menunggu Acc)"}</p>}
+                    {judul}{" "}
+                    {terimaProfSatu && (
+                      <p>{"(Menunggu Acc Dosen Pembimbing Satu)"}</p>
+                    )}
+                    {terimaProfDua && (
+                      <p>{"(Menunggu Acc Dosen Pembimbing Dua)"}</p>
+                    )}
                   </p>
                 </div>
               </>
             ) : (
               <>
                 <div className="flex justify-between w-full mx-7">
-
                   <div className="text-lg items-center text-gray-500  font-sans">
                     Judul Skripsi Belum Ada
                   </div>
@@ -154,8 +161,9 @@ const Dashboard = () => {
               <div className="text-2xl">Dosen Pembimbing 1</div>
             </div>
             <div
-              className={`text-center font-bold ${dosen1 === "" ? "text-sm italic text-gray-400" : "text-4xl"
-                }`}
+              className={`text-center font-bold ${
+                dosen1 === "" ? "text-sm italic text-gray-400" : "text-4xl"
+              }`}
             >
               {!dosen1 && "Kamu Belum Mendapatkan Dosen Pembimbing 1"}
               {dosen1}
@@ -169,8 +177,9 @@ const Dashboard = () => {
               <div className="text-2xl">Dosen Pembimbing 2</div>
             </div>
             <div
-              className={`text-center font-bold ${dosen2 === "" ? "text-sm italic text-gray-400" : "text-4xl"
-                }`}
+              className={`text-center font-bold ${
+                dosen2 === "" ? "text-sm italic text-gray-400" : "text-4xl"
+              }`}
             >
               {!dosen2 && "Kamu Belum Mendapatkan Dosen Pembimbing 2"}
               {dosen2}
@@ -181,8 +190,9 @@ const Dashboard = () => {
         {/* sempro,seminar,sidang  */}
         <div className="flex justify-center xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col mt-7 mx-3">
           <div
-            className={`grid justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full mr-2 py-6 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${proposal ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"
-              } text-[#707070] rounded-2xl shadow-xl`}
+            className={`grid justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full mr-2 py-6 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${
+              proposal ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"
+            } text-[#707070] rounded-2xl shadow-xl`}
           >
             <div className=" text-xl flex justify-center items-center">
               <p className="mx-2">Tanggal Seminar Proposal</p>{" "}
@@ -193,16 +203,18 @@ const Dashboard = () => {
               )}
             </div>
             <p
-              className={` ${proposal ? "text-3xl font-light" : "italic font-light"
-                } `}
+              className={` ${
+                proposal ? "text-3xl font-light" : "italic font-light"
+              } `}
             >
               {!proposal && "Anda belum mengajukan proposal"}
               {proposal}
             </p>
           </div>
           <div
-            className={`grid justify-center xxs:max-sm:w-full xxs:max-sm:my-3 sm:max-md:w-full sm:max-md:my-3 md:max-lg:w-full md:max-lg:my-3 mr-2 py-5 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${seminar ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"
-              }  text-[#707070] rounded-2xl shadow-xl`}
+            className={`grid justify-center xxs:max-sm:w-full xxs:max-sm:my-3 sm:max-md:w-full sm:max-md:my-3 md:max-lg:w-full md:max-lg:my-3 mr-2 py-5 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${
+              seminar ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"
+            }  text-[#707070] rounded-2xl shadow-xl`}
           >
             <div className=" text-xl flex justify-center items-center ">
               <p className="mx-2">Tanggal Seminar Hasil</p>{" "}
@@ -213,8 +225,9 @@ const Dashboard = () => {
               )}
             </div>
             <p
-              className={` ${seminar ? "text-3xl font-light" : "italic font-light"
-                } `}
+              className={` ${
+                seminar ? "text-3xl font-light" : "italic font-light"
+              } `}
             >
               {!seminar &&
                 "Anda belum mengajukan seminar hasil, lengkapi file upload di halaman berkas terlebih dahulu"}
@@ -231,8 +244,9 @@ const Dashboard = () => {
               )}
             </div>
             <p
-              className={` ${sidang ? "text-3xl font-light" : "italic font-light"
-                } `}
+              className={` ${
+                sidang ? "text-3xl font-light" : "italic font-light"
+              } `}
             >
               {!sidang &&
                 "	Anda belum mengajukan sidang akhir, lakukan seminar hasil terlebih dahulu."}
