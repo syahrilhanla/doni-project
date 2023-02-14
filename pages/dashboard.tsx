@@ -85,12 +85,24 @@ const Dashboard = () => {
               <>
                 <div className="flex justify-items-center font-sans italic">
                   <p>
-                    {judul}{" "}
-                    {terimaProfSatu && (
-                      <p>{"(Menunggu Acc Dosen Pembimbing Satu)"}</p>
+                    {terimaProfSatu && terimaProfDua && <p>{judul}</p>}
+                    {!terimaProfSatu && !terimaProfDua && (
+                      <p>
+                        <p>{judul}</p>
+                        <p>{"(Menunggu Acc Dosen Pembimbing Satu dan Dua)"}</p>
+                      </p>
                     )}
-                    {terimaProfDua && (
-                      <p>{"(Menunggu Acc Dosen Pembimbing Dua)"}</p>
+                    {terimaProfSatu && !terimaProfDua && (
+                      <p>
+                        <p>{judul}</p>
+                        <p>{"(Menunggu Acc Dosen Pembimbing Satu)"}</p>
+                      </p>
+                    )}
+                    {!terimaProfSatu && terimaProfDua && (
+                      <p>
+                        <p>{judul}</p>
+                        <p>{"(Menunggu Acc Dosen Pembimbing Dua)"}</p>
+                      </p>
                     )}
                   </p>
                 </div>
