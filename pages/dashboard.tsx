@@ -12,8 +12,8 @@ const Dashboard = () => {
   const [ajukan, setAjukan] = useState(false);
   const { user } = useAuth();
   const [judul, setJudul] = useState(null);
-  const [terimaProfSatu, setTerimaProfSatu] = useState(null);
-  const [terimaProfDua, setTerimaProfDua] = useState(null);
+  const [terimaProfSatu, setTerimaProfSatu] = useState();
+  const [terimaProfDua, setTerimaProfDua] = useState();
   const [dosen1, setDosen1] = useState(null);
   const [dosen2, setDosen2] = useState(null);
   const [seminar, setSeminar] = useState(null);
@@ -26,32 +26,17 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (user.title) {
+      setName(user.name);
+      setUsername(user.username);
+      setDosen1(user.profOne);
+      setDosen2(user.profTwo);
+      setProposal(user.proposalDate);
+      setSeminar(user.seminarDate[0].dateToBe);
+      setSidang(user.sidangDate[0].dateToBe);
       setJudul(user.title[0].titleText);
       setFeedback(user.title[0].feedbackNote);
       setTerimaProfSatu(user.title[0].isApprovedByProfOne);
       setTerimaProfDua(user.title[0].isApprovedByProfTwo);
-    }
-    const getDocs = async (user: User) => {
-      try {
-        onSnapshot(doc(db, "studentsList", user.uid), (doc) => {
-          setName(doc.data()?.name);
-          setUsername(doc.data()?.username);
-          setDosen1(doc.data()?.profOne);
-          setDosen2(doc.data()?.profTwo);
-          setProposal(doc.data()?.proposalDate);
-          setSeminar(doc.data()?.seminarDate[0].dateToBe);
-          setSidang(doc.data()?.sidangDate[0].dateToBe);
-          setJudul(doc.data()?.title[0].titleText);
-          setFeedback(doc.data()?.title[0].feedbackNote);
-          setTerimaProfDua(doc.data()?.title[0].isApprovedByProfOne);
-          setTerimaProfSatu(doc.data()?.title[0].isApprovedByProfTwo);
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    if (user) {
-      getDocs(user!);
     }
   }, [user]);
   const handleNewTitle = async () => {
