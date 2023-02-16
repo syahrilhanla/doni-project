@@ -7,7 +7,7 @@ import {
   Auth,
 } from "firebase/auth";
 import { auth, db } from "../Store/firebase";
-import { setDoc, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc, getDoc, onSnapshot } from "firebase/firestore";
 
 interface UserType {
   email: string | null;
@@ -143,13 +143,21 @@ export const AuthContextProvider = ({
     return signInWithEmailAndPassword(auth, email, password).then(
       (response) => {
         setUser(response.user);
-        getDoc(doc(db, "studentsList", response.user.uid)).then(
+        onSnapshot(
+          doc(db, "studentsList", response.user.uid),
           (userData: any) => {
             if (userData.data()) {
               setUser(userData.data());
             }
           }
         );
+        // getDoc(doc(db, "studentsList", response.user.uid)).then(
+        //   (userData: any) => {
+        //     if (userData.data()) {
+        //       setUser(userData.data());
+        //     }
+        //   }
+        // );
         return response.user;
       }
     );
