@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import { collection, getDocs, query } from "firebase/firestore";
+import React, { useCallback, useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCheckLg, BsTrash } from "react-icons/bs";
 import { FaTrash } from "react-icons/fa";
 import { RiSortDesc, RiCloseLine } from "react-icons/ri";
+import { db } from "../Store/firebase";
 
 interface dataTable {
   id: number;
@@ -19,38 +21,39 @@ interface dataTableMhs {
 export default function ListDosen() {
   const [hapus, setHapus] = useState<any>(false);
   const [buka, setBuka] = useState<any>(false);
-  const content: dataTable[] = [
-    {
-      id: 1,
-      name: "nama 1",
-      nip: "nip 1",
-    },
-    {
-      id: 2,
-      name: "nama 12",
-      nip: "nip 12",
-    },
-    {
-      id: 3,
-      name: "nama 13",
-      nip: "nip 13",
-    },
-    {
-      id: 4,
-      name: "nama 14",
-      nip: "nip 14",
-    },
-    {
-      id: 5,
-      name: "nama 15",
-      nip: "nip 15",
-    },
-    {
-      id: 6,
-      name: "nama 16",
-      nip: "nip 16",
-    },
-  ];
+  const [professor, setProfessor] = useState<any>([]);
+  // const content: dataTable[] = [
+  //   {
+  //     id: 1,
+  //     name: "nama 1",
+  //     nip: "nip 1",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "nama 12",
+  //     nip: "nip 12",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "nama 13",
+  //     nip: "nip 13",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "nama 14",
+  //     nip: "nip 14",
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "nama 15",
+  //     nip: "nip 15",
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "nama 16",
+  //     nip: "nip 16",
+  //   },
+  // ];
   const dataMahasiswa: dataTableMhs[] = [
     {
       id: 1,
@@ -77,12 +80,35 @@ export default function ListDosen() {
       title: "title 1",
     },
   ];
+
+  const getProf = async () => {
+    let unsubscribe = false;
+    await getDocs(collection(db, "professorList"))
+      .then((profRef) => {
+        if (unsubscribe) return;
+        const newProfData = profRef.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setProfessor(newProfData);
+      })
+      .catch((err) => {
+        if (unsubscribe) return;
+        console.error("Failed", err);
+      });
+    return () => (unsubscribe = true);
+  };
+
+  useEffect(() => {
+    getProf();
+  }, []);
+
   return (
     <div>
       {buka && (
         <div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
           <div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />
-          <div className="gap-4 relative  w-3/5 h-full  flex justify-center items-center">
+          <div className="gap-4 relative  w-4/5 h-full  flex justify-center items-center">
             <div className="relative bg-white border-purple-600 rounded-2xl shadow w-3/5 xxs:max-md:w-full md:max-lg:w-full min-h-fit ">
               <button
                 onClick={() => setBuka(!buka)}
@@ -97,7 +123,7 @@ export default function ListDosen() {
                   Daftar mahasiswa yang dibimbing
                 </h1>
 
-                <table className="text-sm text-left text-gray-900 capitalize ">
+                <table className="text-sm text-left text-gray-900 capitalize  ">
                   <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto ">
                     <tr>
                       <th scope="col" className="px-6 py-3 max-w-[20%]">
@@ -216,9 +242,9 @@ export default function ListDosen() {
             </tr>
           </thead>
           <tbody>
-            {content.map((data) => (
+            {professor.map((data: any, index: any) => (
               <tr
-                key={data.id}
+                key={index}
                 className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
               >
                 <th

@@ -34,7 +34,7 @@ const Dashboard = () => {
       setSeminar(user.seminarDate[0].dateToBe);
       setSidang(user.sidangDate[0].dateToBe);
       setJudul(user.title[0].titleText);
-      setFeedback(user.title[0].feedBackNote);
+      setFeedback(user.title[0].feedbackNote);
       setTerimaProfSatu(user.title[0].isApprovedByProfOne);
       setTerimaProfDua(user.title[0].isApprovedByProfTwo);
     }
@@ -44,7 +44,7 @@ const Dashboard = () => {
     const titleValue = {
       title: [
         {
-          feedbackNote: user.title[0].feedBackNote,
+          feedbackNote: user.title[0].feedbackNote,
           isApprovedByProfOne: user.title[0].isApprovedByProfOne,
           isApprovedByProfTwo: user.title[0].isApprovedByProfTwo,
           titleText: newtitle,

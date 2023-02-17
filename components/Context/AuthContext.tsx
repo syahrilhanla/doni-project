@@ -110,7 +110,7 @@ export const AuthContextProvider = ({
             seminarDate: [
               {
                 dateToBe: "",
-                feedBackNote: "",
+                feedbackNote: "",
                 isApprovedByProfOne: true,
                 isApprovedByProfTwo: true,
               },
@@ -118,14 +118,14 @@ export const AuthContextProvider = ({
             sidangDate: [
               {
                 dateToBe: "",
-                feedBackNote: "",
+                feedbackNote: "",
                 isApprovedByProfOne: true,
                 isApprovedByProfTwo: true,
               },
             ],
             title: [
               {
-                feedBackNote: "",
+                feedbackNote: "",
                 isApprovedByProfOne: false,
                 isApprovedByProfTwo: false,
                 titleText: "",
@@ -166,8 +166,7 @@ export const AuthContextProvider = ({
     return signInWithEmailAndPassword(auth, email, password).then(
       (response) => {
         setUser(response.user);
-        onSnapshot(
-          doc(db, "professorList", response.user.uid),
+        getDoc(doc(db, "professorList", response.user.uid)).then(
           (userData: any) => {
             if (userData.data()) {
               setUser(userData.data());
@@ -182,11 +181,13 @@ export const AuthContextProvider = ({
     return signInWithEmailAndPassword(auth, email, password).then(
       (response) => {
         setUser(response.user);
-        onSnapshot(doc(db, "adminList", response.user.uid), (userData: any) => {
-          if (userData.data()) {
-            setUser(userData.data());
+        getDoc(doc(db, "adminList", response.user.uid)).then(
+          (userData: any) => {
+            if (userData.data()) {
+              setUser(userData.data());
+            }
           }
-        });
+        );
         return response.user;
       }
     );
