@@ -1,4 +1,4 @@
-import React, { Key, useEffect, useState } from "react";
+import React, { Key, useCallback, useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCheckLg, BsTrash } from "react-icons/bs";
 import { RiSortDesc, RiCloseLine } from "react-icons/ri";
@@ -11,6 +11,7 @@ import {
   query,
   updateDoc,
   where,
+  getDoc
 } from "firebase/firestore";
 import { db } from "../Store/firebase";
 import { async } from "@firebase/util";
@@ -38,82 +39,23 @@ export default function ListMahasiswa() {
   const [examinerTwo, setExaminerTwo] = useState("");
   const [seminarDate, setSeminarDate] = useState<any>();
   const [sidangDate, setSidangDate] = useState<any>();
-  // const [dosenacc1, setDosenacc1] = useState("27 February 2023");
-  // const [dosenacc2, setDosenacc2] = useState("27 Maret 2023");
-  // const content: dataTable[] = [
-  //   {
-  //     id: 1,
-  //     name: "nama 1",
-  //     nim: "1719201018173",
-  //     dosenSatu: "dosen 1",
-  //     dosenDua: "dosen 2",
-  //     seminar: "27 February 2023",
-  //     sidang: "27 Maret 2023",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "nama 12",
-  //     nim: "1929182723111",
-  //     dosenSatu: "dosen 1",
-  //     dosenDua: "dosen 2",
-  //     seminar: "Ajukan",
-  //     sidang: "Belum",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "nama 13",
-  //     nim: "2019182722222",
-  //     dosenSatu: "dosen 1",
-  //     dosenDua: "dosen 2",
-  //     seminar: "27 February 2023",
-  //     sidang: "Ajukan",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "nama 14",
-  //     nim: "2192992822223",
-  //     dosenSatu: "dosen 1",
-  //     dosenDua: "dosen 2",
-  //     seminar: "Belum",
-  //     sidang: "Belum",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "nama 15",
-  //     nim: "2209390029222",
-  //     dosenSatu: "dosen 1",
-  //     dosenDua: "dosen 2",
-  //     seminar: "Belum",
-  //     sidang: "Belum",
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "nama 16",
-  //     nim: "1821122222313",
-  //     dosenSatu: "dosen 1",
-  //     dosenDua: "dosen 2",
-  //     seminar: "Belum",
-  //     sidang: "Belum",
-  //   },
-  // ];
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     const studentRef = query(
       collection(db, "studentsList"),
       where("statusApprove", "==", true)
     );
+
     try {
-      await getDocs(studentRef).then((data) => {
-        setStudent(
-          data.docs.map((item) => {
-            return { ...item.data(), id: item.id };
-          })
-        );
-      });
+      const studentsData = (await getDocs(studentRef)).docs.map(item => item)
+        .map(item => item.data());
+
+      setStudent(studentsData);
     } catch (e) {
       console.log(e);
     }
-  };
+  }, [student]);
+
   const getProf = async () => {
     let unsubscribe = false;
     await getDocs(collection(db, "professorList"))
@@ -131,10 +73,11 @@ export default function ListMahasiswa() {
       });
     return () => (unsubscribe = true);
   };
+
   useEffect(() => {
     getData();
     getProf();
-  }, [student]);
+  }, []);
 
   const getStatusSeminar = (data: any) => {
     setAssignSeminar(true);
@@ -144,6 +87,7 @@ export default function ListMahasiswa() {
     setAssignSidang(true);
     setUseridSidang(data);
   };
+
   const getUpdateSeminar = async () => {
     const studentRef = doc(db, "studentsList", useridSeminar);
     const valueUpdate = {
@@ -166,6 +110,7 @@ export default function ListMahasiswa() {
       setExaminerTwo("");
     });
   };
+
   const getUpdateSidang = async () => {
     const studentRef = doc(db, "studentsList", useridSidang);
     const valueUpdate = {
@@ -180,6 +125,7 @@ export default function ListMahasiswa() {
         },
       ],
     };
+
     await updateDoc(studentRef, valueUpdate).then(() => {
       window.alert("Sidang akhir berhasil diatur");
       setAssignSidang(false);
@@ -188,6 +134,7 @@ export default function ListMahasiswa() {
       setExaminerTwo("");
     });
   };
+
   return (
     <>
       <FilterSection />
@@ -425,7 +372,7 @@ export default function ListMahasiswa() {
 
                   <td className="px-6 py-2 text-center ">
                     {!data.seminarDate[0].isApprovedByProfOne &&
-                    !data.seminarDate[0].isApprovedByProfTwo ? (
+                      !data.seminarDate[0].isApprovedByProfTwo ? (
                       <button
                         onClick={() => getStatusSeminar(data.id)}
                         className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
