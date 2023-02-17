@@ -113,6 +113,7 @@ export default function ListMahasiswa() {
     } catch (e) {
       console.log(e);
     }
+    console.log(student);
   };
   const getProf = async () => {
     let unsubscribe = false;
@@ -132,62 +133,64 @@ export default function ListMahasiswa() {
     return () => (unsubscribe = true);
   };
   useEffect(() => {
-    getData();
-    getProf();
+    if (!student) {
+      getData();
+      // getProf();
+    }
   }, [student]);
 
-  const getStatusSeminar = (data: any) => {
-    setAssignSeminar(true);
-    setUseridSeminar(data);
-  };
-  const getStatusSidang = (data: any) => {
-    setAssignSidang(true);
-    setUseridSidang(data);
-  };
-  const getUpdateSeminar = async () => {
-    const studentRef = doc(db, "studentsList", useridSeminar);
-    const valueUpdate = {
-      examinerOne: examinerOne,
-      examinerTwo: examinerTwo,
-      seminarDate: [
-        {
-          dateToBe: seminarDate,
-          feedbackNote: seminarDate[0].feedbackNote,
-          isApprovedByProfOne: seminarDate[0].isApprovedByProfOne,
-          isApprovedByProfTwo: seminarDate[0].isApprovedByProfTwo,
-        },
-      ],
-    };
-    await updateDoc(studentRef, valueUpdate).then(() => {
-      window.alert("Seminar hasil berhasil diatur");
-      setAssignSeminar(false);
-      setSeminarDate("");
-      setExaminerOne("");
-      setExaminerTwo("");
-    });
-  };
-  const getUpdateSidang = async () => {
-    const studentRef = doc(db, "studentsList", useridSidang);
-    const valueUpdate = {
-      examinerOne: examinerOne,
-      examinerTwo: examinerTwo,
-      sidangDate: [
-        {
-          dateToBe: sidangDate,
-          feedbackNote: sidangDate[0].feedbackNote,
-          isApprovedByProfOne: sidangDate[0].isApprovedByProfOne,
-          isApprovedByProfTwo: sidangDate[0].isApprovedByProfTwo,
-        },
-      ],
-    };
-    await updateDoc(studentRef, valueUpdate).then(() => {
-      window.alert("Sidang akhir berhasil diatur");
-      setAssignSidang(false);
-      setSidangDate("");
-      setExaminerOne("");
-      setExaminerTwo("");
-    });
-  };
+  // const getStatusSeminar = (data: any) => {
+  //   setAssignSeminar(true);
+  //   setUseridSeminar(data);
+  // };
+  // const getStatusSidang = (data: any) => {
+  //   setAssignSidang(true);
+  //   setUseridSidang(data);
+  // };
+  // const getUpdateSeminar = async () => {
+  //   const studentRef = doc(db, "studentsList", useridSeminar);
+  //   const valueUpdate = {
+  //     examinerOne: examinerOne,
+  //     examinerTwo: examinerTwo,
+  //     seminarDate: [
+  //       {
+  //         dateToBe: seminarDate,
+  //         feedBackNote: seminarDate[0].feedBackNote,
+  //         isApprovedByProfOne: seminarDate[0].isApprovedByProfOne,
+  //         isApprovedByProfTwo: seminarDate[0].isApprovedByProfTwo,
+  //       },
+  //     ],
+  //   };
+  //   await updateDoc(studentRef, valueUpdate).then(() => {
+  //     window.alert("Seminar hasil berhasil diatur");
+  //     setAssignSeminar(false);
+  //     setSeminarDate("");
+  //     setExaminerOne("");
+  //     setExaminerTwo("");
+  //   });
+  // };
+  // const getUpdateSidang = async () => {
+  //   const studentRef = doc(db, "studentsList", useridSidang);
+  //   const valueUpdate = {
+  //     examinerOne: examinerOne,
+  //     examinerTwo: examinerTwo,
+  //     sidangDate: [
+  //       {
+  //         dateToBe: sidangDate,
+  //         feedBackNote: sidangDate[0].feedBackNote,
+  //         isApprovedByProfOne: sidangDate[0].isApprovedByProfOne,
+  //         isApprovedByProfTwo: sidangDate[0].isApprovedByProfTwo,
+  //       },
+  //     ],
+  //   };
+  //   await updateDoc(studentRef, valueUpdate).then(() => {
+  //     window.alert("Sidang akhir berhasil diatur");
+  //     setAssignSidang(false);
+  //     setSidangDate("");
+  //     setExaminerOne("");
+  //     setExaminerTwo("");
+  //   });
+  // };
   return (
     <>
       <FilterSection />
@@ -245,7 +248,7 @@ export default function ListMahasiswa() {
                   </div>
                   <div className="p-4 flex gap-2 justify-end items-end">
                     <button
-                      onClick={getUpdateSeminar}
+                      // onClick={getUpdateSeminar}
                       className=" text-white bg-green-500 ring-2  rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-green-500 hover:ring-green-500 hover:bg-white focus:z-10"
                     >
                       Kirim
@@ -306,7 +309,7 @@ export default function ListMahasiswa() {
                   </div>
                   <div className="p-4 flex gap-2 justify-end items-end">
                     <button
-                      onClick={getUpdateSidang}
+                      // onClick={getUpdateSidang}
                       className=" text-white bg-green-500 ring-2  rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-green-500 hover:ring-green-500 hover:bg-white focus:z-10"
                     >
                       Kirim
@@ -424,10 +427,10 @@ export default function ListMahasiswa() {
                   <td className="px-6 py-2 max-w-[20%]">{data.profTwo}</td>
 
                   <td className="px-6 py-2 text-center ">
-                    {!data.seminarDate[0].isApprovedByProfOne &&
-                    !data.seminarDate[0].isApprovedByProfTwo ? (
+                    {data.seminarDate[0].isApprovedByProfOne &&
+                    data.seminarDate[0].isApprovedByProfTwo ? (
                       <button
-                        onClick={() => getStatusSeminar(data.id)}
+                        // onClick={() => getStatusSeminar(data.id)}
                         className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
                       >
                         Tanggal Seminar
@@ -439,7 +442,7 @@ export default function ListMahasiswa() {
                   <td className="px-6 py-2 text-center ">
                     {data.sidangDate[0].isApproved ? (
                       <button
-                        onClick={() => getStatusSidang(data.id)}
+                        // onClick={() => getStatusSidang(data.id)}
                         className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
                       >
                         Tanggal Sidang
