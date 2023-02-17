@@ -1,4 +1,4 @@
-import React, { Key, useEffect, useState } from "react";
+import React, { Key, useCallback, useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCheckLg, BsTrash } from "react-icons/bs";
 import { RiSortDesc, RiCloseLine } from "react-icons/ri";
@@ -11,6 +11,7 @@ import {
   query,
   updateDoc,
   where,
+  getDoc,
 } from "firebase/firestore";
 import { db } from "../Store/firebase";
 import { async } from "@firebase/util";
@@ -38,83 +39,24 @@ export default function ListMahasiswa() {
   const [examinerTwo, setExaminerTwo] = useState("");
   const [seminarDate, setSeminarDate] = useState<any>();
   const [sidangDate, setSidangDate] = useState<any>();
-  // const [dosenacc1, setDosenacc1] = useState("27 February 2023");
-  // const [dosenacc2, setDosenacc2] = useState("27 Maret 2023");
-  // const content: dataTable[] = [
-  //   {
-  //     id: 1,
-  //     name: "nama 1",
-  //     nim: "1719201018173",
-  //     dosenSatu: "dosen 1",
-  //     dosenDua: "dosen 2",
-  //     seminar: "27 February 2023",
-  //     sidang: "27 Maret 2023",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "nama 12",
-  //     nim: "1929182723111",
-  //     dosenSatu: "dosen 1",
-  //     dosenDua: "dosen 2",
-  //     seminar: "Ajukan",
-  //     sidang: "Belum",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "nama 13",
-  //     nim: "2019182722222",
-  //     dosenSatu: "dosen 1",
-  //     dosenDua: "dosen 2",
-  //     seminar: "27 February 2023",
-  //     sidang: "Ajukan",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "nama 14",
-  //     nim: "2192992822223",
-  //     dosenSatu: "dosen 1",
-  //     dosenDua: "dosen 2",
-  //     seminar: "Belum",
-  //     sidang: "Belum",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "nama 15",
-  //     nim: "2209390029222",
-  //     dosenSatu: "dosen 1",
-  //     dosenDua: "dosen 2",
-  //     seminar: "Belum",
-  //     sidang: "Belum",
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "nama 16",
-  //     nim: "1821122222313",
-  //     dosenSatu: "dosen 1",
-  //     dosenDua: "dosen 2",
-  //     seminar: "Belum",
-  //     sidang: "Belum",
-  //   },
-  // ];
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     const studentRef = query(
       collection(db, "studentsList"),
       where("statusApprove", "==", true)
     );
+
     try {
-      await getDocs(studentRef).then((data) => {
-        setStudent(
-          data.docs.map((item) => {
-            return { ...item.data(), id: item.id };
-          })
-        );
-      });
+      const studentsData = (await getDocs(studentRef)).docs
+        .map((item) => item)
+        .map((item) => item.data());
+
+      setStudent(studentsData);
     } catch (e) {
       console.log(e);
     }
-    console.log(student);
-  };
+  }, [student]);
+
   const getProf = async () => {
     let unsubscribe = false;
     await getDocs(collection(db, "professorList"))
@@ -132,65 +74,68 @@ export default function ListMahasiswa() {
       });
     return () => (unsubscribe = true);
   };
-  useEffect(() => {
-    if (!student) {
-      getData();
-      // getProf();
-    }
-  }, [student]);
 
-  // const getStatusSeminar = (data: any) => {
-  //   setAssignSeminar(true);
-  //   setUseridSeminar(data);
-  // };
-  // const getStatusSidang = (data: any) => {
-  //   setAssignSidang(true);
-  //   setUseridSidang(data);
-  // };
-  // const getUpdateSeminar = async () => {
-  //   const studentRef = doc(db, "studentsList", useridSeminar);
-  //   const valueUpdate = {
-  //     examinerOne: examinerOne,
-  //     examinerTwo: examinerTwo,
-  //     seminarDate: [
-  //       {
-  //         dateToBe: seminarDate,
-  //         feedBackNote: seminarDate[0].feedBackNote,
-  //         isApprovedByProfOne: seminarDate[0].isApprovedByProfOne,
-  //         isApprovedByProfTwo: seminarDate[0].isApprovedByProfTwo,
-  //       },
-  //     ],
-  //   };
-  //   await updateDoc(studentRef, valueUpdate).then(() => {
-  //     window.alert("Seminar hasil berhasil diatur");
-  //     setAssignSeminar(false);
-  //     setSeminarDate("");
-  //     setExaminerOne("");
-  //     setExaminerTwo("");
-  //   });
-  // };
-  // const getUpdateSidang = async () => {
-  //   const studentRef = doc(db, "studentsList", useridSidang);
-  //   const valueUpdate = {
-  //     examinerOne: examinerOne,
-  //     examinerTwo: examinerTwo,
-  //     sidangDate: [
-  //       {
-  //         dateToBe: sidangDate,
-  //         feedBackNote: sidangDate[0].feedBackNote,
-  //         isApprovedByProfOne: sidangDate[0].isApprovedByProfOne,
-  //         isApprovedByProfTwo: sidangDate[0].isApprovedByProfTwo,
-  //       },
-  //     ],
-  //   };
-  //   await updateDoc(studentRef, valueUpdate).then(() => {
-  //     window.alert("Sidang akhir berhasil diatur");
-  //     setAssignSidang(false);
-  //     setSidangDate("");
-  //     setExaminerOne("");
-  //     setExaminerTwo("");
-  //   });
-  // };
+  useEffect(() => {
+    getData();
+    getProf();
+  }, []);
+
+  const getStatusSeminar = (data: any) => {
+    setAssignSeminar(true);
+    setUseridSeminar(data);
+  };
+  const getStatusSidang = (data: any) => {
+    setAssignSidang(true);
+    setUseridSidang(data);
+  };
+
+  const getUpdateSeminar = async () => {
+    const studentRef = doc(db, "studentsList", useridSeminar);
+    const valueUpdate = {
+      examinerOne: examinerOne,
+      examinerTwo: examinerTwo,
+      seminarDate: [
+        {
+          dateToBe: seminarDate,
+          feedbackNote: seminarDate[0].feedbackNote,
+          isApprovedByProfOne: seminarDate[0].isApprovedByProfOne,
+          isApprovedByProfTwo: seminarDate[0].isApprovedByProfTwo,
+        },
+      ],
+    };
+    await updateDoc(studentRef, valueUpdate).then(() => {
+      window.alert("Seminar hasil berhasil diatur");
+      setAssignSeminar(false);
+      setSeminarDate("");
+      setExaminerOne("");
+      setExaminerTwo("");
+    });
+  };
+
+  const getUpdateSidang = async () => {
+    const studentRef = doc(db, "studentsList", useridSidang);
+    const valueUpdate = {
+      examinerOne: examinerOne,
+      examinerTwo: examinerTwo,
+      sidangDate: [
+        {
+          dateToBe: sidangDate,
+          feedbackNote: sidangDate[0].feedbackNote,
+          isApprovedByProfOne: sidangDate[0].isApprovedByProfOne,
+          isApprovedByProfTwo: sidangDate[0].isApprovedByProfTwo,
+        },
+      ],
+    };
+
+    await updateDoc(studentRef, valueUpdate).then(() => {
+      window.alert("Sidang akhir berhasil diatur");
+      setAssignSidang(false);
+      setSidangDate("");
+      setExaminerOne("");
+      setExaminerTwo("");
+    });
+  };
+
   return (
     <>
       <FilterSection />
