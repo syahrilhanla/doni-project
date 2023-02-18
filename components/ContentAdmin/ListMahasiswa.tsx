@@ -80,6 +80,7 @@ export default function ListMahasiswa() {
           ...doc.data(),
           id: doc.id,
         }));
+
         setExaminer(newExaminerData);
       })
       .catch((err) => {
@@ -106,6 +107,7 @@ export default function ListMahasiswa() {
     setIsApprovedByProfOneSeminar(isApprovedByProfOne);
     setIsApprovedByProfTwoSeminar(isApprovedByProfTwo);
   };
+
   const getStatusSidang = (
     uid: any,
     feedbackNote: any,
@@ -120,10 +122,13 @@ export default function ListMahasiswa() {
   };
 
   const getUpdateSeminar = async () => {
+    const examinerOneData = JSON.parse(examinerOne);
+    const examinerTwoData = JSON.parse(examinerTwo);
+
     const studentRef = doc(db, "studentsList", useridSeminar);
     const valueUpdate = {
-      examinerOne: examinerOne,
-      examinerTwo: examinerTwo,
+      examinerOne: examinerOneData.name,
+      examinerTwo: examinerTwoData.name,
       seminarDate: [
         {
           dateToBe: seminarDate,
@@ -134,13 +139,16 @@ export default function ListMahasiswa() {
       ],
     };
 
-    await updateDoc(studentRef, valueUpdate).then(() => {
-      window.alert("Seminar hasil berhasil diatur");
-      setAssignSeminar(false);
-      setSeminarDate("");
-      setExaminerOne("");
-      setExaminerTwo("");
-    });
+
+    console.log({ examinerOneData, examinerTwoData });
+
+    // await updateDoc(studentRef, valueUpdate).then(() => {
+    //   window.alert("Seminar hasil berhasil diatur");
+    //   setAssignSeminar(false);
+    //   setSeminarDate("");
+    //   setExaminerOne("");
+    //   setExaminerTwo("");
+    // });
   };
 
   const getUpdateSidang = async () => {
@@ -177,7 +185,11 @@ export default function ListMahasiswa() {
             <div className="gap-4 relative  w-3/5 h-full  flex justify-center items-center">
               <div className="relative bg-white border-purple-600 rounded-2xl shadow w-3/5 xxs:max-md:w-full md:max-lg:w-full min-h-fit ">
                 <button
-                  onClick={() => setAssignSeminar(!assignSeminar)}
+                  onClick={() => {
+                    setAssignSeminar(!assignSeminar);
+                    setExaminerOne("");
+                    setExaminerTwo("");
+                  }}
                   type="button"
                   className="absolute top-3 right-2.5 bg-red-600 hover:text-red-600 hover:bg-white text-white bg-transparent hover:ring-red-600 ring-1 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
                 >
@@ -202,7 +214,7 @@ export default function ListMahasiswa() {
                     >
                       <option selected>Pilih Dosen Penguji 1</option>
                       {examiner.map((item: any, index: Key) => (
-                        <option key={index} value={item.name}>
+                        <option key={index} value={JSON.stringify(item)}>
                           {item.name}
                         </option>
                       ))}
@@ -216,7 +228,7 @@ export default function ListMahasiswa() {
                     >
                       <option selected>Pilih Dosen Penguji 2</option>
                       {examiner.map((item: any, index: Key) => (
-                        <option key={index} value={item.name}>
+                        <option key={index} value={JSON.stringify(item)}>
                           {item.name}
                         </option>
                       ))}
@@ -224,7 +236,9 @@ export default function ListMahasiswa() {
                   </div>
                   <div className="p-4 flex gap-2 justify-end items-end">
                     <button
-                      onClick={getUpdateSeminar}
+                      onClick={() => {
+                        if (examinerOne && examinerTwo) getUpdateSeminar();
+                      }}
                       className=" text-white bg-green-500 ring-2  rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-green-500 hover:ring-green-500 hover:bg-white focus:z-10"
                     >
                       Kirim
@@ -241,7 +255,11 @@ export default function ListMahasiswa() {
             <div className="gap-4 relative  w-3/5 h-full  flex justify-center items-center">
               <div className="relative bg-white border-purple-600 rounded-2xl shadow w-3/5 xxs:max-md:w-full md:max-lg:w-full min-h-fit ">
                 <button
-                  onClick={() => setAssignSidang(!assignSidang)}
+                  onClick={() => {
+                    setAssignSidang(!assignSidang);
+                    setExaminerOne("");
+                    setExaminerTwo("");
+                  }}
                   type="button"
                   className="absolute top-3 right-2.5 bg-red-600 hover:text-red-600 hover:bg-white text-white bg-transparent hover:ring-red-600 ring-1 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
                 >
@@ -266,7 +284,7 @@ export default function ListMahasiswa() {
                     >
                       <option selected>Dosen Penguji 1</option>
                       {examiner.map((item: any, index: Key) => (
-                        <option key={index} value={item.name}>
+                        <option key={index} value={JSON.stringify(item)}>
                           {item.name}
                         </option>
                       ))}
@@ -280,7 +298,7 @@ export default function ListMahasiswa() {
                     >
                       <option selected>Dosen Penguji 2</option>
                       {examiner.map((item: any, index: Key) => (
-                        <option key={index} value={item.name}>
+                        <option key={index} value={JSON.stringify(item)}>
                           {item.name}
                         </option>
                       ))}
@@ -288,7 +306,9 @@ export default function ListMahasiswa() {
                   </div>
                   <div className="p-4 flex gap-2 justify-end items-end">
                     <button
-                      onClick={getUpdateSidang}
+                      onClick={() => {
+                        if (examinerOne && examinerTwo) getUpdateSidang();
+                      }}
                       className=" text-white bg-green-500 ring-2  rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-green-500 hover:ring-green-500 hover:bg-white focus:z-10"
                     >
                       Kirim
