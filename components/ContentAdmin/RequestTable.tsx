@@ -1,6 +1,13 @@
 import { async } from "@firebase/util";
 import { User } from "firebase/auth";
-import { collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import React, { Key, useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCheckLg } from "react-icons/bs";
@@ -21,9 +28,9 @@ export default function RequestTable() {
   const [tolak, setTolak] = useState<any>(false);
   const [student, setStudent] = useState<any>([]);
   const [prof, setProf] = useState<any>([]);
-  const [dosen1, setDosen1] = useState('')
-  const [dosen2, setDosen2] = useState('')
-  const [userid, setUserid] = useState('')
+  const [dosen1, setDosen1] = useState("");
+  const [dosen2, setDosen2] = useState("");
+  const [userid, setUserid] = useState("");
   const content: dataTable[] = [
     {
       id: 1,
@@ -63,61 +70,72 @@ export default function RequestTable() {
     },
   ];
   const getData = async () => {
-    const studentRef = query(collection(db, "studentsList"), where("statusApprove", "==", false))
+    const studentRef = query(
+      collection(db, "studentsList"),
+      where("statusApprove", "==", false)
+    );
     try {
       await getDocs(studentRef).then((data) => {
-        setStudent(data.docs.map((item) => {
-          return { ...item.data(), id: item.id }
-        }))
-      })
+        setStudent(
+          data.docs.map((item) => {
+            return { ...item.data(), id: item.id };
+          })
+        );
+      });
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
-  }
-  const getProf = async() => {
-    let unsubscribe = false
+    console.log(student);
+  };
+  const getProf = async () => {
+    let unsubscribe = false;
     await getDocs(collection(db, "professorList"))
       .then((profRef) => {
         if (unsubscribe) return;
-        const newProfDataArray = profRef.docs
-        .map((doc)=>({...doc.data(), id:doc.id}))
-        setProf(newProfDataArray)
-      }).catch((err) => {
-        if (unsubscribe) return;
-        console.error("Failed",err)
+        const newProfDataArray = profRef.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setProf(newProfDataArray);
       })
-      return () => unsubscribe = true;
-      // const profRef = collection(db, "professorList")
-      
-      //   await getDocs(profRef).then((data) => {
-        //     setProf(data.docs.map((item) => {
+      .catch((err) => {
+        if (unsubscribe) return;
+        console.error("Failed", err);
+      });
+    return () => (unsubscribe = true);
+    // const profRef = collection(db, "professorList")
+
+    //   await getDocs(profRef).then((data) => {
+    //     setProf(data.docs.map((item) => {
     //       return { ...item.data(), id: item.id }
     //     }))
     //   })
-  }
+  };
   useEffect(() => {
-    getData();
-    getProf();
-  }, [student])
- 
+    if (!student) {
+      getData();
+      getProf();
+    }
+  }, [student]);
+
   const getStatus = (data: any) => {
-    setSetuju(true)
-    setUserid(data)
-  }
+    setSetuju(true);
+    setUserid(data);
+  };
   const getUpdate = () => {
-    const studentRef = doc(db, "studentsList", userid)
+    const studentRef = doc(db, "studentsList", userid);
     const valueUpdate = {
       statusApprove: true,
       profOne: dosen1,
-      profTwo: dosen2
-    }
+      profTwo: dosen2,
+    };
     updateDoc(studentRef, valueUpdate).then(() => {
-      window.alert("Mahasiswa berhasil di terima")
-      setSetuju(false)
-      setDosen1('')
-      setDosen2('')
-    })
-  }
+      window.alert("Mahasiswa berhasil di terima");
+      setSetuju(false);
+      setDosen1("");
+      setDosen2("");
+    });
+  };
   return (
     <>
       <FilterSection />
@@ -137,17 +155,18 @@ export default function RequestTable() {
 
                 <div className="p-4 flex flex-col mt-9 gap-2">
                   <div className="realtive xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full">
-                      <select
-                        className="bg-[#f1e8f252] focus:outline-none border-1 justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full  text-[#707070] w-full hover:bg-[#ebe6ea]  font-medium rounded-lg text-sm px-4 py-2.5 text-center items-center"
-                        onChange={(e) => setDosen1(e.target.value)}
-                        value={dosen1}
-                        >
-                      <option selected>Dosen Pembimbing 1</option>                        
-                        {prof.map((item: any, index: Key) => (
-                        <option key={index} value={item.name}>{item.name}</option>
-                        ))}
+                    <select
+                      className="bg-[#f1e8f252] focus:outline-none border-1 justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full  text-[#707070] w-full hover:bg-[#ebe6ea]  font-medium rounded-lg text-sm px-4 py-2.5 text-center items-center"
+                      onChange={(e) => setDosen1(e.target.value)}
+                      value={dosen1}
+                    >
+                      <option selected>Dosen Pembimbing 1</option>
+                      {prof.map((item: any, index: Key) => (
+                        <option key={index} value={item.name}>
+                          {item.name}
+                        </option>
+                      ))}
                     </select>
-                    
                   </div>
                   <div className="realtive xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full">
                     <select
@@ -156,8 +175,10 @@ export default function RequestTable() {
                       value={dosen2}
                     >
                       <option selected>Dosen Pembimbing 2</option>
-                      {prof.map((item: any, index: Key) => (  
-                        <option key={index} value={item.name}>{item.name}</option>
+                      {prof.map((item: any, index: Key) => (
+                        <option key={index} value={item.name}>
+                          {item.name}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -168,7 +189,6 @@ export default function RequestTable() {
                     >
                       Kirim
                     </button>
-
                   </div>
                 </div>
               </div>
@@ -239,40 +259,35 @@ export default function RequestTable() {
               </tr>
             </thead>
             <tbody>
-              {
-                student.map((data: any, index: Key) => (
-                  <tr
-                    key={index}
-                    className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
+              {student.map((data: any, index: Key) => (
+                <tr
+                  key={index}
+                  className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
+                >
+                  <th
+                    scope="row"
+                    className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
                   >
-                    <th
-                      scope="row"
-                      className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+                    {data.name}
+                  </th>
+                  <td className="px-6 py-2 max-w-[20%]">{data.username}</td>
+
+                  <td className="px-6 py-2 text-right flex gap-2">
+                    <button
+                      onClick={() => getStatus(data.id)}
+                      className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white  hover:text-green-500 bg-green-500 p-2 rounded-md"
                     >
-                      {data.name}
-                    </th>
-                    <td className="px-6 py-2 max-w-[20%]">{data.username}</td>
-
-                    <td className="px-6 py-2 text-right flex gap-2">
-                      <button
-                        onClick={() => getStatus(data.id)}
-                        className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white  hover:text-green-500 bg-green-500 p-2 rounded-md"
-                      >
-                        <BsCheckLg className="" />
-                      </button>
-                      <button
-                        onClick={() => setTolak(!tolak)}
-                        className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
-                      >
-                        <AiOutlineClose />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              }
-
-
-
+                      <BsCheckLg className="" />
+                    </button>
+                    <button
+                      onClick={() => setTolak(!tolak)}
+                      className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
+                    >
+                      <AiOutlineClose />
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

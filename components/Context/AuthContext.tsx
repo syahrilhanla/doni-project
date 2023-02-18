@@ -125,7 +125,7 @@ export const AuthContextProvider = ({
             ],
             title: [
               {
-                feedBackNote: "",
+                feedbackNote: "",
                 isApprovedByProfOne: false,
                 isApprovedByProfTwo: false,
                 titleText: "",

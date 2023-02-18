@@ -16,7 +16,7 @@ const FileSeminar = () => {
       setJadwal(user.seminarDate[0].dateToBe);
       setFile(user.fileSeminar);
     }
-    console.log(user.fileSeminar);
+    // console.log(user.fileSeminar);
   }, [user]);
   const handleLink1 = async () => {
     const docRef = doc(db, "studentsList", user.uid);
