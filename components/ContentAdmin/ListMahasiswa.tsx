@@ -139,23 +139,23 @@ export default function ListMahasiswa() {
       ],
     };
 
-
-    console.log({ examinerOneData, examinerTwoData });
-
-    // await updateDoc(studentRef, valueUpdate).then(() => {
-    //   window.alert("Seminar hasil berhasil diatur");
-    //   setAssignSeminar(false);
-    //   setSeminarDate("");
-    //   setExaminerOne("");
-    //   setExaminerTwo("");
-    // });
+    await updateDoc(studentRef, valueUpdate).then(() => {
+      window.alert("Seminar hasil berhasil diatur");
+      setAssignSeminar(false);
+      setSeminarDate("");
+      setExaminerOne("");
+      setExaminerTwo("");
+    });
   };
 
   const getUpdateSidang = async () => {
+    const examinerOneData = JSON.parse(examinerOne);
+    const examinerTwoData = JSON.parse(examinerTwo);
+
     const studentRef = doc(db, "studentsList", useridSidang);
     const valueUpdate = {
-      examinerOne: examinerOne,
-      examinerTwo: examinerTwo,
+      examinerOne: examinerOneData.name,
+      examinerTwo: examinerTwoData.name,
       sidangDate: [
         {
           dateToBe: sidangDate,
@@ -237,7 +237,8 @@ export default function ListMahasiswa() {
                   <div className="p-4 flex gap-2 justify-end items-end">
                     <button
                       onClick={() => {
-                        if (examinerOne && examinerTwo) getUpdateSeminar();
+                        if (examinerOne && examinerTwo && seminarDate) getUpdateSeminar();
+                        else alert("Lengkapi data terlebih dahulu!");
                       }}
                       className=" text-white bg-green-500 ring-2  rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-green-500 hover:ring-green-500 hover:bg-white focus:z-10"
                     >
@@ -307,7 +308,8 @@ export default function ListMahasiswa() {
                   <div className="p-4 flex gap-2 justify-end items-end">
                     <button
                       onClick={() => {
-                        if (examinerOne && examinerTwo) getUpdateSidang();
+                        if (examinerOne && examinerTwo && sidangDate) getUpdateSidang();
+                        else alert("Lengkapi data terlebih dahulu!");
                       }}
                       className=" text-white bg-green-500 ring-2  rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-green-500 hover:ring-green-500 hover:bg-white focus:z-10"
                     >
