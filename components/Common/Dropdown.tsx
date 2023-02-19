@@ -18,9 +18,9 @@ const Dropdown = ({ displayText, dropdownData, handleClickItem }: Props) => {
   useOnClickOutside(ref, () => setOpenDropdown(false));
 
   return (
-    <div ref={ref}>
+    <div ref={ref} className="w-full relative ">
       <button
-        className="relative py-2.5 px-6 flex justify-between bg-[#f4eff3] duration-300
+        className="py-2.5 px-6 flex justify-between bg-[#f4eff3] duration-300
         border-1 xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full text-[#707070]
         w-full hover:bg-[#e4e0e4] font-medium rounded-lg text-sm text-center items-center"
         type="button"
