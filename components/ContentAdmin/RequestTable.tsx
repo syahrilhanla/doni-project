@@ -258,7 +258,7 @@ export default function RequestTable() {
                     colSpan={3}
                     className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
                   >
-                    No Data
+                    Tidak ada data untuk ditampilkan
                   </td>
                 </tr>
               </>
