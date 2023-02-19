@@ -268,32 +268,18 @@ export default function ListMahasiswa() {
                       onChange={(e) => setSidangDate(e.target.value)}
                       value={sidangDate}
                     />
-                    <select
-                      className="bg-[#f1e8f252] focus:outline-none border-1 justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full  text-[#707070] w-full hover:bg-[#ebe6ea]  font-medium rounded-lg text-sm px-4 py-2.5 text-center items-center"
-                      onChange={(e) => setExaminerOne(e.target.value)}
-                      value={examinerOne}
-                    >
-                      <option selected>Dosen Penguji 1</option>
-                      {examiner.map((item: any, index: Key) => (
-                        <option key={index} value={JSON.stringify(item)}>
-                          {item.name}
-                        </option>
-                      ))}
-                    </select>
+                    <Dropdown
+                      displayText="Pilih Dosen Penguji 1"
+                      handleClickItem={selectExaminerOne}
+                      dropdownData={examiner}
+                    />
                   </div>
                   <div className="relative xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full">
-                    <select
-                      className="bg-[#f1e8f252] focus:outline-none border-1 justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full  text-[#707070] w-full hover:bg-[#ebe6ea]  font-medium rounded-lg text-sm px-4 py-2.5 text-center items-center"
-                      onChange={(e) => setExaminerTwo(e.target.value)}
-                      value={examinerTwo}
-                    >
-                      <option selected>Dosen Penguji 2</option>
-                      {examiner.map((item: any, index: Key) => (
-                        <option key={index} value={JSON.stringify(item)}>
-                          {item.name}
-                        </option>
-                      ))}
-                    </select>
+                    <Dropdown
+                      displayText="Pilih Dosen Penguji 2"
+                      handleClickItem={selectExaminerTwo}
+                      dropdownData={examiner}
+                    />
                   </div>
                   <div className="p-4 flex gap-2 justify-end items-end">
                     <SendButton handleClick={handleAssignSidang} />
