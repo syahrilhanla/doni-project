@@ -32,7 +32,9 @@ const Dropdown = ({ displayText, dropdownData, handleClickItem }: Props) => {
       {openDropdown && (
         <ul className="rounded-lg absolute mt-1 z-50 w-full bg-[#ffffff]">
           {dropdownData.map(item => (
-            <li className="py-2 px-4 hover:bg-[#f8f8f8] duration-200 cursor-pointer"
+            <li
+              key={item.id}
+              className="py-2 px-4 hover:bg-[#f8f8f8] duration-200 cursor-pointer"
               onClick={() => {
                 handleClickItem(item);
                 setSelectedItemText(item.name)
