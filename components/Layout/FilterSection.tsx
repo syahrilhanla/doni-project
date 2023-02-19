@@ -1,8 +1,23 @@
 import React, { useState } from "react";
+import Dropdown from "../Common/Dropdown";
 
 const FilterSection = () => {
   const [title, setTitle] = useState("");
   const [angkatan, setAngkatan] = useState("");
+
+  const listAngkatan = [
+    { name: 2016 },
+    { name: 2017 },
+    { name: 2018 },
+    { name: 2019 },
+    { name: 2020 },
+    { name: 2021 },
+    { name: 2022 }
+  ]
+
+  const handleSetAngkatan = (itemData: any) => {
+    setAngkatan(itemData)
+  }
 
   return (
     <>
@@ -10,18 +25,11 @@ const FilterSection = () => {
         className={`flex justify-center items-center my-5 py-4 w-5/6  xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col `}
       >
         <div className="realtive xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full">
-          <select
-            className="bg-[#f1e8f252] focus:outline-none border-1 justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full  text-[#707070] w-44  hover:bg-[#ebe6ea]  font-medium rounded-lg text-sm px-4 py-2.5 text-center items-center"
-            onChange={(e) => setAngkatan(e.target.value)}
-            value={angkatan}
-          >
-            <option selected>Angkatan</option>
-            <option value="2016">2016</option>
-            <option value="2017">2017</option>
-            <option value="2018">2018</option>
-            <option value="2019">2019</option>
-            <option value="2020">2020</option>
-          </select>
+          <Dropdown
+            displayText="Angkatan"
+            dropdownData={listAngkatan}
+            handleClickItem={handleSetAngkatan}
+          />
         </div>
         <div
           className={`relative w-full sm:w-[50vw] lg:ml-3 xxs:max-sm:mt-2 sm:max-md:mt-2 md:max-lg:mt-2`}

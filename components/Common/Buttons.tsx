@@ -11,17 +11,29 @@ export const CloseButton = ({ handleClick }: Props) => {
     </button>)
 }
 
-export const SendButton = ({ handleClick }: Props) => {
+export const SendButton = ({ handleClick, buttonText = "Kirim" }: Props) => {
   return (
     <button
       onClick={handleClick}
       className="purple-button"
     >
-      Kirim
+      {buttonText}
     </button>
   )
 }
 
+
+export const ErrorButton = ({ handleClick, buttonText }: Props) => {
+  return (
+    <button
+      onClick={handleClick}
+      className="red-button"
+    >
+      {buttonText}
+    </button>
+  )
+}
 interface Props {
-  handleClick: () => void
+  handleClick: () => void;
+  buttonText?: string;
 }

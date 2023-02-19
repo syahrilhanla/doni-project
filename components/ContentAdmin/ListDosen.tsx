@@ -151,7 +151,7 @@ export default function ListDosen() {
                     </tr>
                   </thead>
                   <tbody>
-                    {dataMahasiswa.map((data) => (
+                    {dataMahasiswa ? dataMahasiswa.map((data) => (
                       <tr
                         key={data.id}
                         className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
@@ -165,7 +165,21 @@ export default function ListDosen() {
                         <td className="px-6 py-2 max-w-[20%]">{data.nim}</td>
                         <td className="px-6 py-2 max-w-[20%]">{data.title}</td>
                       </tr>
-                    ))}
+                    )) : (
+                      <>
+                        <tr
+                          className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
+                        >
+                          <td
+                            scope="row"
+                            colSpan={4}
+                            className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+                          >
+                            Tidak ada data untuk ditampilkan
+                          </td>
+                        </tr>
+                      </>
+                    )}
                   </tbody>
                 </table>
               </div>
