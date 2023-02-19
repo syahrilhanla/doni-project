@@ -394,7 +394,7 @@ export default function ListMahasiswa() {
               </tr>
             </thead>
             <tbody>
-              {student.map((data: any, index: any) => (
+              {student ? student.map((data: any, index: any) => (
                 <tr
                   key={index}
                   className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
@@ -460,7 +460,20 @@ export default function ListMahasiswa() {
                     </button>
                   </td>
                 </tr>
-              ))}
+              )) : <>
+                <tr
+                  className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
+                >
+                  <td
+                    scope="row"
+                    colSpan={7}
+                    className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+                  >
+                    No Data
+                  </td>
+                </tr>
+              </>
+              }
             </tbody>
           </table>
         </div>
