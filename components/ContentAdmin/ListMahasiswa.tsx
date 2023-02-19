@@ -16,6 +16,7 @@ import {
 import { db } from "../Store/firebase";
 import { async } from "@firebase/util";
 import { CloseButton, SendButton } from "../Common/Buttons";
+import Dropdown from "../Common/Dropdown";
 
 interface dataTable {
   id: number;
@@ -220,7 +221,7 @@ export default function ListMahasiswa() {
                       onChange={(e) => setSeminarDate(e.target.value)}
                       value={seminarDate}
                     />
-                    <select
+                    {/* <select
                       className="bg-[#f1e8f252] focus:outline-none border-1 justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full  text-[#707070] w-full hover:bg-[#ebe6ea]  font-medium rounded-lg text-sm px-4 py-2.5 text-center items-center"
                       onChange={(e) => setExaminerOne(e.target.value)}
                       value={examinerOne}
@@ -231,10 +232,11 @@ export default function ListMahasiswa() {
                           {item.name}
                         </option>
                       ))}
-                    </select>
+                    </select> */}
+                    <Dropdown displayText="Pilih Dosen Penguji 1" />
                   </div>
                   <div className="relative xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full">
-                    <select
+                    {/* <select
                       className="bg-[#f1e8f252] focus:outline-none border-1 justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full  text-[#707070] w-full hover:bg-[#ebe6ea]  font-medium rounded-lg text-sm px-4 py-2.5 text-center items-center"
                       onChange={(e) => setExaminerTwo(e.target.value)}
                       value={examinerTwo}
@@ -245,7 +247,8 @@ export default function ListMahasiswa() {
                           {item.name}
                         </option>
                       ))}
-                    </select>
+                    </select> */}
+                    <Dropdown displayText="Pilih Dosen Penguji 2" />
                   </div>
                   <div className="p-4 flex gap-2 justify-end items-end">
                     <SendButton handleClick={handleAssignSeminar} />
