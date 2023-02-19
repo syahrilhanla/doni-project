@@ -31,44 +31,7 @@ export default function RequestTable() {
   const [dosen1, setDosen1] = useState("");
   const [dosen2, setDosen2] = useState("");
   const [userid, setUserid] = useState("");
-  const content: dataTable[] = [
-    {
-      id: 1,
-      name: "nama 1",
-      nim: "nim 1",
-      status: true,
-    },
-    {
-      id: 2,
-      name: "nama 12",
-      nim: "nim 12",
-      status: true,
-    },
-    {
-      id: 3,
-      name: "nama 13",
-      nim: "nim 13",
-      status: true,
-    },
-    {
-      id: 4,
-      name: "nama 14",
-      nim: "nim 14",
-      status: true,
-    },
-    {
-      id: 5,
-      name: "nama 15",
-      nim: "nim 15",
-      status: true,
-    },
-    {
-      id: 6,
-      name: "nama 16",
-      nim: "nim 16",
-      status: true,
-    },
-  ];
+
   const getData = async () => {
     const studentRef = query(
       collection(db, "studentsList"),
@@ -85,8 +48,8 @@ export default function RequestTable() {
     } catch (e) {
       console.log(e);
     }
-    console.log(student);
   };
+
   const getProf = async () => {
     let unsubscribe = false;
     await getDocs(collection(db, "professorList"))
@@ -102,33 +65,31 @@ export default function RequestTable() {
         if (unsubscribe) return;
         console.error("Failed", err);
       });
-    return () => (unsubscribe = true);
-    // const profRef = collection(db, "professorList")
 
-    //   await getDocs(profRef).then((data) => {
-    //     setProf(data.docs.map((item) => {
-    //       return { ...item.data(), id: item.id }
-    //     }))
-    //   })
+    return () => (unsubscribe = true);
   };
+
   useEffect(() => {
     if (!student) {
       getData();
       getProf();
     }
-  }, [student]);
+  }, []);
 
   const getStatus = (data: any) => {
     setSetuju(true);
     setUserid(data);
   };
+
   const getUpdate = () => {
     const studentRef = doc(db, "studentsList", userid);
+
     const valueUpdate = {
       statusApprove: true,
       profOne: dosen1,
       profTwo: dosen2,
     };
+
     updateDoc(studentRef, valueUpdate).then(() => {
       window.alert("Mahasiswa berhasil di terima");
       setSetuju(false);
@@ -136,6 +97,7 @@ export default function RequestTable() {
       setDosen2("");
     });
   };
+
   return (
     <>
       <FilterSection />
@@ -259,17 +221,17 @@ export default function RequestTable() {
               </tr>
             </thead>
             <tbody>
-              {student.map((data: any, index: Key) => (
+              {student.length > 0 ? student.map((data: any, index: Key) => (
                 <tr
                   key={index}
                   className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
                 >
-                  <th
+                  <td
                     scope="row"
                     className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
                   >
                     {data.name}
-                  </th>
+                  </td>
                   <td className="px-6 py-2 max-w-[20%]">{data.username}</td>
 
                   <td className="px-6 py-2 text-right flex gap-2">
@@ -287,7 +249,20 @@ export default function RequestTable() {
                     </button>
                   </td>
                 </tr>
-              ))}
+              )) : <>
+                <tr
+                  className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
+                >
+                  <td
+                    scope="row"
+                    colSpan={3}
+                    className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+                  >
+                    No Data
+                  </td>
+                </tr>
+              </>
+              }
             </tbody>
           </table>
         </div>
