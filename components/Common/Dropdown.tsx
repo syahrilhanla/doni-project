@@ -5,10 +5,14 @@ import { useOnClickOutside } from 'usehooks-ts'
 
 interface Props {
   displayText: string,
+  dropdownData: any[],
+  handleClickItem: (itemData: any) => void
 }
 
-const Dropdown = ({ displayText }: Props) => {
+const Dropdown = ({ displayText, dropdownData, handleClickItem }: Props) => {
   const [openDropdown, setOpenDropdown] = useState(false);
+  const [selectedItemText, setSelectedItemText] = useState("");
+
   const ref = useRef(null);
 
   useOnClickOutside(ref, () => setOpenDropdown(false));
@@ -22,18 +26,22 @@ const Dropdown = ({ displayText }: Props) => {
         type="button"
         onClick={() => setOpenDropdown(!openDropdown)}
       >
-        <p>{displayText}</p>
+        <p>{!selectedItemText ? displayText : selectedItemText}</p>
         <RiArrowDownSLine className="text-[#707070] text-xl" />
       </button>
       {openDropdown && (
         <ul className="rounded-lg absolute mt-1 z-50 w-full bg-[#ffffff]">
-          <li className="py-2 px-4 hover:bg-[#f8f8f8] duration-200 cursor-pointer"
-            onClick={() => {
-              setOpenDropdown(false);
-            }}
-          >
-            list 1
-          </li>
+          {dropdownData.map(item => (
+            <li className="py-2 px-4 hover:bg-[#f8f8f8] duration-200 cursor-pointer"
+              onClick={() => {
+                handleClickItem(item);
+                setSelectedItemText(item.name)
+                setOpenDropdown(false);
+              }}
+            >
+              {item.name}
+            </li>
+          ))}
         </ul>
       )}
     </div>
