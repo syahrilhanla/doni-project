@@ -18,3 +18,13 @@ a {
 * {
   box-sizing: border-box;
 }
+
+@layer components {
+  .purple-button {
+    @apply rounded-md bg-[#F0EBF8] py-1 px-4 text-[#9F86C0] hover:bg-[#e6ddf6] duration-150
+  }
+
+  .red-button {
+    @apply rounded-md bg-[#EF4444] py-1 px-4 text-[#f3f3f3] hover:bg-[#e94c4c] duration-150
+  }
+}
