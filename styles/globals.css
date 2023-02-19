@@ -25,6 +25,6 @@ a {
   }
 
   .red-button {
-    @apply rounded-md bg-[#EF4444] py-1 px-4 text-[#f3f3f3] hover:bg-[#e94c4c] duration-150
+    @apply rounded-md bg-[#EF4444] py-1 px-4 text-[#f3f3f3] hover:bg-[#e95151] duration-150
   }
 }
