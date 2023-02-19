@@ -15,6 +15,8 @@ import {
 } from "firebase/firestore";
 import { db } from "../Store/firebase";
 import { async } from "@firebase/util";
+import { CloseButton, SendButton } from "../Common/Buttons";
+import Dropdown from "../Common/Dropdown";
 
 interface dataTable {
   id: number;
@@ -122,8 +124,8 @@ export default function ListMahasiswa() {
   };
 
   const getUpdateSeminar = async () => {
-    const examinerOneData = JSON.parse(examinerOne);
-    const examinerTwoData = JSON.parse(examinerTwo);
+    const examinerOneData: any = examinerOne;
+    const examinerTwoData: any = examinerTwo;
 
     const studentRef = doc(db, "studentsList", useridSeminar);
     const valueUpdate = {
@@ -149,8 +151,8 @@ export default function ListMahasiswa() {
   };
 
   const getUpdateSidang = async () => {
-    const examinerOneData = JSON.parse(examinerOne);
-    const examinerTwoData = JSON.parse(examinerTwo);
+    const examinerOneData: any = examinerOne;
+    const examinerTwoData: any = examinerTwo;
 
     const studentRef = doc(db, "studentsList", useridSidang);
     const valueUpdate = {
@@ -175,6 +177,36 @@ export default function ListMahasiswa() {
     });
   };
 
+  const handleCloseSeminarModal = () => {
+    setAssignSeminar(!assignSeminar);
+    setExaminerOne("");
+    setExaminerTwo("");
+  }
+
+  const handleCloseSidangModal = () => {
+    setAssignSidang(!assignSidang);
+    setExaminerOne("");
+    setExaminerTwo("");
+  }
+
+  const handleAssignSeminar = () => {
+    if (examinerOne && examinerTwo && seminarDate) getUpdateSeminar();
+    else alert("Lengkapi data terlebih dahulu!");
+  }
+
+  const handleAssignSidang = () => {
+    if (examinerOne && examinerTwo && sidangDate) getUpdateSidang();
+    else alert("Lengkapi data terlebih dahulu!");
+  }
+
+  const selectExaminerOne = (itemData: any) => {
+    setExaminerOne(itemData);
+  }
+
+  const selectExaminerTwo = (itemData: any) => {
+    setExaminerTwo(itemData);
+  }
+
   return (
     <>
       <FilterSection />
@@ -184,17 +216,7 @@ export default function ListMahasiswa() {
             <div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />
             <div className="gap-4 relative  w-3/5 h-full  flex justify-center items-center">
               <div className="relative bg-white border-purple-600 rounded-2xl shadow w-3/5 xxs:max-md:w-full md:max-lg:w-full min-h-fit ">
-                <button
-                  onClick={() => {
-                    setAssignSeminar(!assignSeminar);
-                    setExaminerOne("");
-                    setExaminerTwo("");
-                  }}
-                  type="button"
-                  className="absolute top-3 right-2.5 bg-red-600 hover:text-red-600 hover:bg-white text-white bg-transparent hover:ring-red-600 ring-1 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-                >
-                  <RiCloseLine />
-                </button>
+                <CloseButton handleClick={handleCloseSeminarModal} />
 
                 <div className="p-4 flex flex-col mt-9 gap-2">
                   <div className="relative xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full">
@@ -207,43 +229,21 @@ export default function ListMahasiswa() {
                       onChange={(e) => setSeminarDate(e.target.value)}
                       value={seminarDate}
                     />
-                    <select
-                      className="bg-[#f1e8f252] focus:outline-none border-1 justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full  text-[#707070] w-full hover:bg-[#ebe6ea]  font-medium rounded-lg text-sm px-4 py-2.5 text-center items-center"
-                      onChange={(e) => setExaminerOne(e.target.value)}
-                      value={examinerOne}
-                    >
-                      <option selected>Pilih Dosen Penguji 1</option>
-                      {examiner.map((item: any, index: Key) => (
-                        <option key={index} value={JSON.stringify(item)}>
-                          {item.name}
-                        </option>
-                      ))}
-                    </select>
+                    <Dropdown
+                      displayText="Pilih Dosen Penguji 1"
+                      handleClickItem={selectExaminerOne}
+                      dropdownData={examiner}
+                    />
                   </div>
                   <div className="relative xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full">
-                    <select
-                      className="bg-[#f1e8f252] focus:outline-none border-1 justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full  text-[#707070] w-full hover:bg-[#ebe6ea]  font-medium rounded-lg text-sm px-4 py-2.5 text-center items-center"
-                      onChange={(e) => setExaminerTwo(e.target.value)}
-                      value={examinerTwo}
-                    >
-                      <option selected>Pilih Dosen Penguji 2</option>
-                      {examiner.map((item: any, index: Key) => (
-                        <option key={index} value={JSON.stringify(item)}>
-                          {item.name}
-                        </option>
-                      ))}
-                    </select>
+                    <Dropdown
+                      displayText="Pilih Dosen Penguji 2"
+                      handleClickItem={selectExaminerTwo}
+                      dropdownData={examiner}
+                    />
                   </div>
                   <div className="p-4 flex gap-2 justify-end items-end">
-                    <button
-                      onClick={() => {
-                        if (examinerOne && examinerTwo && seminarDate) getUpdateSeminar();
-                        else alert("Lengkapi data terlebih dahulu!");
-                      }}
-                      className=" text-white bg-green-500 ring-2  rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-green-500 hover:ring-green-500 hover:bg-white focus:z-10"
-                    >
-                      Kirim
-                    </button>
+                    <SendButton handleClick={handleAssignSeminar} />
                   </div>
                 </div>
               </div>
@@ -255,17 +255,7 @@ export default function ListMahasiswa() {
             <div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />
             <div className="gap-4 relative  w-3/5 h-full  flex justify-center items-center">
               <div className="relative bg-white border-purple-600 rounded-2xl shadow w-3/5 xxs:max-md:w-full md:max-lg:w-full min-h-fit ">
-                <button
-                  onClick={() => {
-                    setAssignSidang(!assignSidang);
-                    setExaminerOne("");
-                    setExaminerTwo("");
-                  }}
-                  type="button"
-                  className="absolute top-3 right-2.5 bg-red-600 hover:text-red-600 hover:bg-white text-white bg-transparent hover:ring-red-600 ring-1 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-                >
-                  <RiCloseLine />
-                </button>
+                <CloseButton handleClick={handleCloseSidangModal} />
 
                 <div className="p-4 flex flex-col mt-9 gap-2">
                   <div className="relative xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full">
@@ -306,15 +296,7 @@ export default function ListMahasiswa() {
                     </select>
                   </div>
                   <div className="p-4 flex gap-2 justify-end items-end">
-                    <button
-                      onClick={() => {
-                        if (examinerOne && examinerTwo && sidangDate) getUpdateSidang();
-                        else alert("Lengkapi data terlebih dahulu!");
-                      }}
-                      className=" text-white bg-green-500 ring-2  rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-green-500 hover:ring-green-500 hover:bg-white focus:z-10"
-                    >
-                      Kirim
-                    </button>
+                    <SendButton handleClick={handleAssignSidang} />
                   </div>
                 </div>
               </div>
