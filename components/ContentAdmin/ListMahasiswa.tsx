@@ -181,31 +181,31 @@ export default function ListMahasiswa() {
     setAssignSeminar(!assignSeminar);
     setExaminerOne("");
     setExaminerTwo("");
-  }
+  };
 
   const handleCloseSidangModal = () => {
     setAssignSidang(!assignSidang);
     setExaminerOne("");
     setExaminerTwo("");
-  }
+  };
 
   const handleAssignSeminar = () => {
     if (examinerOne && examinerTwo && seminarDate) getUpdateSeminar();
     else alert("Lengkapi data terlebih dahulu!");
-  }
+  };
 
   const handleAssignSidang = () => {
     if (examinerOne && examinerTwo && sidangDate) getUpdateSidang();
     else alert("Lengkapi data terlebih dahulu!");
-  }
+  };
 
   const selectExaminerOne = (itemData: any) => {
     setExaminerOne(itemData);
-  }
+  };
 
   const selectExaminerTwo = (itemData: any) => {
     setExaminerTwo(itemData);
-  }
+  };
 
   return (
     <>
@@ -301,8 +301,14 @@ export default function ListMahasiswa() {
                     Apakah anda ingin menghapus data mahasiswa ini?
                   </p>
                   <div className="p-4 flex gap-2 justify-end items-end">
-                    <ErrorButton handleClick={() => setHapus(false)} buttonText="Hapus" />
-                    <SendButton handleClick={() => setHapus(false)} buttonText="Batal" />
+                    <ErrorButton
+                      handleClick={() => setHapus(false)}
+                      buttonText="Hapus"
+                    />
+                    <SendButton
+                      handleClick={() => setHapus(false)}
+                      buttonText="Batal"
+                    />
                   </div>
                 </div>
               </div>
@@ -364,86 +370,89 @@ export default function ListMahasiswa() {
               </tr>
             </thead>
             <tbody>
-              {student ? student.map((data: any, index: any) => (
-                <tr
-                  key={index}
-                  className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
-                >
-                  <th
-                    scope="row"
-                    className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+              {student ? (
+                student.map((data: any, index: any) => (
+                  <tr
+                    key={index}
+                    className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
                   >
-                    {data.name}
-                  </th>
-                  <td className="px-6 py-2 max-w-[20%]">{data.username}</td>
-                  <td className="px-6 py-2 max-w-[20%]">{data.profOne}</td>
-                  <td className="px-6 py-2 max-w-[20%]">{data.profTwo}</td>
-
-                  {data.seminarDate.map((item: any, index: any) => (
-                    <td key={index} className="px-6 py-2 text-center ">
-                      {item.isApprovedByProfOne && item.isApprovedByProfTwo ? (
-                        <button
-                          onClick={() =>
-                            getStatusSeminar(
-                              data.uid,
-                              item.feedbackNote,
-                              item.isApprovedByProfOne,
-                              item.isApprovedByProfTwo
-                            )
-                          }
-                          className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
-                        >
-                          Tanggal Seminar
-                        </button>
-                      ) : (
-                        <p>Belum ditentukan</p>
-                      )}
-                    </td>
-                  ))}
-                  {data.sidangDate.map((item: any, index: any) => (
-                    <td key={index} className="px-6 py-2 text-center ">
-                      {item.isApprovedByProfOne && item.isApprovedByProfTwo ? (
-                        <button
-                          onClick={() =>
-                            getStatusSidang(
-                              data.uid,
-                              item.feedbackNote,
-                              item.isApprovedByProfOne,
-                              item.isApprovedByProfTwo
-                            )
-                          }
-                          className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
-                        >
-                          Tanggal sidang
-                        </button>
-                      ) : (
-                        <p>Belum ditentukan</p>
-                      )}
-                    </td>
-                  ))}
-                  <td className="px-6 py-2">
-                    <button
-                      onClick={() => setHapus(!hapus)}
-                      className="font-medium text-white hover:opacity-50 duration-150 bg-[#D0312D] p-2 rounded-md"
+                    <th
+                      scope="row"
+                      className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
                     >
-                      <FaTrash />
-                    </button>
-                  </td>
-                </tr>
-              )) : <>
-                <tr
-                  className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
-                >
-                  <td
-                    scope="row"
-                    colSpan={7}
-                    className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
-                  >
-                    Tidak ada data untuk ditampilkan
-                  </td>
-                </tr>
-              </>
-              }
+                      {data.name}
+                    </th>
+                    <td className="px-6 py-2 max-w-[20%]">{data.username}</td>
+                    <td className="px-6 py-2 max-w-[20%]">{data.profOne}</td>
+                    <td className="px-6 py-2 max-w-[20%]">{data.profTwo}</td>
+
+                    {data.seminarDate.map((item: any, index: any) => (
+                      <td key={index} className="px-6 py-2 text-center ">
+                        {item.isApprovedByProfOne &&
+                        item.isApprovedByProfTwo ? (
+                          <button
+                            onClick={() =>
+                              getStatusSeminar(
+                                data.uid,
+                                item.feedbackNote,
+                                item.isApprovedByProfOne,
+                                item.isApprovedByProfTwo
+                              )
+                            }
+                            className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
+                          >
+                            Tanggal Seminar
+                          </button>
+                        ) : (
+                          <p>Belum ditentukan</p>
+                        )}
+                      </td>
+                    ))}
+                    {data.sidangDate.map((item: any, index: any) => (
+                      <td key={index} className="px-6 py-2 text-center ">
+                        {item.isApprovedByProfOne &&
+                        item.isApprovedByProfTwo ? (
+                          <button
+                            onClick={() =>
+                              getStatusSidang(
+                                data.uid,
+                                item.feedbackNote,
+                                item.isApprovedByProfOne,
+                                item.isApprovedByProfTwo
+                              )
+                            }
+                            className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
+                          >
+                            Tanggal sidang
+                          </button>
+                        ) : (
+                          <p>Belum ditentukan</p>
+                        )}
+                      </td>
+                    ))}
+                    <td className="px-6 py-2">
+                      <button
+                        onClick={() => setHapus(!hapus)}
+                        className="font-medium text-white hover:opacity-50 duration-150 bg-[#D0312D] p-2 rounded-md"
+                      >
+                        <FaTrash />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <>
+                  <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
+                    <td
+                      scope="row"
+                      colSpan={7}
+                      className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+                    >
+                      Tidak ada data untuk ditampilkan
+                    </td>
+                  </tr>
+                </>
+              )}
             </tbody>
           </table>
         </div>
