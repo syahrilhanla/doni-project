@@ -254,49 +254,58 @@ export default function ApprovalTable() {
        </th>
       </tr>
      </thead>
-     {student.length > 0 ? student.map((data: any, index: any) => (
-      <tbody>
-        <>
-         <tr
-          key={index}
-          className="even:bg-[#040405d7] odd:bg-white border-b z-auto "
-         >
-          <th
-           scope="row"
-           className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
-          >
-           {data.name}
-          </th>
-          {data.title.map((item: any) => (
-           <td className="px-6 py-2 max-w-[20%]">
-            {item.titleText}
-           </td>
-          ))}
-          <td className="px-6 py-2">{data.generation}</td>
-          <td className="px-6 py-2">
-           {data.profOne === user.name ? "Dospem 1" : data.profTwo === user.name ? "Dospem 2" : ""}
-          </td>
-          {data.title.map((item: any) => (
-           <td className="px-6 py-2 text-right flex gap-2">
-              <button
-               onClick={() => getValue(data.uid, data.profOne, data.profTwo, item.feedbackNote, item.isApprovedByProfOne, item.isApprovedByProfTwo, item.titleText)}
-               className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white hover:text-green-500 bg-green-500 p-2 rounded-md"
+     <tbody>
+      {student.length > 0 ? student.map((data: any, index: any) => (
+       <tr
+        key={index}
+        className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
+       >
+       {data.profOne || data.profTwo === user.name ? (
+         <>
+         <td
+               scope="row"
+               className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
               >
-               Setuju
-              </button>
-              <button
-               onClick={() => setTolak(!tolak)}
-               className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
-              >
-               Tolak
-              </button>
-             </td>
-          ))}
-         </tr>
-        </>
-    
-      </tbody>
-     )) : <></>}
+               {data.name}
+              </td>
+              {data.title.map((item: any) => (
+               <td className="px-6 py-2 max-w-[20%]">
+                {item.titleText ? item.titleText : "-"}
+               </td>
+              ))}
+              <td className="px-6 py-2">{data.generation}</td>
+              <td className="px-6 py-2">
+               {data.profOne === user.name ? "Dospem 1" : data.profTwo === user.name ? "Dospem 2" : "None"}
+              </td>
+              {data.title.map((item: any) => (
+               <td className="px-6 py-2 text-right flex gap-2">
+                {item.titleText !== ""  ? (
+                 <>
+                  <button
+                   onClick={() => getValue(data.uid, data.profOne, data.profTwo, item.feedbackNote, item.isApprovedByProfOne, item.isApprovedByProfTwo, item.titleText)}
+                   className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white hover:text-green-500 bg-green-500 p-2 rounded-md"
+                  >
+                   Setuju
+                  </button>
+                  <button
+                   onClick={() => setTolak(!tolak)}
+                   className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
+                  >
+                   Tolak
+                  </button>
+                 </>
+                ) : (
+                 <p className="italic">Belum Mengajukan Judul</p>
+                )}
+               </td>
+              ))}
+         </>
+        ) : (
+         <></>
+        )}
+       </tr>
+      )) : (<>NONEE</>)}
+     </tbody>
     </table>
    </div>
   </div>
