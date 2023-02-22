@@ -1,4 +1,3 @@
-import { async } from "@firebase/util";
 import { User } from "firebase/auth";
 import {
   collection,
@@ -8,7 +7,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import React, { Key, useEffect, useState } from "react";
+import React, { Key, useCallback, useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCheckLg } from "react-icons/bs";
 import { RiSortDesc, RiCloseLine } from "react-icons/ri";
@@ -32,23 +31,20 @@ export default function RequestTable() {
   const [dosen2, setDosen2] = useState("");
   const [userid, setUserid] = useState("");
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     const studentRef = query(
       collection(db, "studentsList"),
       where("statusApprove", "==", false)
     );
     try {
-      await getDocs(studentRef).then((data) => {
-        setStudent(
-          data.docs.map((item) => {
-            return { ...item.data(), id: item.id };
-          })
-        );
-      });
+      const studentsData= (await getDocs(studentRef)).docs
+      .map((item) => item)
+      .map((item) => item.data());
+      setStudent(studentsData);
     } catch (e) {
       console.log(e);
     }
-  };
+  },[student]);
 
   const getProf = async () => {
     let unsubscribe = false;
@@ -70,15 +66,14 @@ export default function RequestTable() {
   };
 
   useEffect(() => {
-    if (!student) {
       getData();
       getProf();
-    }
+
   }, []);
 
-  const getStatus = (data: any) => {
+  const getStatus = (uid:any) => {
     setSetuju(true);
-    setUserid(data);
+    setUserid(uid);
   };
 
   const getUpdate = () => {
@@ -236,7 +231,7 @@ export default function RequestTable() {
 
                   <td className="px-6 py-2 text-right flex gap-2">
                     <button
-                      onClick={() => getStatus(data.id)}
+                      onClick={() => getStatus(data.uid)}
                       className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white  hover:text-green-500 bg-green-500 p-2 rounded-md"
                     >
                       <BsCheckLg className="" />

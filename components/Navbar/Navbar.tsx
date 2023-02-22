@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 
 import { RiLogoutBoxRLine } from "react-icons/ri";
@@ -8,7 +8,7 @@ import NotificationList, {
 } from "../Notification/NotificationList";
 import { useAuth } from "../Context/AuthContext";
 import { useRouter } from "next/router";
-import { arrayUnion, doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { arrayUnion, collection, doc, getDocs, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import { User } from "firebase/auth";
 import { db } from "../Store/firebase";
 
@@ -17,18 +17,20 @@ const Navbar = () => {
   const { user, logOut } = useAuth();
   const [openNotification, setOpenNotification] = useState(false);
   const router = useRouter();
-  const [roleuser, setRoleuser] = useState(user.role)
   const [notification, setNotification] = useState([])
+  const [notificationdosen, setNotificationDosen] = useState([])
   const [dospem1, setDospem1] = useState(user.profOne)
   const [dospem2, setDospem2] = useState(user.profTwo)
-  const [titleapproveprofone, setTitleapproveprofone] = useState(null)
-  const [titleapproveproftwo, setTitleapproveproftwo] = useState(null)
-  const [seminarapproveone, setSeminarapproveone] = useState(null)
-  const [seminarapprovetwo, setSeminarapprovetwo] = useState(null)
-  const [sidangapproveone, setSidangapproveone] = useState(null)
-  const [sidangapprovetwo, setSidangapprovetwo] = useState(null)
-  const [penguji1, setPenguji1]= useState(user.examinerOne)
-  const [penguji2, setPenguji2]= useState(null)
+  const [titleapproveprofone, setTitleapproveprofone] = useState<any>()
+  const [titleapproveproftwo, setTitleapproveproftwo] = useState<any>()
+  const [seminarapproveone, setSeminarapproveone] = useState<any>()
+  const [seminarapprovetwo, setSeminarapprovetwo] = useState<any>()
+  const [sidangapproveone, setSidangapproveone] = useState<any>()
+  const [sidangapprovetwo, setSidangapprovetwo] = useState<any>()
+  const [penguji1, setPenguji1] = useState(user.examinerOne)
+  const [penguji2, setPenguji2] = useState(user.examinerTwo)
+  const [student, setStudent] = useState<any>([])
+
   const handleLogout = async () => {
     try {
       await logOut();
@@ -37,36 +39,31 @@ const Navbar = () => {
       console.log(error.message);
     }
   };
+
+
   useEffect(() => {
-    if (user.title) {
-      setTitleapproveprofone(user.title[0].isApprovedByProfOne)
-      setTitleapproveproftwo(user.title[0].isApprovedByProfTwo)
-    }
-    if (user.seminarDate) {
-      setSeminarapproveone(user.seminarDate[0].isApprovedByProfOne)
-      setSeminarapprovetwo(user.seminarDate[0].isApprovedByProfTwo)
-    }
-    if (user.sidangDate) {
-      setSidangapproveone(user.sidangDate[0].isApprovedByProfOne)
-      setSidangapprovetwo(user.sidangDate[0].isApprovedByProfTwo)
-    }
+      if (user.title) {
+        setTitleapproveprofone(user.title[0].isApprovedByProfOne)
+        setTitleapproveproftwo(user.title[0].isApprovedByProfTwo)
+      }
+      if (user.seminarDate) {
+        setSeminarapproveone(user.seminarDate[0].isApprovedByProfOne)
+        setSeminarapprovetwo(user.seminarDate[0].isApprovedByProfTwo)
+      }
+      if (user.sidangDate) {
+        setSidangapproveone(user.sidangDate[0].isApprovedByProfOne)
+        setSidangapprovetwo(user.sidangDate[0].isApprovedByProfTwo)
+      }
+    
     const getApprove = async (user: User) => {
-      try {        
+      try {
         onSnapshot(doc(db, "studentsList", user.uid), (doc) => {
-          setRoleuser(doc.data()?.role)
-          setDospem1(doc.data()?.profOne)
-          setDospem2(doc.data()?.profTwo)
-          setPenguji1(doc.data()?.examinerOne)
-          setPenguji2(doc.data()?.examinerTwo)
-          setTitleapproveprofone(doc.data()?.title[0].isApprovedByProfOne)
-          setTitleapproveproftwo(doc.data()?.title[0].isApprovedByProfTwo)
-          setSeminarapproveone(doc.data()?.seminarDate[0].isApprovedByProfOne)
-          setSeminarapprovetwo(doc.data()?.seminarDate[0].isApprovedByProfTwo)
-          setSidangapproveone(doc.data()?.sidangDate[0].isApprovedByProfOne)
-          setSidangapprovetwo(doc.data()?.sidangDate[0].isApprovedByProfTwo)
           setNotification(doc.data()?.notifications)
-  
         })
+        onSnapshot(doc(db, "professorList", user.uid), (doc) => {
+          setNotificationDosen(doc.data()?.notifications)
+        })
+        
       } catch (error) {
         console.log(error)
       }
@@ -81,10 +78,17 @@ const Navbar = () => {
     { seminarapprovetwo && notifSeminarApproveProfTwo() }
     { sidangapproveone && notifSidangApproveProfOne() }
     { sidangapprovetwo && notifSidangApproveProfTwo() }
+
     if (user) {
       getApprove(user!);
     }
+    getNotifDospem1()
+    getNotifDospem2()
+    getNotifStudentSeminar()
+    getNotifStudentSidang()
   }, [])
+
+
 
   const notificationData: NotificationData[] = [
     {
@@ -128,8 +132,8 @@ const Navbar = () => {
 
   // mahasiswa 
 
-  const createNotifDosen1 = () => {
-      const docRef = doc(db, "studentsList", user.uid);
+  const createNotifDosen1 = useCallback( () => {
+    const docRef = doc(db, "studentsList", user.uid);
     const notifValue = {
       notifications: arrayUnion(
         {
@@ -141,8 +145,8 @@ const Navbar = () => {
       )
     };
     updateDoc(docRef, notifValue)
-  }
-  const createNotifDosen2 = () => {
+  },[dospem1])
+  const createNotifDosen2 = useCallback(() => {
     const docRef = doc(db, "studentsList", user.uid);
     const notifValue = {
       notifications: arrayUnion(
@@ -155,8 +159,8 @@ const Navbar = () => {
       )
     };
     updateDoc(docRef, notifValue)
-  }
-  const notifApproveProfOne = () => {
+  },[dospem2])
+  const notifApproveProfOne = useCallback(() => {
     const docRef = doc(db, "studentsList", user.uid);
     const notifValue = {
       notifications: arrayUnion(
@@ -169,8 +173,8 @@ const Navbar = () => {
       )
     };
     updateDoc(docRef, notifValue)
-  }
-  const notifApproveProfTwo = () => {
+  },[titleapproveprofone])
+  const notifApproveProfTwo = useCallback(() => {
     const docRef = doc(db, "studentsList", user.uid);
     const notifValue = {
       notifications: arrayUnion(
@@ -183,8 +187,8 @@ const Navbar = () => {
       )
     };
     updateDoc(docRef, notifValue)
-  }
-  const notifSeminarApproveProfOne = () => {
+  },[titleapproveproftwo])
+  const notifSeminarApproveProfOne = useCallback( () => {
     const docRef = doc(db, "studentsList", user.uid);
     const notifValue = {
       notifications: arrayUnion(
@@ -197,8 +201,8 @@ const Navbar = () => {
       )
     };
     updateDoc(docRef, notifValue)
-  }
-  const notifSeminarApproveProfTwo = () => {
+  },[seminarapproveone])
+  const notifSeminarApproveProfTwo = useCallback(() => {
     const docRef = doc(db, "studentsList", user.uid);
     const notifValue = {
       notifications: arrayUnion(
@@ -211,8 +215,8 @@ const Navbar = () => {
       )
     };
     updateDoc(docRef, notifValue)
-  }
-   const notifSidangApproveProfTwo = () => {
+  },[seminarapprovetwo])
+  const notifSidangApproveProfTwo = useCallback(() => {
     const docRef = doc(db, "studentsList", user.uid);
     const notifValue = {
       notifications: arrayUnion(
@@ -225,8 +229,8 @@ const Navbar = () => {
       )
     };
     updateDoc(docRef, notifValue)
-  }
-     const notifSidangApproveProfOne = () => {
+  },[sidangapprovetwo])
+  const notifSidangApproveProfOne = useCallback(() => {
     const docRef = doc(db, "studentsList", user.uid);
     const notifValue = {
       notifications: arrayUnion(
@@ -239,8 +243,8 @@ const Navbar = () => {
       )
     };
     updateDoc(docRef, notifValue)
-  }
-    const createNotifPenguji1 = () => {
+  },[sidangapproveone])
+  const createNotifPenguji1 = useCallback(() => {
     const docRef = doc(db, "studentsList", user.uid);
     const notifValue = {
       notifications: arrayUnion(
@@ -253,8 +257,8 @@ const Navbar = () => {
       )
     };
     updateDoc(docRef, notifValue)
-  }
-    const createNotifPenguji2 = () => {
+  },[penguji1])
+  const createNotifPenguji2 = useCallback(() => {
     const docRef = doc(db, "studentsList", user.uid);
     const notifValue = {
       notifications: arrayUnion(
@@ -267,9 +271,101 @@ const Navbar = () => {
       )
     };
     updateDoc(docRef, notifValue)
-  }
-  // mahasiswa 
+  },[penguji2])
+  // mahasiswa
+  // dosen   
+  const getNotifDospem1 = useCallback(async () => {
+    try {
+      const docRef1 = doc(db, "professorList", user.uid);
+      const studentRef1 = query(collection(db, "studentsList"), where("profOne", "==", user.name));
+      (await getDocs(studentRef1)).forEach((doc) => {
+        if (doc.data()?.title[0].titleText !== "") {
+          const notifValue1 = {
+            notifications: arrayUnion(
+              {
+                id: user.uid,
+                isRead: false,
+                text: `${doc.data()?.name} Mengajukan Judul Skripsi, Anda Sebagai Dosen Pembimbing 1`,
+                title: "Pemberitahuan"
+              }
+            )
+          };
+          updateDoc(docRef1, notifValue1)
+        }
+      })
 
+    } catch (e) {
+      console.log(e)
+    }
+  }, [student])
+   const getNotifDospem2 = useCallback(async () => {
+    try {
+      const docRef2 = doc(db, "professorList", user.uid);
+      const studentRef2 = query(collection(db, "studentsList"), where("profTwo", "==", user.name));
+      (await getDocs(studentRef2)).forEach((doc) => {
+        if (doc.data()?.title[0].titleText !== "") {
+          const notifValue2 = {
+            notifications: arrayUnion(
+              {
+                id: user.uid,
+                isRead: false,
+                text: `${doc.data()?.name} Mengajukan Judul Skripsi, Anda Sebagai Dosen Pembimbing 2`,
+                title: "Pemberitahuan"
+              }
+            )
+          };
+          updateDoc(docRef2, notifValue2)
+        }
+      })
+
+    } catch (e) {
+      console.log(e)
+    }
+  }, [student])
+    const getNotifStudentSidang = useCallback(async () => {
+    try {
+      const docRefSidang = doc(db, "professorList", user.uid);
+      const studentRefSidang = query(collection(db, "studentsList"), where("fileSidang", "!=", ""));
+      (await getDocs(studentRefSidang)).forEach((doc) => {   
+          
+        const notifSidang = {
+            notifications: arrayUnion(
+              {
+                id: user.uid,
+                isRead: false,
+                text: `${doc.data()?.name} Mengajukan File Sidang Akhir`,
+                title: "Pemberitahuan"
+              }
+            )
+          };
+          updateDoc(docRefSidang, notifSidang)
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }, [])
+    const getNotifStudentSeminar = useCallback(async () => {
+    try {
+      const docRef2 = doc(db, "professorList", user.uid);
+      const studentRef2 = query(collection(db, "studentsList"), where("fileSeminar", "!=", ""));
+      (await getDocs(studentRef2)).forEach((doc) => {   
+          const notifValue2 = {
+            notifications: arrayUnion(
+              {
+                id: user.uid,
+                isRead: false,
+                text: `${doc.data()?.name} Mengajukan File Seminar Hasil`,
+                title: "Pemberitahuan"
+              }
+            )
+          };
+          updateDoc(docRef2, notifValue2)
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }, [])
+  // dosen
   return (
     <div className="flex flex-col top-12">
       <div
@@ -296,8 +392,8 @@ const Navbar = () => {
 
       {openNotification && (
         <>
-          {roleuser !== "mhs" && <NotificationList notificationData={notificationData} />}
-          {roleuser === "mhs" && <NotificationList notificationData={notification} />}
+          {user.role === "mhs" && <NotificationList notificationData={notification} />}
+          {user.role === "dosen" && <NotificationList notificationData={notificationdosen} />}
 
 
         </>
