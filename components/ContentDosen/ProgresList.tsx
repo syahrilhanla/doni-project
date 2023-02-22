@@ -215,12 +215,12 @@ export default function ProgresList() {
           </thead>
           <tbody>
             {student.map((data: any, index: any) => (
-              <tr
-                key={index}
-                className=" border-b even:bg-[#f0ebf8d7] odd:bg-white"
-              >
+              <>
                 {data.profOne || data.profTwo === user.name ? (
-                  <>
+                  <tr
+                    key={index}
+                    className=" border-b even:bg-[#f0ebf8d7] odd:bg-white"
+                  >
                     <td scope="row" className="px-4 py-2 font-medium   w-[20%]">
                       {data.name}
                     </td>
@@ -320,11 +320,9 @@ export default function ProgresList() {
                         <p>-</p>
                       )}
                     </td>
-                  </>
-                ) : (
-                  ""
-                )}
-              </tr>
+                  </tr>
+                ) : null}
+              </>
             ))}
           </tbody>
         </table>
