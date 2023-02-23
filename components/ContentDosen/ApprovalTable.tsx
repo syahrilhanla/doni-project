@@ -307,8 +307,8 @@ export default function ApprovalTable() {
           >
            {data.name}
           </td>
-          {data.title.map((item: any) => (
-           <td className="px-6 py-2 max-w-[20%]">
+          {data.title.map((item: any, index:any) => (
+           <td key={index} className="px-6 py-2 max-w-[20%]">
             {item.titleText ? item.titleText : "-"}
            </td>
           ))}
@@ -316,8 +316,8 @@ export default function ApprovalTable() {
           <td className="px-6 py-2">
            {data.profOne === user.name ? "Dospem 1" : data.profTwo === user.name ? "Dospem 2" : "None"}
           </td>
-          {data.title.map((item: any) => (
-           <td className="px-6 py-2 text-right flex gap-2">
+          {data.title.map((item: any, index:any) => (
+           <td key={index} className="px-6 py-2 text-right flex gap-2">
             {item.titleText !== "" ? (
              <>
               <button
