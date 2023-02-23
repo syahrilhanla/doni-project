@@ -1,5 +1,6 @@
 import React from "react";
 import LayoutDosen from "../components/Layout/LayoutDosen";
+// import ApprovedProf from "../components/ContentDosen/ApprovedProf";
 import ApprovalTable from "../components/ContentDosen/ApprovalTable";
 
 export default function approval() {
@@ -12,6 +13,7 @@ export default function approval() {
 
       <div className="flex p-4 flex-col justify-center items-center">
         <ApprovalTable />
+        {/* <ApprovedProf /> */}
       </div>
     </LayoutDosen>
   );

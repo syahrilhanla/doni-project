@@ -16,7 +16,8 @@ export default function ApprovalTable() {
  const { user } = useAuth()
  const [setuju, setSetuju] = useState<any>(false);
  const [tolak, setTolak] = useState<any>(false);
- const [student, setStudent] = useState<any>([]);
+ const [student1, setStudent1] = useState<any>([]);
+ const [student2, setStudent2] = useState<any>([]);
  const [uidUser, setUidUser] = useState<any>()
  const [profSatu, setProfSatu] = useState<any>()
  const [profDua, setProfDua] = useState<any>()
@@ -24,87 +25,35 @@ export default function ApprovalTable() {
  const [isApprovedByProfOne, setIsApprovedByProfOne] = useState<any>()
  const [isApprovedByProfTwo, setIsApprovedByProfTwo] = useState<any>()
  const [titleTextUser, setTitleTextuser] = useState<any>()
- const content: dataTable[] = [
-  {
-   id: 1,
-   name: "nama 1",
-   title: "title 1",
-   generation: 1,
-  },
-  {
-   id: 2,
-   name: "nama 12",
-   title: "title 12",
-   generation: 2,
-  },
-  {
-   id: 3,
-   name: "nama 13",
-   title: "title 13",
-   generation: 3,
-  },
-  {
-   id: 4,
-   name: "nama 14",
-   title: "title 14",
-   generation: 4,
-  },
-  {
-   id: 5,
-   name: "nama 15",
-   title: "title 15",
-   generation: 5,
-  },
-  {
-   id: 6,
-   name: "nama 16",
-   title: "title 16",
-   generation: 6,
-  },
- ];
- const getStudent = useCallback(async () => {
+ 
+ const getStudent1 = useCallback(async () => {
   try {
-   const studentRef = query(
-    collection(db, "studentsList"),
-    where("statusApprove", "==", true),
-   );
    const studentRef1 = query(
     collection(db, "studentsList"),
-    where("statusApprove", "==", true),
-    where("profOne", "==", user.name)
+    where("statusApprove", "==", true), where("profOne", "==", user.name)
    );
-   const studentRef2 = query(
-    collection(db, "studentsList"),
-    where("statusApprove", "==", true),
-    where("profTwo", "==", user.name)
-   );
-
    const studentsData1 = (await getDocs(studentRef1)).docs
     .map((item) => item)
     .map((item) => item.data());
-
-   const studentsData2 = (await getDocs(studentRef2)).docs
-    .map((item) => item)
-    .map((item) => item.data());
-
-   const arrayStudents = [...studentsData1, ...studentsData2].filter((item: any) => item.profOne === user.name || item.profTwo === user.name)
-
-   const fixArray = arrayStudents.map((item: any) => {
-    if (item.profOne === user.name) {
-     if (item.title[0].isApprovedByProfOne !== user.name) return item;
-    }
-    else if (item.profTwo === user.name) {
-     if (item.title[0].isApprovedByProfTwo !== user.name) return item;
-    }
-   }
-   ).filter((item:any)=> item !== undefined)
-   setStudent(fixArray);
-
-
+   setStudent1(studentsData1);
   } catch (e) {
    console.log(e);
   }
- }, [student])
+ }, [student1])
+ const getStudent2 = useCallback(async () => {
+  try {
+   const studentRef2 = query(
+    collection(db, "studentsList"),
+    where("statusApprove", "==", true), where("profTwo", "==", user.name)
+   );
+   const studentsData2 = (await getDocs(studentRef2)).docs
+    .map((item) => item)
+    .map((item) => item.data());
+   setStudent2(studentsData2);
+  } catch (e) {
+   console.log(e);
+  }
+ }, [student2])
  const getValue = (uid: any, profOne: any, profTwo: any, feedbackNote: any, isApprovedByProfOne: any, isApprovedByProfTwo: any, titleText: any) => {
   setSetuju(true)
   setUidUser(uid)
@@ -122,7 +71,7 @@ export default function ApprovalTable() {
     title: [
      {
       feedbackNote: feedbackNoteUser,
-      isApprovedByProfOne: user.name,
+      isApprovedByProfOne: true,
       isApprovedByProfTwo: isApprovedByProfTwo,
       titleText: titleTextUser
      },
@@ -139,11 +88,6 @@ export default function ApprovalTable() {
    updateDoc(studentRef, value1)
    window.alert("Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 1")
    setSetuju(false)
-     const newStudentData = student.filter((item: any) => {
-     return item.uid !== uidUser      
-     })
-  setStudent(newStudentData);
-   
   }
   else if (profDua === user.name) {
    const value2 = {
@@ -151,7 +95,7 @@ export default function ApprovalTable() {
      {
       feedbackNote: feedbackNoteUser,
       isApprovedByProfOne: isApprovedByProfOne,
-      isApprovedByProfTwo: user.name,
+      isApprovedByProfTwo: true,
       titleText: titleTextUser
      },
     ],
@@ -167,15 +111,11 @@ export default function ApprovalTable() {
    updateDoc(studentRef, value2)
    window.alert("Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 2")
    setSetuju(false)
-     const newStudentData = student.filter((item: any) => {
-     return item.uid !== uidUser      
-     })
-  setStudent(newStudentData);
-   
   }
  }
  useEffect(() => {
-  getStudent()
+  getStudent1()
+  getStudent2()
  }, [])
  return (
   <div>
@@ -253,6 +193,7 @@ export default function ApprovalTable() {
    )}
 
    <div className="inline-block overflow-auto shadow-md sm:rounded-lg sm:max-w-full max-w-[350px] max-h-[500px] ">
+    <div className="text-xl"> Selaku Dosen Pembimbing 1</div>
     <table className="text-sm text-left text-gray-900 capitalize ">
      <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto ">
       <tr>
@@ -294,12 +235,12 @@ export default function ApprovalTable() {
       </tr>
      </thead>
      <tbody>
-      {student.length > 0 ? student.map((data: any, index: any) => (
+      {student1.length > 0 ? student1.map((data: any, index: any) => (
        <tr
         key={index}
         className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
        >
-        {data.profOne || data.profTwo === user.name ? (
+        {data.title[0].isApprovedByProfOne === false &&
          <>
           <td
            scope="row"
@@ -338,10 +279,104 @@ export default function ApprovalTable() {
             )}
            </td>
           ))}
-         </>
-        ) : (
-         <></>
-        )}
+         </>    
+        }
+
+       </tr>
+      )) : (<>NONEE</>)}
+     </tbody>
+    </table>
+   </div>
+   <div className="inline-block overflow-auto shadow-md sm:rounded-lg sm:max-w-full max-w-[350px] max-h-[500px] mt-4 ">
+      <div className="text-xl "> Selaku Dosen Pembimbing 2</div>
+    <table className="text-sm text-left text-gray-900 capitalize ">
+     <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto ">
+      <tr>
+       <th scope="col" className="px-6 py-3 max-w-[20%]">
+        <div className="flex items-center gap-2">
+         Nama
+         <a href="#">
+          <RiSortDesc />
+         </a>
+        </div>
+       </th>
+       <th scope="col" className="px-6 py-3">
+        <div className="flex items-center gap-2">
+         Judul
+         <a href="#">
+          <RiSortDesc />
+         </a>
+        </div>
+       </th>
+       <th scope="col" className="px-6 py-3">
+        <div className="flex items-center gap-2">
+         Angkatan
+         <a href="#">
+          <RiSortDesc />
+         </a>
+        </div>
+       </th>
+       <th scope="col" className="px-6 py-3">
+        <div className="flex items-center gap-2">
+         Sebagai
+         <a href="#">
+          <RiSortDesc />
+         </a>
+        </div>
+       </th>
+       <th scope="col" className="px-6 py-3">
+        <div className="flex items-center justify-center">Aksi</div>
+       </th>
+      </tr>
+     </thead>
+     <tbody>
+      {student2.length > 0 ? student2.map((data: any, index: any) => (
+       <tr
+        key={index}
+        className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
+       >
+        {data.title[0].isApprovedByProfTwo === false &&
+         <>
+          <td
+           scope="row"
+           className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+          >
+           {data.name}
+          </td>
+          {data.title.map((item: any) => (
+           <td className="px-6 py-2 max-w-[20%]">
+            {item.titleText ? item.titleText : "-"}
+           </td>
+          ))}
+          <td className="px-6 py-2">{data.generation}</td>
+          <td className="px-6 py-2">
+           {data.profOne === user.name ? "Dospem 1" : data.profTwo === user.name ? "Dospem 2" : "None"}
+          </td>
+          {data.title.map((item: any) => (
+           <td className="px-6 py-2 text-right flex gap-2">
+            {item.titleText !== "" ? (
+             <>
+              <button
+               onClick={() => getValue(data.uid, data.profOne, data.profTwo, item.feedbackNote, item.isApprovedByProfOne, item.isApprovedByProfTwo, item.titleText)}
+               className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white hover:text-green-500 bg-green-500 p-2 rounded-md"
+              >
+               Setuju
+              </button>
+              <button
+               onClick={() => setTolak(!tolak)}
+               className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
+              >
+               Tolak
+              </button>
+             </>
+            ) : (
+             <p className="text-center">{"-"}</p>
+            )}
+           </td>
+          ))}
+         </>    
+        }
+
        </tr>
       )) : (<>NONEE</>)}
      </tbody>
