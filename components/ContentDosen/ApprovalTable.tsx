@@ -24,50 +24,10 @@ export default function ApprovalTable() {
  const [isApprovedByProfOne, setIsApprovedByProfOne] = useState<any>()
  const [isApprovedByProfTwo, setIsApprovedByProfTwo] = useState<any>()
  const [titleTextUser, setTitleTextuser] = useState<any>()
- const content: dataTable[] = [
-  {
-   id: 1,
-   name: "nama 1",
-   title: "title 1",
-   generation: 1,
-  },
-  {
-   id: 2,
-   name: "nama 12",
-   title: "title 12",
-   generation: 2,
-  },
-  {
-   id: 3,
-   name: "nama 13",
-   title: "title 13",
-   generation: 3,
-  },
-  {
-   id: 4,
-   name: "nama 14",
-   title: "title 14",
-   generation: 4,
-  },
-  {
-   id: 5,
-   name: "nama 15",
-   title: "title 15",
-   generation: 5,
-  },
-  {
-   id: 6,
-   name: "nama 16",
-   title: "title 16",
-   generation: 6,
-  },
- ];
+
+
  const getStudent = useCallback(async () => {
   try {
-   const studentRef = query(
-    collection(db, "studentsList"),
-    where("statusApprove", "==", true),
-   );
    const studentRef1 = query(
     collection(db, "studentsList"),
     where("statusApprove", "==", true),
@@ -78,7 +38,6 @@ export default function ApprovalTable() {
     where("statusApprove", "==", true),
     where("profTwo", "==", user.name)
    );
-
    const studentsData1 = (await getDocs(studentRef1)).docs
     .map((item) => item)
     .map((item) => item.data());
@@ -98,9 +57,8 @@ export default function ApprovalTable() {
     }
    }
    ).filter((item:any)=> item !== undefined)
+  
    setStudent(fixArray);
-
-
   } catch (e) {
    console.log(e);
   }
@@ -175,6 +133,7 @@ export default function ApprovalTable() {
   }
  }
  useEffect(() => {
+  
   getStudent()
  }, [])
  return (
@@ -265,7 +224,7 @@ export default function ApprovalTable() {
         </div>
        </th>
        <th scope="col" className="px-6 py-3">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center gap-2">
          Judul
          <a href="#">
           <RiSortDesc />
@@ -299,7 +258,6 @@ export default function ApprovalTable() {
         key={index}
         className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
        >
-        {data.profOne || data.profTwo === user.name ? (
          <>
           <td
            scope="row"
@@ -308,7 +266,7 @@ export default function ApprovalTable() {
            {data.name}
           </td>
           {data.title.map((item: any, index:any) => (
-           <td key={index} className="px-6 py-2 max-w-[20%]">
+           <td key={index} className="px-6 py-2 max-w-[20%] text-center">
             {item.titleText ? item.titleText : "-"}
            </td>
           ))}
@@ -339,11 +297,8 @@ export default function ApprovalTable() {
            </td>
           ))}
          </>
-        ) : (
-         <></>
-        )}
        </tr>
-      )) : (<>NONEE</>)}
+      )):<></>}
      </tbody>
     </table>
    </div>

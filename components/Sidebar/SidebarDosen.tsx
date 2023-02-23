@@ -40,7 +40,7 @@ export default function SidebarDosen() {
               shadow-sm bg-[#faf8fd] py-12 mb-5 text-[#9F86C0]"
             >
               <div className="flex justify-center items-center">
-                <div className="h-32 w-32 rounded-full flex items-center justify-center  overflow-hidden mr-2">
+                <div className="h-32 w-32 rounded-full flex items-center justify-center  overflow-hidden">
                   {/* <Image
                     alt="student picture"
                     src={"/reminz.jfif"}

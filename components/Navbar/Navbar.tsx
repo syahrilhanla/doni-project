@@ -21,12 +21,6 @@ const Navbar = () => {
   const [notificationdosen, setNotificationDosen] = useState<any>([])
   const [dospem1, setDospem1] = useState(user.profOne)
   const [dospem2, setDospem2] = useState(user.profTwo)
-  const [titleapproveprofone, setTitleapproveprofone] = useState<any>()
-  const [titleapproveproftwo, setTitleapproveproftwo] = useState<any>()
-  const [seminarapproveone, setSeminarapproveone] = useState<any>()
-  const [seminarapprovetwo, setSeminarapprovetwo] = useState<any>()
-  const [sidangapproveone, setSidangapproveone] = useState<any>()
-  const [sidangapprovetwo, setSidangapprovetwo] = useState<any>()
   const [penguji1, setPenguji1] = useState(user.examinerOne)
   const [penguji2, setPenguji2] = useState(user.examinerTwo)
   const [student, setStudent] = useState<any>([])
@@ -60,32 +54,13 @@ const Navbar = () => {
 
 
   useEffect(() => {
-    if (user.title) {
-      setTitleapproveprofone(user.title[0].isApprovedByProfOne)
-      setTitleapproveproftwo(user.title[0].isApprovedByProfTwo)
-    }
-    if (user.seminarDate) {
-      setSeminarapproveone(user.seminarDate[0].isApprovedByProfOne)
-      setSeminarapprovetwo(user.seminarDate[0].isApprovedByProfTwo)
-    }
-    if (user.sidangDate) {
-      setSidangapproveone(user.sidangDate[0].isApprovedByProfOne)
-      setSidangapprovetwo(user.sidangDate[0].isApprovedByProfTwo)
-    }
     if (user.role === "mhs") {
       { dospem1 && createNotifDosen1() }
       { dospem2 && createNotifDosen2() }
       { penguji1 && createNotifPenguji1() }
       { penguji2 && createNotifPenguji2() }
-      { titleapproveprofone && notifApproveProfOne() }
-      { titleapproveproftwo && notifApproveProfTwo() }
-      { seminarapproveone && notifSeminarApproveProfOne() }
-      { seminarapprovetwo && notifSeminarApproveProfTwo() }
-      { sidangapproveone && notifSidangApproveProfOne() }
-      { sidangapprovetwo && notifSidangApproveProfTwo() }
       getNotifMahasiswa()
     } else if (user.role === "dosen") {
-
       getNotifDosen()
       getNotifDospem1()
       getNotifDospem2()
@@ -168,90 +143,7 @@ const Navbar = () => {
     };
     updateDoc(docRef, notifValue)
   }, [dospem2])
-  const notifApproveProfOne = useCallback(() => {
-    const docRef = doc(db, "studentsList", user.uid);
-    const notifValue = {
-      notifications: arrayUnion(
-        {
-          id: user.uid,
-          isRead: false,
-          text: "Judul Skripsi Diterima Dospem 1",
-          title: "Selamat"
-        }
-      )
-    };
-    updateDoc(docRef, notifValue)
-  }, [titleapproveprofone])
-  const notifApproveProfTwo = useCallback(() => {
-    const docRef = doc(db, "studentsList", user.uid);
-    const notifValue = {
-      notifications: arrayUnion(
-        {
-          id: user.uid,
-          isRead: false,
-          text: "Judul Skripsi Diterima Dospem 2",
-          title: "Selamat"
-        }
-      )
-    };
-    updateDoc(docRef, notifValue)
-  }, [titleapproveproftwo])
-  const notifSeminarApproveProfOne = useCallback(() => {
-    const docRef = doc(db, "studentsList", user.uid);
-    const notifValue = {
-      notifications: arrayUnion(
-        {
-          id: user.uid,
-          isRead: false,
-          text: "Kamu diperbolehkan Seminar Hasil Oleh Dospem 1",
-          title: "Selamat"
-        }
-      )
-    };
-    updateDoc(docRef, notifValue)
-  }, [seminarapproveone])
-  const notifSeminarApproveProfTwo = useCallback(() => {
-    const docRef = doc(db, "studentsList", user.uid);
-    const notifValue = {
-      notifications: arrayUnion(
-        {
-          id: user.uid,
-          isRead: false,
-          text: "Kamu diperbolehkan Seminar Hasil Oleh Dospem 2",
-          title: "Selamat"
-        }
-      )
-    };
-    updateDoc(docRef, notifValue)
-  }, [seminarapprovetwo])
-  const notifSidangApproveProfTwo = useCallback(() => {
-    const docRef = doc(db, "studentsList", user.uid);
-    const notifValue = {
-      notifications: arrayUnion(
-        {
-          id: user.uid,
-          isRead: false,
-          text: "Kamu diperbolehkan Sidang Akhir Oleh Dospem 2",
-          title: "Selamat"
-        }
-      )
-    };
-    updateDoc(docRef, notifValue)
-  }, [sidangapprovetwo])
-  const notifSidangApproveProfOne = useCallback(() => {
-    const docRef = doc(db, "studentsList", user.uid);
-    const notifValue = {
-      notifications: arrayUnion(
-        {
-          id: user.uid,
-          isRead: false,
-          text: "Kamu diperbolehkan Sidang Akhir Oleh Dospem 1",
-          title: "Selamat"
-        }
-      )
-    };
-    updateDoc(docRef, notifValue)
-  }, [sidangapproveone])
+
   const createNotifPenguji1 = useCallback(() => {
     const docRef = doc(db, "studentsList", user.uid);
     const notifValue = {
