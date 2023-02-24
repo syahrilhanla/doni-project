@@ -6,6 +6,7 @@ import { RiCheckFill } from "react-icons/ri";
 import { GiProgression, GiFinishLine } from "react-icons/gi";
 import { HiOutlinePresentationChartBar } from "react-icons/hi";
 import { useAuth } from "../Context/AuthContext";
+import { BsPersonCircle } from "react-icons/bs";
 
 export default function SidebarAdmin() {
   const router = useRouter();
@@ -35,13 +36,8 @@ export default function SidebarAdmin() {
             >
               <div className="flex justify-center items-center">
                 <div className="h-32 w-32 rounded-full relative
-                  overflow-hidden mr-2">
-                  <Image
-                    alt="student picture"
-                    src={"/reminz.jfif"}
-                    fill
-                    className="rounded-full"
-                  />
+                  overflow-hidden">
+                 <BsPersonCircle className="h-32 w-32" />
                 </div>
               </div>
               <div className="flex flex-col gap-2 justify-center items-center

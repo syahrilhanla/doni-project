@@ -111,23 +111,23 @@ export const AuthContextProvider = ({
               {
                 dateToBe: "",
                 feedbackNote: "",
-                isApprovedByProfOne: true,
-                isApprovedByProfTwo: true,
+                isApprovedByProfOne: "",
+                isApprovedByProfTwo: "",
               },
             ],
             sidangDate: [
               {
                 dateToBe: "",
                 feedbackNote: "",
-                isApprovedByProfOne: true,
-                isApprovedByProfTwo: true,
+                isApprovedByProfOne: "",
+                isApprovedByProfTwo: "",
               },
             ],
             title: [
               {
                 feedbackNote: "",
-                isApprovedByProfOne: false,
-                isApprovedByProfTwo: false,
+                isApprovedByProfOne: "",
+                isApprovedByProfTwo: "",
                 titleText: "",
               },
             ],
