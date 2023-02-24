@@ -4,7 +4,7 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { RiCloseLine } from "react-icons/ri";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../components/Context/AuthContext";
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../components/Store/firebase";
 import { User } from "firebase/auth";
 
@@ -22,7 +22,8 @@ const Dashboard = () => {
   const [name, setName] = useState(null);
   const [username, setUsername] = useState(null);
   const [newtitle, setNewtitle] = useState("");
-  const [feedback, setFeedback] = useState<String>();
+  const [feedbackOne, setFeedbackOne] = useState<String>();
+  const [feedbackTwo, setFeedbackTwo] = useState<String>();
 
   useEffect(() => {
     if (user.title) {
@@ -34,7 +35,8 @@ const Dashboard = () => {
       setSeminar(user.seminarDate[0].dateToBe);
       setSidang(user.sidangDate[0].dateToBe);
       setJudul(user.title[0].titleText);
-      setFeedback(user.title[0].feedbackNote);
+      setFeedbackOne(user.title[0].feedbackNoteByProfOne);
+      setFeedbackTwo(user.title[0].feedbackNoteByProfTwo);
       setTerimaProfSatu(user.title[0].isApprovedByProfOne);
       setTerimaProfDua(user.title[0].isApprovedByProfTwo);
     }
@@ -44,7 +46,8 @@ const Dashboard = () => {
     const titleValue = {
       title: [
         {
-          feedbackNote: user.title[0].feedbackNote,
+          feedbackNoteByProfOne: user.title[0].feedbackNoteByProfOne,
+          feedbackNoteByProfTwo: user.title[0].feedbackNoteByProfTwo,
           isApprovedByProfOne: user.title[0].isApprovedByProfOne,
           isApprovedByProfTwo: user.title[0].isApprovedByProfTwo,
           titleText: newtitle,

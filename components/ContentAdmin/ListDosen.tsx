@@ -151,25 +151,27 @@ export default function ListDosen() {
                     </tr>
                   </thead>
                   <tbody>
-                    {dataMahasiswa ? dataMahasiswa.map((data) => (
-                      <tr
-                        key={data.id}
-                        className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
-                      >
-                        <th
-                          scope="row"
-                          className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
-                        >
-                          {data.name}
-                        </th>
-                        <td className="px-6 py-2 max-w-[20%]">{data.nim}</td>
-                        <td className="px-6 py-2 max-w-[20%]">{data.title}</td>
-                      </tr>
-                    )) : (
-                      <>
+                    {dataMahasiswa ? (
+                      dataMahasiswa.map((data) => (
                         <tr
+                          key={data.id}
                           className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
                         >
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+                          >
+                            {data.name}
+                          </th>
+                          <td className="px-6 py-2 max-w-[20%]">{data.nim}</td>
+                          <td className="px-6 py-2 max-w-[20%]">
+                            {data.title}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <>
+                        <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
                           <td
                             scope="row"
                             colSpan={4}
