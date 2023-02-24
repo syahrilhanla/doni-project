@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { BsPersonCircle } from "react-icons/bs";
 import { useAuth } from "../Context/AuthContext";
 // import { db } from "../Store/firebase";
 
@@ -44,13 +45,8 @@ const [name, setName] = useState(null)
             >
               <div className="flex justify-center items-center">
                 <div className="h-32 w-32 rounded-full relative
-                  overflow-hidden mr-2">
-                  <Image
-                    alt="student picture"
-                    src={"/reminz.jfif"}
-                    fill
-                    className="rounded-full"
-                  />
+                  overflow-hidden">
+                 <BsPersonCircle className="h-32 w-32" />
                 </div>
               </div>
               <div className="flex flex-col gap-2 justify-center items-center
