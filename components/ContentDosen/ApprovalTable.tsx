@@ -1,7 +1,8 @@
 import { arrayUnion, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { userAgent } from "next/server";
 import React, { useCallback, useEffect, useState } from "react";
-import { RiSortDesc, RiCloseLine } from "react-icons/ri";
+import { RiSortDesc, RiCloseLine, RiLoader5Line } from "react-icons/ri";
+
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
 
@@ -24,9 +25,10 @@ export default function ApprovalTable() {
  const [isApprovedByProfOne, setIsApprovedByProfOne] = useState<any>()
  const [isApprovedByProfTwo, setIsApprovedByProfTwo] = useState<any>()
  const [titleTextUser, setTitleTextuser] = useState<any>()
-
+ const [loading, setLoading] = useState(false)
 
  const getStudent = useCallback(async () => {
+  setLoading(false)
   try {
    const studentRef1 = query(
     collection(db, "studentsList"),
@@ -59,6 +61,7 @@ export default function ApprovalTable() {
    ).filter((item:any)=> item !== undefined)
   
    setStudent(fixArray);
+   setLoading(true)
   } catch (e) {
    console.log(e);
   }
@@ -210,7 +213,7 @@ export default function ApprovalTable() {
      </div>
     </div>
    )}
-
+   {!loading ? <RiLoader5Line className="animate-spin text-3xl mt-5" /> : 
    <div className="inline-block overflow-auto shadow-md sm:rounded-lg sm:max-w-full max-w-[350px] max-h-[500px] ">
     <table className="text-sm text-left text-gray-900 capitalize ">
      <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto ">
@@ -302,6 +305,7 @@ export default function ApprovalTable() {
      </tbody>
     </table>
    </div>
+  }
   </div>
  );
 }

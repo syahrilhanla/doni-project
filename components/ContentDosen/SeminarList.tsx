@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { RiCloseLine, RiSortDesc } from "react-icons/ri";
+import { RiCloseLine, RiSortDesc, RiLoader5Line } from "react-icons/ri";
 import { useAuth } from "../Context/AuthContext";
 import { arrayUnion, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../Store/firebase";
+
 import Link from "next/link";
 interface dataTable {
  id: number;
@@ -25,6 +26,7 @@ export default function SeminarList() {
  const [isApprovedByProfOne, setIsApprovedByProfOne] = useState<any>()
  const [isApprovedByProfTwo, setIsApprovedByProfTwo] = useState<any>()
  const [dateToBe, setDateToBe] = useState<any>()
+  const [loading, setLoading] = useState(false)
  const content: dataTable[] = [
   {
    id: 1,
@@ -76,6 +78,7 @@ export default function SeminarList() {
   },
  ];
  const getStudent = useCallback(async () => {
+  setLoading(false)
   try {
 
    const studentRef1 = query(
@@ -109,7 +112,7 @@ export default function SeminarList() {
    }
    ).filter((item: any) => item !== undefined)
    setStudent(fixArray);
-
+  setLoading(true)
 
   } catch (e) {
    console.log(e);
@@ -261,6 +264,7 @@ export default function SeminarList() {
      </div>
     </div>
    )}
+    {!loading ? <RiLoader5Line className="animate-spin text-3xl mt-5" /> :
    <div className=" inline-block overflow-x-auto shadow-md sm:rounded-lg max-h-[500px] max-w-[350px] sm:max-w-full">
     <table className="text-sm text-left text-gray-900 capitalize ">
      <thead className="text-xs text-white  bg-patternTwo sticky top-0 z-auto ">
@@ -352,6 +356,7 @@ export default function SeminarList() {
      </tbody>
     </table>
    </div>
+}
   </div>
  );
 }
