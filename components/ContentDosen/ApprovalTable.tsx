@@ -1,7 +1,6 @@
 import { arrayUnion, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
-import { userAgent } from "next/server";
 import React, { useCallback, useEffect, useState } from "react";
-import { RiSortDesc, RiCloseLine, RiLoader5Line } from "react-icons/ri";
+import { RiSortDesc, RiLoader5Line, RiCloseCircleLine, RiCheckboxCircleLine } from "react-icons/ri";
 import { CloseButton, SendButton } from "../Common/Buttons";
 
 import { useAuth } from "../Context/AuthContext";
@@ -96,7 +95,7 @@ export default function ApprovalTable() {
  }
  const updateApprove = async () => {
   const studentRef = doc(db, "studentsList", uidUser);
-  if (profSatu === user.name) {   
+  if (profSatu === user.name) {
    const value1 = {
     title: [
      {
@@ -155,15 +154,15 @@ export default function ApprovalTable() {
 
   }
  }
-  const updateDenied = async () => {
+ const updateDenied = async () => {
   const studentRef = doc(db, "studentsList", uidUser);
-  if (profSatu === user.name) {   
+  if (profSatu === user.name) {
    const value1 = {
     title: [
      {
       feedbackNoteByProfOne: newFeedback,
       feedbackNoteByProfTwo: feedbackNoteUser2,
-      isApprovedByProfOne: user.name,
+      isApprovedByProfOne: "Denied",
       isApprovedByProfTwo: isApprovedByProfTwo,
       titleText: titleTextUser
      },
@@ -172,14 +171,14 @@ export default function ApprovalTable() {
      {
       id: user.uid,
       isRead: false,
-      text: "Judul Skripsi Kamu Telah Di TOLAK Dosen Pembimbing 1",
+      text: "Judul Skripsi Kamu Di TOLAK Dosen Pembimbing 1",
       title: "Pemberitahuan"
      }
     )
    }
    updateDoc(studentRef, value1)
    window.alert("Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 1")
-   setSetuju(false)
+   setTolak(false)
    const newStudentData = student.filter((item: any) => {
     return item.uid !== uidUser
    })
@@ -193,7 +192,7 @@ export default function ApprovalTable() {
       feedbackNoteByProfOne: feedbackNoteUser1,
       feedbackNoteByProfTwo: newFeedback,
       isApprovedByProfOne: isApprovedByProfOne,
-      isApprovedByProfTwo: user.name,
+      isApprovedByProfTwo: "Denied",
       titleText: titleTextUser
      },
     ],
@@ -201,14 +200,14 @@ export default function ApprovalTable() {
      {
       id: user.uid,
       isRead: false,
-      text: "Judul Skripsi Kamu Telah Di TOLAK Dosen Pembimbing 2",
+      text: "Judul Skripsi Kamu Di TOLAK Dosen Pembimbing 2",
       title: "Pemberitahuan"
      }
     )
    }
    updateDoc(studentRef, value2)
    window.alert("Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 2")
-   setSetuju(false)
+   setTolak(false)
    const newStudentData = student.filter((item: any) => {
     return item.uid !== uidUser
    })
@@ -244,7 +243,6 @@ export default function ApprovalTable() {
      <div className="gap-4 relative  w-3/5 h-full  flex justify-center items-center">
       <div className="relative bg-white border-purple-600 rounded-2xl shadow w-3/5 xxs:max-md:w-full md:max-lg:w-full min-h-fit ">
        <CloseButton handleClick={handleCloseModal} />
-
        <div className="p-4 flex flex-col gap-2 mt-2">
         <p className="block text-lg mt-6 font-medium text-gray-900 ">
          {`Apakah anda ingin menyutujui judul skripsi ${studentName} ?`}
@@ -267,7 +265,7 @@ export default function ApprovalTable() {
      <div className="bg-gray-700 opacity-30 h-screen w-full -z-50 absolute top-0 left-0 right-0" />
      <div className="gap-4 relative  w-3/5 h-full  flex justify-center items-center">
       <div className="relative bg-white border-purple-600 rounded-2xl shadow w-3/5 xxs:max-md:w-full md:max-lg:w-full min-h-fit ">
-      <CloseButton handleClick={handleCloseModalTolak} />
+       <CloseButton handleClick={handleCloseModalTolak} />
 
        <div className="p-4 flex flex-col gap-2 mt-2">
         <p className="block text-lg mt-6 font-medium text-gray-900 ">
@@ -351,24 +349,24 @@ export default function ApprovalTable() {
            {data.profOne === user.name ? "Dospem 1" : data.profTwo === user.name ? "Dospem 2" : "None"}
           </td>
           {data.title.map((item: any, index: any) => (
-           <td key={index} className="px-6 py-2 text-right flex gap-2">
+           <td key={index} className="px-6 py-2 flex justify-center gap-2">
             {item.titleText !== "" ? (
              <>
               <button
                onClick={() => getValueApprove(data.uid, data.name, data.profOne, data.profTwo, item.feedbackNoteByProfOne, item.feedbackNoteByProfTwo, item.isApprovedByProfOne, item.isApprovedByProfTwo, item.titleText)}
                className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white hover:text-green-500 bg-green-500 p-2 rounded-md"
               >
-               Setuju
+               <RiCheckboxCircleLine className="text-2xl" />
               </button>
               <button
                onClick={() => getValueDenied(data.uid, data.name, data.profOne, data.profTwo, item.feedbackNoteByProfOne, item.feedbackNoteByProfTwo, item.isApprovedByProfOne, item.isApprovedByProfTwo, item.titleText)}
                className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
               >
-               Tolak
+               <RiCloseCircleLine className="text-2xl" />
               </button>
              </>
             ) : (
-             <p className="text-center">{"-"}</p>
+             <p className="flex justify-center text-center">{"-"}</p>
             )}
            </td>
           ))}
