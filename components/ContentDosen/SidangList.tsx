@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { RiCloseLine, RiLoader5Line, RiSortDesc } from "react-icons/ri";
+import { RiCheckboxCircleLine, RiCloseCircleLine, RiCloseLine, RiLoader5Line, RiSortDesc } from "react-icons/ri";
 import { useAuth } from "../Context/AuthContext";
 import { arrayUnion, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../Store/firebase";
@@ -357,13 +357,13 @@ export default function SidangList() {
             onClick={() => getValueApprove(data.uid, data.name, data.profOne, data.profTwo, data.sidangDate[0].feedbackNoteByProfOne, data.sidangDate[0].feedbackNoteByProfTwo, data.sidangDate[0].isApprovedByProfOne, data.sidangDate[0].isApprovedByProfTwo, data.sidangDate[0].dateToBe)}
             className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white hover:text-green-500 bg-green-500 p-2 rounded-md"
            >
-            Setuju
+           <RiCheckboxCircleLine className="text-2xl" />
            </button>
            <button
             onClick={() => getValueDenied(data.uid, data.name, data.profOne, data.profTwo, data.sidangDate[0].feedbackNoteByProfOne, data.sidangDate[0].feedbackNoteByProfTwo, data.sidangDate[0].isApprovedByProfOne, data.sidangDate[0].isApprovedByProfTwo, data.sidangDate[0].dateToBe)}
             className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
            >
-            Tolak
+            <RiCloseCircleLine className="text-2xl" />
            </button>
           </td>
           :
