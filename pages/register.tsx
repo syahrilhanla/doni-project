@@ -6,7 +6,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import { useAuth } from "../components/Context/AuthContext";
 
-
 interface formInput {
   name: String;
   username: String;
@@ -35,8 +34,7 @@ const schema = yup.object().shape({
     .min(4, "Minimal 4 angka")
     .max(4, "Maksimal 4 angka")
     .required("Informasi angkatan diperlukan"),
-  proposalDate: yup
-  .string(),
+  proposalDate: yup.string(),
   password: yup
     .string()
     .min(6, "Kata sandi harus memiliki minimal 6 karakter")
@@ -49,7 +47,7 @@ const schema = yup.object().shape({
 
 export default function Register() {
   const { signUp } = useAuth();
-const router = useRouter();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -58,14 +56,22 @@ const router = useRouter();
     resolver: yupResolver(schema),
   });
 
-  const onSubmit : SubmitHandler<formInput>= async (data) => {
-  try {
-    await signUp(data.email, data.password, data.username, data.name, data.phoneNumber, data.generation, data.proposalDate)
-    router.push("/login");
-  } catch (error: any) {
-    console.log(error.message);
-  }
-};
+  const onSubmit: SubmitHandler<formInput> = async (data) => {
+    try {
+      await signUp(
+        data.email,
+        data.password,
+        data.username,
+        data.name,
+        data.phoneNumber,
+        data.generation,
+        data.proposalDate
+      );
+      router.push("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div>
       <section className="h-screen overflow-auto bg-gradient-to-t from-patternThree via-patternTwo to-patternOne  text-gray-900">

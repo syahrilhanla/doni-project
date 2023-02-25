@@ -23,7 +23,6 @@ export default function LayoutDosen(props: any) {
             <SidebarDosen />
           </span>
           <div className="w-full flex flex-col items-center p-4">
-            <FilterSection />
             {props.children}
           </div>
         </div>

@@ -8,10 +8,15 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../Store/firebase";
 import { setDoc, doc, getDoc, onSnapshot } from "firebase/firestore";
+import { StudentsData } from "../../typings";
 
 interface UserType {
   email: string | null;
   uid: string | null;
+}
+
+interface Props {
+  student: StudentsData;
 }
 
 const AuthContext = createContext({});
