@@ -8,10 +8,15 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../Store/firebase";
 import { setDoc, doc, getDoc, onSnapshot } from "firebase/firestore";
+import { StudentsData } from "../../typings";
 
 interface UserType {
   email: string | null;
   uid: string | null;
+}
+
+interface Props {
+  student: StudentsData;
 }
 
 const AuthContext = createContext({});
@@ -41,102 +46,96 @@ export const AuthContextProvider = ({
     return () => unsubscribe();
   }, []);
 
-  const signUp = (
-    email: string,
-    password: string,
-    username: string,
-    name: string,
-    phoneNumber: string,
-    generation: string,
-    proposalDate: string
-  ) => {
-    return createUserWithEmailAndPassword(auth, email, password).then(
-      (response) => {
-        const user1 = response.user.uid;
-        const emailType = user.email?.split("@")[1];
+  const signUp = ({ student }: Props) => {
+    return createUserWithEmailAndPassword(
+      auth,
+      student.email,
+      student.password
+    ).then((response) => {
+      const user1 = response.user.uid;
+      const emailType = user.email?.split("@")[1];
 
-        if (!emailType) return;
+      if (!emailType) return;
 
-        const userRole = (emailType: string) => {
-          switch (emailType) {
-            case "mhs.ulm.ac.id":
-              return "mhs";
-            case "dosen.ulm.ac.id":
-              return "dosen";
-            default:
-              return "admin";
-          }
-        };
-
-        try {
-          user.email;
-          const studentsCol = setDoc(doc(db, "studentsList", user1), {
-            uid: user1,
-            email: email,
-            password: password,
-            username: username,
-            phoneNumber: phoneNumber,
-            name: name,
-            generation: generation,
-            profOne: "",
-            proposalDate: proposalDate,
-            profTwo: "",
-            examinerOne: "",
-            examinerTwo: "",
-            profilePict: "",
-            fileSeminar: "",
-            fileSidang: "",
-            note: "",
-            statusApprove: false,
-            progressStatus: "",
-            role: userRole(String(emailType)),
-            files: [
-              {
-                chapterOne: "",
-                chapterTwo: "",
-                chapterThree: "",
-                chapterFour: "",
-                chapterFive: "",
-              },
-            ],
-            notifications: [
-              {
-                id: user1,
-                isRead: true,
-                text: "",
-                title: "",
-              },
-            ],
-            seminarDate: [
-              {
-                dateToBe: "",
-                feedbackNote: "",
-                isApprovedByProfOne: "",
-                isApprovedByProfTwo: "",
-              },
-            ],
-            sidangDate: [
-              {
-                dateToBe: "",
-                feedbackNote: "",
-                isApprovedByProfOne: "",
-                isApprovedByProfTwo: "",
-              },
-            ],
-            title: [
-              {
-                feedbackNote: "",
-                isApprovedByProfOne: "",
-                isApprovedByProfTwo: "",
-                titleText: "",
-              },
-            ],
-          });
-        } catch (e) {
-          console.log(e);
+      const userRole = (emailType: string) => {
+        switch (emailType) {
+          case "mhs.ulm.ac.id":
+            return "mhs";
+          case "dosen.ulm.ac.id":
+            return "dosen";
+          default:
+            return "admin";
         }
+      };
+
+      try {
+        user.email;
+        const studentsCol = setDoc(doc(db, "studentsList", user1), {
+          uid: user1,
+          email: student.email,
+          password: student.password,
+          username: student.username,
+          phoneNumber: student.phoneNumber,
+          name: student.name,
+          generation: student.generation,
+          profOne: "",
+          proposalDate: student.proposalDate,
+          profTwo: "",
+          examinerOne: "",
+          examinerTwo: "",
+          profilePict: "",
+          fileSeminar: "",
+          fileSidang: "",
+          note: "",
+          statusApprove: false,
+          progressStatus: "",
+          role: userRole(String(emailType)),
+          files: [
+            {
+              chapterOne: "",
+              chapterTwo: "",
+              chapterThree: "",
+              chapterFour: "",
+              chapterFive: "",
+            },
+          ],
+          notifications: [
+            {
+              id: user1,
+              isRead: true,
+              text: "",
+              title: "",
+            },
+          ],
+          seminarDate: [
+            {
+              dateToBe: "",
+              feedbackNote: "",
+              isApprovedByProfOne: "",
+              isApprovedByProfTwo: "",
+            },
+          ],
+          sidangDate: [
+            {
+              dateToBe: "",
+              feedbackNote: "",
+              isApprovedByProfOne: "",
+              isApprovedByProfTwo: "",
+            },
+          ],
+          title: [
+            {
+              feedbackNote: "",
+              isApprovedByProfOne: "",
+              isApprovedByProfTwo: "",
+              titleText: "",
+            },
+          ],
+        });
+      } catch (e) {
+        console.log(e);
       }
-    );
+    });
   };
 
   const logIn = (email: string, password: string) => {
