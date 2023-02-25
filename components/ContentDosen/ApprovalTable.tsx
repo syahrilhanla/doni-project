@@ -61,11 +61,12 @@ export default function ApprovalTable() {
       );
       const studentsData1 = (await getDocs(studentRef1)).docs
         .map((item) => item)
-        .map((item) => item.data());
-
+        .map((item) => item.data())
+        .filter((item) => item.title[0].isApprovedByProfOne !== "Denied");
       const studentsData2 = (await getDocs(studentRef2)).docs
         .map((item) => item)
-        .map((item) => item.data());
+        .map((item) => item.data())
+        .filter((item) => item.title[0].isApprovedByProfTwo !== "Denied");
 
       const arrayStudents = [...studentsData1, ...studentsData2].filter(
         (item) => item.profOne === user.name || item.profTwo === user.name
