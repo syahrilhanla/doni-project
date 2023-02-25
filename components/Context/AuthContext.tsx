@@ -110,7 +110,8 @@ export const AuthContextProvider = ({
             seminarDate: [
               {
                 dateToBe: "",
-                feedbackNote: "",
+                feedbackNoteByProfOne: "",
+                feedbackNoteByProfTwo: "",
                 isApprovedByProfOne: "",
                 isApprovedByProfTwo: "",
               },
@@ -118,14 +119,16 @@ export const AuthContextProvider = ({
             sidangDate: [
               {
                 dateToBe: "",
-                feedbackNote: "",
+                feedbackNoteByProfOne: "",
+                feedbackNoteByProfTwo: "",
                 isApprovedByProfOne: "",
                 isApprovedByProfTwo: "",
               },
             ],
             title: [
               {
-                feedbackNote: "",
+                feedbackNoteByProfOne: "",
+                feedbackNoteByProfTwo: "",
                 isApprovedByProfOne: "",
                 isApprovedByProfTwo: "",
                 titleText: "",
