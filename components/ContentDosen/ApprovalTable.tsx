@@ -2,6 +2,7 @@ import {
   arrayUnion,
   collection,
   doc,
+  DocumentData,
   getDocs,
   orderBy,
   query,
@@ -15,6 +16,7 @@ import {
   RiCloseCircleLine,
   RiCheckboxCircleLine,
 } from "react-icons/ri";
+import { StudentsData, TitleType } from "../../typings";
 import { CloseButton, SendButton } from "../Common/Buttons";
 
 import { useAuth } from "../Context/AuthContext";
@@ -29,20 +31,20 @@ interface dataTable {
 
 export default function ApprovalTable() {
   const { user } = useAuth();
-  const [setuju, setSetuju] = useState<any>(false);
-  const [tolak, setTolak] = useState<any>(false);
-  const [student, setStudent] = useState<any>([]);
-  const [uidUser, setUidUser] = useState<any>();
-  const [profSatu, setProfSatu] = useState<any>();
-  const [profDua, setProfDua] = useState<any>();
-  const [studentName, setStudentName] = useState<any>();
+  const [setuju, setSetuju] = useState<boolean>(false);
+  const [tolak, setTolak] = useState<boolean>(false);
+  const [student, setStudent] = useState<DocumentData[] | StudentsData[]>([]);
+  const [uidUser, setUidUser] = useState<string>("");
+  const [profSatu, setProfSatu] = useState<string>("");
+  const [profDua, setProfDua] = useState<string>("");
+  const [studentName, setStudentName] = useState<string>("");
   const [newFeedback, setNewFeedBack] = useState("");
-  const [feedbackNoteUser1, setFeedbackNoteUser1] = useState<any>();
-  const [feedbackNoteUser2, setFeedbackNoteUser2] = useState<any>();
-  const [isApprovedByProfOne, setIsApprovedByProfOne] = useState<any>();
-  const [isApprovedByProfTwo, setIsApprovedByProfTwo] = useState<any>();
-  const [titleTextUser, setTitleTextuser] = useState<any>();
-  const [loading, setLoading] = useState(false);
+  const [feedbackNoteUser1, setFeedbackNoteUser1] = useState<string>("");
+  const [feedbackNoteUser2, setFeedbackNoteUser2] = useState<string>("");
+  const [isApprovedByProfOne, setIsApprovedByProfOne] = useState<string>("");
+  const [isApprovedByProfTwo, setIsApprovedByProfTwo] = useState<string>("");
+  const [titleTextUser, setTitleTextUser] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const getStudent = useCallback(async () => {
     setLoading(false);
@@ -66,18 +68,16 @@ export default function ApprovalTable() {
         .map((item) => item.data());
 
       const arrayStudents = [...studentsData1, ...studentsData2].filter(
-        (item: any) => item.profOne === user.name || item.profTwo === user.name
+        (item) => item.profOne === user.name || item.profTwo === user.name
       );
 
-      const fixArray = arrayStudents
-        .map((item: any) => {
-          if (item.profOne === user.name) {
-            if (item.title[0].isApprovedByProfOne !== user.name) return item;
-          } else if (item.profTwo === user.name) {
-            if (item.title[0].isApprovedByProfTwo !== user.name) return item;
-          }
-        })
-        .filter((item: any) => item !== undefined);
+      const fixArray = arrayStudents.filter((item) => {
+        if (item.profOne === user.name) {
+          if (item.title[0].isApprovedByProfOne !== user.name) return item;
+        } else if (item.profTwo === user.name) {
+          if (item.title[0].isApprovedByProfTwo !== user.name) return item;
+        }
+      });
 
       setStudent(fixArray);
       setLoading(true);
@@ -87,15 +87,15 @@ export default function ApprovalTable() {
   }, [user]);
 
   const getValueApprove = (
-    uid: any,
-    name: any,
-    profOne: any,
-    profTwo: any,
-    feedbackNote1: any,
-    feedbackNote2: any,
-    isApprovedByProfOne: any,
-    isApprovedByProfTwo: any,
-    titleText: any
+    uid: string,
+    name: string,
+    profOne: string,
+    profTwo: string,
+    feedbackNote1: string,
+    feedbackNote2: string,
+    isApprovedByProfOne: string,
+    isApprovedByProfTwo: string,
+    titleText: string
   ) => {
     setSetuju(true);
     setUidUser(uid);
@@ -105,20 +105,20 @@ export default function ApprovalTable() {
     setFeedbackNoteUser2(feedbackNote2);
     setIsApprovedByProfOne(isApprovedByProfOne);
     setIsApprovedByProfTwo(isApprovedByProfTwo);
-    setTitleTextuser(titleText);
+    setTitleTextUser(titleText);
     setStudentName(name);
   };
 
   const getValueDenied = (
-    uid: any,
-    name: any,
-    profOne: any,
-    profTwo: any,
-    feedbackNote1: any,
-    feedbackNote2: any,
-    isApprovedByProfOne: any,
-    isApprovedByProfTwo: any,
-    titleText: any
+    uid: string,
+    name: string,
+    profOne: string,
+    profTwo: string,
+    feedbackNote1: string,
+    feedbackNote2: string,
+    isApprovedByProfOne: string,
+    isApprovedByProfTwo: string,
+    titleText: string
   ) => {
     setTolak(true);
     setUidUser(uid);
@@ -128,7 +128,7 @@ export default function ApprovalTable() {
     setFeedbackNoteUser2(feedbackNote2);
     setIsApprovedByProfOne(isApprovedByProfOne);
     setIsApprovedByProfTwo(isApprovedByProfTwo);
-    setTitleTextuser(titleText);
+    setTitleTextUser(titleText);
     setStudentName(name);
   };
 
@@ -155,7 +155,7 @@ export default function ApprovalTable() {
       updateDoc(studentRef, value1);
       window.alert("Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 1");
       setSetuju(false);
-      const newStudentData = student.filter((item: any) => {
+      const newStudentData = student.filter((item) => {
         return item.uid !== uidUser;
       });
       setStudent(newStudentData);
@@ -180,7 +180,7 @@ export default function ApprovalTable() {
       updateDoc(studentRef, value2);
       window.alert("Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 2");
       setSetuju(false);
-      const newStudentData = student.filter((item: any) => {
+      const newStudentData = student.filter((item) => {
         return item.uid !== uidUser;
       });
       setStudent(newStudentData);
@@ -210,7 +210,7 @@ export default function ApprovalTable() {
       updateDoc(studentRef, value1);
       window.alert("Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 1");
       setTolak(false);
-      const newStudentData = student.filter((item: any) => {
+      const newStudentData = student.filter((item) => {
         return item.uid !== uidUser;
       });
       setStudent(newStudentData);
@@ -235,7 +235,7 @@ export default function ApprovalTable() {
       updateDoc(studentRef, value2);
       window.alert("Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 2");
       setTolak(false);
-      const newStudentData = student.filter((item: any) => {
+      const newStudentData = student.filter((item) => {
         return item.uid !== uidUser;
       });
       setStudent(newStudentData);
@@ -365,7 +365,7 @@ export default function ApprovalTable() {
             </thead>
             <tbody>
               {student.length > 0 ? (
-                student.map((data: any, index: any) => (
+                student.map((data, index) => (
                   <tr
                     key={index}
                     className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
@@ -377,7 +377,7 @@ export default function ApprovalTable() {
                       >
                         {data.name}
                       </td>
-                      {data.title.map((item: any, index: any) => (
+                      {data.title.map((item: TitleType, index: number) => (
                         <td
                           key={index}
                           className="px-6 py-2 max-w-[20%] text-center"
@@ -393,7 +393,7 @@ export default function ApprovalTable() {
                           ? "Dospem 2"
                           : "None"}
                       </td>
-                      {data.title.map((item: any, index: any) => (
+                      {data.title.map((item: TitleType, index: number) => (
                         <td
                           key={index}
                           className="px-6 py-2 flex justify-center gap-2"
