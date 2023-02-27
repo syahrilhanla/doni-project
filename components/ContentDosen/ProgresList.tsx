@@ -1,6 +1,6 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useCallback, useEffect, useState } from "react";
-import { RiSortDesc } from "react-icons/ri";
+import { RiLoader5Line, RiSortDesc } from "react-icons/ri";
 import seminar from "../../pages/seminar";
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
@@ -24,101 +24,10 @@ import { db } from "../Store/firebase";
 export default function ProgresList() {
   const [student, setStudent] = useState<any>([]);
   const { user } = useAuth();
-
-  // const content: dataTable[] = [
-  //   {
-  //     id: 1,
-  //     name: "nama 1",
-  //     title: "title 1",
-  //     bab1: "cek",
-  //     bab2: "cek",
-  //     bab3: "cek",
-  //     bab4: "cek",
-  //     bab5: "cek",
-  //     seminarHasil: "cek",
-  //     sidang: "cek",
-  //     generation: 1,
-  //     seminarDate: "23 Jan 2023",
-  //     sidangDate: "24 Jan 2023",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "nama 12",
-  //     title: "title 12",
-  //     bab1: "cek",
-  //     bab2: "cek",
-  //     bab3: "cek",
-  //     bab4: "cek",
-  //     bab5: "cek",
-  //     seminarHasil: "cek",
-  //     sidang: "cek",
-  //     generation: 2,
-  //     seminarDate: "23 Jan 2023",
-  //     sidangDate: "24 Jan 2023",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "nama 13",
-  //     title: "title 13",
-  //     bab1: "cek",
-  //     bab2: "cek",
-  //     bab3: "cek",
-  //     bab4: "cek",
-  //     bab5: "cek",
-  //     seminarHasil: "cek",
-  //     sidang: "cek",
-  //     generation: 3,
-  //     seminarDate: "23 Jan 2023",
-  //     sidangDate: "24 Jan 2023",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "nama 14",
-  //     title: "title 14",
-  //     bab1: "cek",
-  //     bab2: "cek",
-  //     bab3: "cek",
-  //     bab4: "cek",
-  //     bab5: "cek",
-  //     seminarHasil: "cek",
-  //     sidang: "cek",
-  //     generation: 4,
-  //     seminarDate: "23 Jan 2023",
-  //     sidangDate: "24 Jan 2023",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "nama 15",
-  //     title: "title 15",
-  //     bab1: "cek",
-  //     bab2: "cek",
-  //     bab3: "cek",
-  //     bab4: "cek",
-  //     bab5: "cek",
-  //     seminarHasil: "cek",
-  //     sidang: "cek",
-  //     generation: 5555,
-  //     seminarDate: "23 Jan 2023",
-  //     sidangDate: "24 Jan 2023",
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "Dimas maulana muhammad",
-  //     title: "Pengembangan media pembelajaran interaktif berbasis web",
-  //     bab1: "cek",
-  //     bab2: "cek",
-  //     bab3: "cek",
-  //     bab4: "cek",
-  //     bab5: "cek",
-  //     seminarHasil: "cek",
-  //     sidang: "cek",
-  //     generation: 6,
-  //     seminarDate: "23 Jan 2023",
-  //     sidangDate: "24 Jan 2023",
-  //   },
-  // ];
+  const [loading, setLoading] = useState<boolean>(false);
 
   const getData = useCallback(async () => {
+    setLoading(false);
     const studentRef = query(
       collection(db, "studentsList"),
       where("statusApprove", "==", true)
@@ -130,6 +39,7 @@ export default function ProgresList() {
         .map((item) => item.data());
 
       setStudent(studentsData);
+      setLoading(true);
     } catch (e) {
       console.log(e);
     }
@@ -213,118 +123,127 @@ export default function ProgresList() {
               </th>
             </tr>
           </thead>
-          <tbody>
-            {student.map((data: any, index: any) => (
-              <>
-                {data.profOne || data.profTwo === user.name ? (
-                  <tr
-                    key={index}
-                    className=" border-b even:bg-[#f0ebf8d7] odd:bg-white"
-                  >
-                    <td scope="row" className="px-4 py-2 font-medium   w-[20%]">
-                      {data.name}
-                    </td>
-                    <td className=" px-2 py-2 w-[20%] text-center">
-                      {data.title[0].titleText}
-                    </td>
-                    <td className=" text-center px-2 py-2 w-[5%]">
-                      {data.generation}
-                    </td>
-                    <td className=" text-center px-1.5 py-2">
-                      {data.files[0].chapterOne ? (
-                        <a
-                          href={data.files[0].chapterOne}
-                          className="hover:underline hover:text-black underline text-blue-400"
-                        >
-                          Cek
-                        </a>
-                      ) : (
-                        <p>-</p>
-                      )}
-                    </td>
-                    <td className=" text-center px-1.5 py-2">
-                      {data.files[0].chapterTwo ? (
-                        <a
-                          href={data.files[0].chapterTwo}
-                          className="hover:underline hover:text-black underline text-blue-400"
-                        >
-                          Cek
-                        </a>
-                      ) : (
-                        <p>-</p>
-                      )}
-                    </td>
-                    <td className=" text-center px-1.5 py-2">
-                      {data.files[0].chapterThree ? (
-                        <a
-                          href={data.files[0].chapterThree}
-                          className="hover:underline hover:text-black underline text-blue-400"
-                        >
-                          Cek
-                        </a>
-                      ) : (
-                        <p>-</p>
-                      )}
-                    </td>
-                    <td className=" text-center px-1.5 py-2">
-                      {data.files[0].chapterFour ? (
-                        <a
-                          href={data.files[0].chapterFour}
-                          className="hover:underline hover:text-black underline text-blue-400"
-                        >
-                          Cek
-                        </a>
-                      ) : (
-                        <p>-</p>
-                      )}
-                    </td>
-                    <td className=" text-center px-1.5 py-2">
-                      {data.files[0].chapterFive ? (
-                        <a
-                          href={data.files[0].chapterFive}
-                          className="hover:underline hover:text-black underline text-blue-400"
-                        >
-                          Cek
-                        </a>
-                      ) : (
-                        <p>-</p>
-                      )}
-                    </td>
-                    <td className=" text-center py-1  w-[10%]">
-                      {data.seminarDate[0].dateToBe && data.fileSeminar ? (
-                        <div className="flex flex-col gap-1">
-                          {data.seminarDate[0].dateToBe}
+          {!loading ? (
+            <div className="flex items-center justify-center">
+              <RiLoader5Line className="animate-spin text-3xl my-5 " />
+            </div>
+          ) : (
+            <tbody>
+              {student.map((data: any, index: any) => (
+                <>
+                  {data.profOne || data.profTwo === user.name ? (
+                    <tr
+                      key={index}
+                      className=" border-b even:bg-[#f0ebf8d7] odd:bg-white"
+                    >
+                      <td
+                        scope="row"
+                        className="px-4 py-2 font-medium   w-[20%]"
+                      >
+                        {data.name}
+                      </td>
+                      <td className=" px-2 py-2 w-[20%] text-center">
+                        {data.title[0].titleText}
+                      </td>
+                      <td className=" text-center px-2 py-2 w-[5%]">
+                        {data.generation}
+                      </td>
+                      <td className=" text-center px-1.5 py-2">
+                        {data.files[0].chapterOne ? (
                           <a
-                            href={data.fileSeminar}
+                            href={data.files[0].chapterOne}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
                             Cek
                           </a>
-                        </div>
-                      ) : (
-                        <p>-</p>
-                      )}
-                    </td>
-                    <td className=" text-center w-[10%]">
-                      {data.sidangDate[0].dateToBe && data.fileSidang ? (
-                        <div className="flex flex-col gap-1">
-                          {data.sidangDate[0].dateToBe}
+                        ) : (
+                          <p>-</p>
+                        )}
+                      </td>
+                      <td className=" text-center px-1.5 py-2">
+                        {data.files[0].chapterTwo ? (
                           <a
-                            href={data.fileSidang}
+                            href={data.files[0].chapterTwo}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
                             Cek
                           </a>
-                        </div>
-                      ) : (
-                        <p>-</p>
-                      )}
-                    </td>
-                  </tr>
-                ) : null}
-              </>
-            ))}
-          </tbody>
+                        ) : (
+                          <p>-</p>
+                        )}
+                      </td>
+                      <td className=" text-center px-1.5 py-2">
+                        {data.files[0].chapterThree ? (
+                          <a
+                            href={data.files[0].chapterThree}
+                            className="hover:underline hover:text-black underline text-blue-400"
+                          >
+                            Cek
+                          </a>
+                        ) : (
+                          <p>-</p>
+                        )}
+                      </td>
+                      <td className=" text-center px-1.5 py-2">
+                        {data.files[0].chapterFour ? (
+                          <a
+                            href={data.files[0].chapterFour}
+                            className="hover:underline hover:text-black underline text-blue-400"
+                          >
+                            Cek
+                          </a>
+                        ) : (
+                          <p>-</p>
+                        )}
+                      </td>
+                      <td className=" text-center px-1.5 py-2">
+                        {data.files[0].chapterFive ? (
+                          <a
+                            href={data.files[0].chapterFive}
+                            className="hover:underline hover:text-black underline text-blue-400"
+                          >
+                            Cek
+                          </a>
+                        ) : (
+                          <p>-</p>
+                        )}
+                      </td>
+                      <td className=" text-center py-1  w-[10%]">
+                        {data.seminarDate[0].dateToBe && data.fileSeminar ? (
+                          <div className="flex flex-col gap-1">
+                            {data.seminarDate[0].dateToBe}
+                            <a
+                              href={data.fileSeminar}
+                              className="hover:underline hover:text-black underline text-blue-400"
+                            >
+                              Cek
+                            </a>
+                          </div>
+                        ) : (
+                          <p>-</p>
+                        )}
+                      </td>
+                      <td className=" text-center w-[10%]">
+                        {data.sidangDate[0].dateToBe && data.fileSidang ? (
+                          <div className="flex flex-col gap-1">
+                            {data.sidangDate[0].dateToBe}
+                            <a
+                              href={data.fileSidang}
+                              className="hover:underline hover:text-black underline text-blue-400"
+                            >
+                              Cek
+                            </a>
+                          </div>
+                        ) : (
+                          <p>-</p>
+                        )}
+                      </td>
+                    </tr>
+                  ) : null}
+                </>
+              ))}
+            </tbody>
+          )}
         </table>
       </div>
     </div>
