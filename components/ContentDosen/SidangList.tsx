@@ -246,7 +246,7 @@ export default function SidangList() {
               <CloseButton handleClick={handleCloseModal} />
               <div className="p-4 flex flex-col gap-2">
                 <p className="block text-lg mt-6 font-medium text-gray-900 ">
-                  {`Apakah anda ingin menyutujui ${studentName} melakukan sidang akhir?`}
+                  {`Apakah anda ingin menyetujui ${studentName} melakukan sidang akhir?`}
                 </p>
                 <textarea placeholder="Berikan Masukkan Untuk Mahasiswa Bimbingan"
                   className="min-h-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:outline-none block w-full p-2.5"

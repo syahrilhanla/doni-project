@@ -277,7 +277,7 @@ export default function ApprovalTable() {
               <CloseButton handleClick={handleCloseModal} />
               <div className="p-4 flex flex-col gap-2 mt-2">
                 <p className="block text-lg mt-6 font-medium text-gray-900 ">
-                  {`Apakah anda ingin menyutujui judul skripsi ${studentName} ?`}
+                  {`Apakah anda ingin menyetujui judul skripsi ${studentName} ?`}
                 </p>
                 <textarea
                   placeholder="Berikan Masukkan Untuk Mahasiswa Bimbingan"
