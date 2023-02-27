@@ -49,11 +49,13 @@ export default function SeminarList() {
 
    const studentsData1 = (await getDocs(studentRef1)).docs
     .map((item) => item)
-    .map((item) => item.data());
+     .map((item) => item.data())
+     .filter((item) => item.seminarDate[0].isApprovedByProfOne !== "Denied");
 
    const studentsData2 = (await getDocs(studentRef2)).docs
     .map((item) => item)
-    .map((item) => item.data());
+     .map((item) => item.data())
+     .filter((item) => item.seminarDate[0].isApprovedByProfTwo !== "Denied");
 
    const arrayStudents = [...studentsData1, ...studentsData2].filter((item: any) => item.profOne === user.name || item.profTwo === user.name)
 
@@ -72,7 +74,7 @@ export default function SeminarList() {
   } catch (e) {
    console.log(e);
   }
- }, [student])
+ }, [user])
  const getValueApprove = (uid: any, name: any, profOne: any, profTwo: any, feedbackNote1: any, feedbackNote2: any, isApprovedByProfOne: any, isApprovedByProfTwo: any, dateToBe: any) => {
   setSetuju(true)
   setUidUser(uid)
