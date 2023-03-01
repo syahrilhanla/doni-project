@@ -49,11 +49,13 @@ export default function SeminarList() {
 
    const studentsData1 = (await getDocs(studentRef1)).docs
     .map((item) => item)
-    .map((item) => item.data());
+     .map((item) => item.data())
+     .filter((item) => item.seminarDate[0].isApprovedByProfOne !== "Denied");
 
    const studentsData2 = (await getDocs(studentRef2)).docs
     .map((item) => item)
-    .map((item) => item.data());
+     .map((item) => item.data())
+     .filter((item) => item.seminarDate[0].isApprovedByProfTwo !== "Denied");
 
    const arrayStudents = [...studentsData1, ...studentsData2].filter((item: any) => item.profOne === user.name || item.profTwo === user.name)
 
@@ -72,7 +74,7 @@ export default function SeminarList() {
   } catch (e) {
    console.log(e);
   }
- }, [student])
+ }, [user])
  const getValueApprove = (uid: any, name: any, profOne: any, profTwo: any, feedbackNote1: any, feedbackNote2: any, isApprovedByProfOne: any, isApprovedByProfTwo: any, dateToBe: any) => {
   setSetuju(true)
   setUidUser(uid)
@@ -246,7 +248,7 @@ export default function SeminarList() {
        <CloseButton handleClick={handleCloseModal} />
        <div className="p-4 flex flex-col gap-2">
         <p className="block text-lg mt-6 font-medium text-gray-900 ">
-         {`Apakah anda ingin menyutujui ${studentName} melakukan seminar hasil?`}
+         {`Apakah anda ingin menyetujui ${studentName} melakukan seminar hasil?`}
         </p>
         <textarea placeholder="Berikan Masukkan Untuk Mahasiswa Bimbingan"
          className="min-h-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:outline-none block w-full p-2.5"
