@@ -124,9 +124,17 @@ export default function ProgresList() {
             </tr>
           </thead>
           {!loading ? (
-            <div className="flex items-center justify-center">
-              <RiLoader5Line className="animate-spin text-3xl my-5 " />
-            </div>
+            <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
+              <td
+                scope="row"
+                colSpan={10}
+                className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+              >
+                <div className="flex items-center justify-center">
+                  <RiLoader5Line className="animate-spin text-3xl my-5 " />
+                </div>
+              </td>
+            </tr>
           ) : (
             <tbody>
               {student.map((data: any, index: any) => (
