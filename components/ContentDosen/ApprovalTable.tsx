@@ -4,7 +4,6 @@ import {
   doc,
   DocumentData,
   getDocs,
-  orderBy,
   query,
   updateDoc,
   where,
@@ -441,7 +440,17 @@ export default function ApprovalTable() {
             </tr>
           </thead>
           {!loading ? (
-            <RiLoader5Line className="text-center animate-spin text-3xl mt-5" />
+            <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
+              <td
+                scope="row"
+                colSpan={7}
+                className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+              >
+                <div className="flex items-center justify-center">
+                  <RiLoader5Line className="text-center animate-spin text-3xl mt-5" />
+                </div>
+              </td>
+            </tr>
           ) : (
             <tbody>
               {student.length > 0 ? (
