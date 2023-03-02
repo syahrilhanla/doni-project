@@ -53,7 +53,7 @@ export default function ProgresList() {
     <div>
       <div className=" inline-block overflow-x-auto shadow-md sm:rounded-lg max-h-[500px] max-w-[350px] sm:max-w-full ">
         <table className=" text-left table-auto text-sm capitalize  text-gray-900 ">
-          <thead className="text-xs text-white  bg-patternTwo sticky top-0 z-50  ">
+          <thead className="text-xs text-white  bg-patternTwo sticky top-0 z-20  ">
             <tr>
               <th scope="col" rowSpan={2} className="px-2 py-3">
                 <div className="flex items-center gap-2 justify-center">
@@ -159,6 +159,7 @@ export default function ProgresList() {
                       <td className=" text-center px-1.5 py-2">
                         {data.files[0].chapterOne ? (
                           <a
+                            target="_blank"
                             href={data.files[0].chapterOne}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
@@ -171,6 +172,7 @@ export default function ProgresList() {
                       <td className=" text-center px-1.5 py-2">
                         {data.files[0].chapterTwo ? (
                           <a
+                            target="_blank"
                             href={data.files[0].chapterTwo}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
@@ -183,6 +185,7 @@ export default function ProgresList() {
                       <td className=" text-center px-1.5 py-2">
                         {data.files[0].chapterThree ? (
                           <a
+                            target="_blank"
                             href={data.files[0].chapterThree}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
@@ -195,6 +198,7 @@ export default function ProgresList() {
                       <td className=" text-center px-1.5 py-2">
                         {data.files[0].chapterFour ? (
                           <a
+                            target="_blank"
                             href={data.files[0].chapterFour}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
@@ -207,6 +211,7 @@ export default function ProgresList() {
                       <td className=" text-center px-1.5 py-2">
                         {data.files[0].chapterFive ? (
                           <a
+                            target="_blank"
                             href={data.files[0].chapterFive}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
@@ -221,6 +226,7 @@ export default function ProgresList() {
                           <div className="flex flex-col gap-1">
                             {data.seminarDate[0].dateToBe}
                             <a
+                              target="_blank"
                               href={data.fileSeminar}
                               className="hover:underline hover:text-black underline text-blue-400"
                             >
@@ -236,6 +242,7 @@ export default function ProgresList() {
                           <div className="flex flex-col gap-1">
                             {data.sidangDate[0].dateToBe}
                             <a
+                              target="_blank"
                               href={data.fileSidang}
                               className="hover:underline hover:text-black underline text-blue-400"
                             >
