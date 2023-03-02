@@ -7,6 +7,7 @@ import { useAuth } from "../components/Context/AuthContext";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../components/Store/firebase";
 import { User } from "firebase/auth";
+import TableActivity from "../components/Content/TableActivity";
 
 const Dashboard = () => {
   const [ajukan, setAjukan] = useState(false);
@@ -60,7 +61,8 @@ const Dashboard = () => {
   };
   return (
     <Layout>
-      <div className="h-screen px-4 overflow-auto py-4">
+      <div className="h-full px-4  py-4">
+        
         <div className="flex lg:space-between xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col  mt-5 mb-2 mx-4">
           <div className="grid justify-items-start xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 py-4 px-3 w-2/5 h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
             <div className=" text-lg text-center font-sans">
@@ -253,6 +255,9 @@ const Dashboard = () => {
               {sidang}
             </p>
           </div>
+        </div>
+        <div className="flex justify-center lg:space-between xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col  mt-4 mb-2 mx-4">
+          <TableActivity />
         </div>
       </div>
     </Layout>
