@@ -17,6 +17,8 @@ const FileUpload = () => {
   const [link3, setLink3] = useState("");
   const [link4, setLink4] = useState("");
   const [link5, setLink5] = useState("");
+  const [enable, setEnable] = useState(false);
+
   useEffect(() => {
     if (user.files) {
       setChapter1(user.files[0].chapterOne);
@@ -24,6 +26,7 @@ const FileUpload = () => {
       setChapter3(user.files[0].chapterThree);
       setChapter4(user.files[0].chapterFour);
       setChapter5(user.files[0].chapterFive);
+      setEnable(user.files[0].chapterOne ? false : true);
     }
   }, [user]);
 
@@ -40,6 +43,7 @@ const FileUpload = () => {
         },
       ],
     };
+    setEnable(true);
     await updateDoc(docRef, chapter1Value);
     setLink1("");
   };
@@ -149,19 +153,43 @@ const FileUpload = () => {
             {chapter1 && (
               <>
                 <input
-                  className="bg-gray-50 items-center border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
+                  className="disabled:bg-slate-200 bg-gray-50 items-center border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
                   value={link1}
                   onChange={(e) => setLink1(e.target.value)}
                   type="text"
                   placeholder={chapter1}
-                  disabled
+                  disabled={enable ? false : true}
                 />
-                <button
-                  onClick={handleLink1}
-                  className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
-                >
-                  Edit
-                </button>
+
+                {enable && (
+                  <>
+                    <button
+                      onClick={() => handleLink1()}
+                      className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
+                    >
+                      Submit
+                    </button>
+                    <button
+                      onClick={() => {
+                        setEnable(false);
+                        setLink1(chapter1);
+                      }}
+                      className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
+                    >
+                      Cancel
+                    </button>
+                  </>
+                )}
+
+                {!enable && (
+                  <button
+                    onClick={() => setEnable(true)}
+                    className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
+                  >
+                    Edit
+                  </button>
+                )}
+
                 <Link
                   target="_blank"
                   href={`${chapter1}`}
