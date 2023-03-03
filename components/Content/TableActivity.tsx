@@ -11,45 +11,6 @@ interface dataTable {
   activity: string;
   feedbackNote: string;
 }
-const content: dataTable[] = [
-  {
-    id: 1,
-    date: "27-02-2023",
-    name: "Dosen 1",
-    activity: "Menerima Judul Skripsi",
-    feedbackNote: "Perbaiki kata-kata yang salah"
-  },
-  {
-    id: 2,
-    date: "27-02-2023",
-    name: "Dosen 1",
-    activity: "Menerima Seminar Hasil",
-    feedbackNote: "Perbaiki kata-kata yang salah"
-  },
-  {
-    id: 3,
-    date: "27-02-2023",
-    name: "Dosen 1",
-    activity: "Menerima Sidang Akhir",
-    feedbackNote: "Perbaiki kata-kata yang salah"
-  },
-  {
-    id: 4,
-    date: "27-02-2023",
-    name: "Dosen 1",
-    activity: "Menerima Sidang Akhir",
-    feedbackNote: "Perbaiki kata-kata yang salah"
-  },
-  {
-    id: 5,
-    date: "27-02-2023",
-    name: "Dosen 1",
-    activity: "Menerima Sidang Akhir",
-    feedbackNote: "Perbaiki kata-kata yang salah"
-  }
-
-];
-
 interface ActivityTable {
   user: StudentsData,
 }
@@ -66,7 +27,7 @@ const TableActivity = ({ user }: ActivityTable) => {
           activity: item.feedbackActivity,
           feedbackNote: item.feedbackText
         }
-      })
+      }).filter((item)=> item.activity !== "" && item.date !=="" && item.feedbackNote!=="" && item.name !== "")
       setActivity(arrayFix)
     } catch (e) {
       console.log(e);
