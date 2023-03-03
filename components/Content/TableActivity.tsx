@@ -1,8 +1,9 @@
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import React, { useCallback, useEffect, useState } from 'react'
 import { RiSortDesc } from 'react-icons/ri'
-import { useAuth } from '../Context/AuthContext';
+// import { useAuth } from '../Context/AuthContext';
 import { db } from '../Store/firebase';
+import { StudentsData } from '../../typings';
 interface dataTable {
   id: number;
   date: string;
@@ -49,20 +50,33 @@ const content: dataTable[] = [
 
 ];
 
-const TableActivity = () => {
-  const { user } = useAuth();
-  const [activity, setActivity] = useState<any>([])
+interface ActivityTable {
+  user: StudentsData,
+}
+const TableActivity = ({ user }: ActivityTable) => {
+
+  const [activity, setActivity] = useState<dataTable[]>([])
   const getActivity = useCallback(async () => {
     try {
-      const docRef = doc(db, "studentsList", user.uid)
-      const titleArray1 = (await getDoc(docRef)).data()?.title[0].feedbackNoteByProfOne;
-      const titleArray2 = (await getDoc(docRef)).data()?.title[0].feedbackNoteByProfTwo;
-      const seminarDateArray1 = (await getDoc(docRef)).data()?.seminarDate[0].feedbackNoteByProfOne;
-      const seminarDateArray2 = (await getDoc(docRef)).data()?.seminarDate[0].feedbackNoteByProfTwo;
-      const sidangDateArray1 = (await getDoc(docRef)).data()?.sidangDate[0].feedbackNoteByProfOne;
-      const sidangDateArray2 = (await getDoc(docRef)).data()?.sidangDate[0].feedbackNoteByProfTwo;
-      const ActivityArray = [titleArray1, titleArray2, seminarDateArray1, seminarDateArray2, sidangDateArray1, sidangDateArray2]
-      setActivity(ActivityArray)
+
+      const titleArray1 = user.title[0].feedbackNoteByProfOne.map((item) => item);
+      const titleArray2 = user.title[0].feedbackNoteByProfTwo.map((item) => item);
+      const activityArray = [ ...titleArray1, ...titleArray2 ]
+      const arrayFix = activityArray.map((item, index) => {
+        return {
+          id: index,
+          date: item.feedbackDate,
+          name: item.feedbackProfName,
+          activity: item.feedbackActivity,
+          feedbackNote: item.feedbackText
+        }
+      })
+      console.log(arrayFix);
+      
+      setActivity(arrayFix)
+      // const ActivityArray = { titleArray1, titleArray2, seminarDateArray1, seminarDateArray2, sidangDateArray1, sidangDateArray2 }
+      // console.log(activity);
+      // console.log(user);
 
     } catch (e) {
       console.log(e);
@@ -70,9 +84,11 @@ const TableActivity = () => {
     }
   }, [user])
 
+
   useEffect(() => {
+    console.log(user);
     getActivity()
-  }, [])
+  }, [user])
   return (
     <div className=" inline-block overflow-x-auto overflow-y-scroll shadow-md sm:rounded-lg max-h-[150px] w-full">
       <table className="text-sm text-left text-gray-900 capitalize w-full ">
@@ -108,7 +124,7 @@ const TableActivity = () => {
           </tr>
         </thead>
         <tbody>
-          {activity.map((data: any, index: number) => (
+          {activity.map((data , index: number) => (
             <tr
               key={index}
               className="even:bg-[#f0ebf8d7] odd:bg-white border-b "
@@ -117,17 +133,17 @@ const TableActivity = () => {
                 scope="row"
                 className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
               >
-                {data.feedbackDate}
+                {data.date}
               </th>
-              <td className="px-6 py-2 text-center">{data.feedbackProfName}</td>
+              <td className="px-6 py-2 text-center">{data.name}</td>
               <td className="py-1">
-                {data.feedbackActivity}
+                {data.activity}
               </td>
               <td className="px-6 py-2">
-                {data.feedbackText}
+                {data.feedbackNote}
               </td>
             </tr>
-          )) }
+          ))}
         </tbody>
       </table>
     </div>

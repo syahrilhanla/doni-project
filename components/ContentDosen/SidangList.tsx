@@ -54,12 +54,14 @@ export default function SidangList() {
       const studentsData1 = (await getDocs(studentRef1)).docs
         .map((item) => item)
         .map((item) => item.data())
-        .filter((item) => item.sidangDate[0].isApprovedByProfOne !== "Denied");
+        .filter((item) => item.sidangDate[0].isApprovedByProfOne !== "Denied")
+        .filter((item) => item.title[0].titleText !== "");
 
       const studentsData2 = (await getDocs(studentRef2)).docs
         .map((item) => item)
         .map((item) => item.data())
-        .filter((item) => item.sidangDate[0].isApprovedByProfTwo !== "Denied");
+        .filter((item) => item.sidangDate[0].isApprovedByProfTwo !== "Denied")
+        .filter((item) => item.title[0].titleText !== "");
 
       const arrayStudents = [...studentsData1, ...studentsData2].filter((item: any) => item.profOne === user.name || item.profTwo === user.name)
 
@@ -423,7 +425,7 @@ export default function SidangList() {
               </td>
             </tr> :
             <tbody>
-              {student.map((data: any, index: any) => (
+              {student.length > 0 ? student.map((data: any, index: any) => (
                 <tr
                   key={index}
                   className="even:bg-[#f0ebf8d7] odd:bg-white border-b "
@@ -440,6 +442,7 @@ export default function SidangList() {
                     <div className="flex flex-col items-center">
                       {data.sidangDate[0].dateToBe ? data.sidangDate[0].dateToBe : "-"}
                       <Link
+                        target="_blank"
                         className="hover:underline hover:text-black underline:none text-purple-500"
                         href={`${data.fileSidang}`}
                       >
@@ -488,7 +491,19 @@ export default function SidangList() {
                   }
 
                 </tr>
-              ))}
+              )) :
+                <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
+                  <td
+                    scope="row"
+                    colSpan={7}
+                    className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+                  >
+                    <div className="flex items-center justify-center">
+                      Belum Ada Yang Mengajukan Sidang Akhir
+                    </div>
+                  </td>
+                </tr>
+              }
             </tbody>
           }
         </table>

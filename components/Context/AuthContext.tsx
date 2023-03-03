@@ -115,8 +115,18 @@ export const AuthContextProvider = ({
             seminarDate: [
               {
                 dateToBe: "",
-                feedbackNoteByProfOne: "",
-                feedbackNoteByProfTwo: "",
+                feedbackNoteByProfOne: {
+                  feedbackActivity: "",
+                  feedbackDate: "",
+                  feedbackProfName: "",
+                  feedbackText:""
+                },
+                feedbackNoteByProfTwo: {
+                  feedbackActivity: "",
+                  feedbackDate: "",
+                  feedbackProfName: "",
+                  feedbackText:""
+                },
                 isApprovedByProfOne: "",
                 isApprovedByProfTwo: "",
               },
@@ -124,16 +134,36 @@ export const AuthContextProvider = ({
             sidangDate: [
               {
                 dateToBe: "",
-                feedbackNoteByProfOne: "",
-                feedbackNoteByProfTwo: "",
+                feedbackNoteByProfOne: {
+                  feedbackActivity: "",
+                  feedbackDate: "",
+                  feedbackProfName: "",
+                  feedbackText:""
+                },
+                feedbackNoteByProfTwo: {
+                  feedbackActivity: "",
+                  feedbackDate: "",
+                  feedbackProfName: "",
+                  feedbackText:""
+                },
                 isApprovedByProfOne: "",
                 isApprovedByProfTwo: "",
               },
             ],
             title: [
               {
-                feedbackNoteByProfOne: "",
-                feedbackNoteByProfTwo: "",
+                feedbackNoteByProfOne: {
+                  feedbackActivity: "",
+                  feedbackDate: "",
+                  feedbackProfName: "",
+                  feedbackText:""
+                },
+                feedbackNoteByProfTwo: {
+                  feedbackActivity: "",
+                  feedbackDate: "",
+                  feedbackProfName: "",
+                  feedbackText:""
+                },
                 isApprovedByProfOne: "",
                 isApprovedByProfTwo: "",
                 titleText: "",

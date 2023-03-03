@@ -68,11 +68,13 @@ export default function ApprovalTable() {
       const studentsData1 = (await getDocs(studentRef1)).docs
         .map((item) => item)
         .map((item) => item.data())
-        .filter((item) => item.title[0].isApprovedByProfOne !== "Denied");
+        .filter((item) => item.title[0].isApprovedByProfOne !== "Denied")
+        .filter((item) => item.title[0].titleText !== "");
       const studentsData2 = (await getDocs(studentRef2)).docs
         .map((item) => item)
         .map((item) => item.data())
-        .filter((item) => item.title[0].isApprovedByProfTwo !== "Denied");
+        .filter((item) => item.title[0].isApprovedByProfTwo !== "Denied")
+        .filter((item) => item.title[0].titleText !== "");
 
       const arrayStudents = [...studentsData1, ...studentsData2].filter(
         (item) => item.profOne === user.name || item.profTwo === user.name
@@ -286,12 +288,13 @@ export default function ApprovalTable() {
       const value2 = {
         title: [
           {
-            feedbackNoteByProfOne: {
+            feedbackNoteByProfOne: arrayUnion(
+              {
               feedbackActivity: feedbackActivity1,
               feedbackDate: feedbackDate1,
               feedbackProfName: feedbackProfName1,
               feedbackText: feedbackText1
-            },
+            }),
             feedbackNoteByProfTwo: {
               feedbackActivity: "Menolak Judul Skripsi",
               feedbackDate: getCurrentDate(),
@@ -549,7 +552,18 @@ export default function ApprovalTable() {
                   </tr>
                 ))
               ) : (
-                <></>
+                <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
+                  <td
+                    scope="row"
+                    colSpan={7}
+                    className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+                  >
+                    <div className="flex items-center justify-center">
+                      Belum Ada Yang Mengajukan Judul Skripsi
+                    </div>
+                  </td>
+                </tr>
+
               )}
             </tbody>
           )}

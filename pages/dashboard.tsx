@@ -257,7 +257,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="flex justify-center lg:space-between xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col  mt-5 mb-2 mx-4">
-          <TableActivity />
+          <TableActivity user={user} />
         </div>
       </div>
     </Layout>
