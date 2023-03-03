@@ -115,18 +115,6 @@ export const AuthContextProvider = ({
             seminarDate: [
               {
                 dateToBe: "",
-                feedbackNoteByProfOne: {
-                  feedbackActivity: "",
-                  feedbackDate: "",
-                  feedbackProfName: "",
-                  feedbackText:""
-                },
-                feedbackNoteByProfTwo: {
-                  feedbackActivity: "",
-                  feedbackDate: "",
-                  feedbackProfName: "",
-                  feedbackText:""
-                },
                 isApprovedByProfOne: "",
                 isApprovedByProfTwo: "",
               },
@@ -134,41 +122,26 @@ export const AuthContextProvider = ({
             sidangDate: [
               {
                 dateToBe: "",
-                feedbackNoteByProfOne: {
-                  feedbackActivity: "",
-                  feedbackDate: "",
-                  feedbackProfName: "",
-                  feedbackText:""
-                },
-                feedbackNoteByProfTwo: {
-                  feedbackActivity: "",
-                  feedbackDate: "",
-                  feedbackProfName: "",
-                  feedbackText:""
-                },
                 isApprovedByProfOne: "",
                 isApprovedByProfTwo: "",
               },
             ],
             title: [
               {
-                feedbackNoteByProfOne: {
-                  feedbackActivity: "",
-                  feedbackDate: "",
-                  feedbackProfName: "",
-                  feedbackText:""
-                },
-                feedbackNoteByProfTwo: {
-                  feedbackActivity: "",
-                  feedbackDate: "",
-                  feedbackProfName: "",
-                  feedbackText:""
-                },
+
                 isApprovedByProfOne: "",
                 isApprovedByProfTwo: "",
                 titleText: "",
               },
             ],
+            activity: [
+              {
+                feedbackActivity: "",
+                feedbackDate: "",
+                feedbackProfName: "",
+                feedbackText: ""
+              }
+            ]
           });
         } catch (e) {
           console.log(e);

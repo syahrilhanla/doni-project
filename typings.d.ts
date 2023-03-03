@@ -28,22 +28,6 @@ interface SidangDateType {
     isApprovedByProfTwo: string
 }
 interface TitleType {
-    feedbackNoteByProfOne: Array<
-        {
-            feedbackActivity: string,
-            feedbackDate: string,
-            feedbackText: string,
-            feedbackProfName: string,
-        }
-    >
-    feedbackNoteByProfTwo: Array<
-        {
-            feedbackActivity: string,
-            feedbackDate: string,
-            feedbackText: string,
-            feedbackProfName: string,
-        }
-    >
     isApprovedByProfOne: string
     isApprovedByProfTwo: string
     titleText: string
@@ -55,6 +39,14 @@ export interface StudentsData {
     examinerTwo: string
     fileSeminar: string
     fileSidang: string
+    activity: Array<
+         {
+            feedbackActivity: string,
+            feedbackDate: string,
+            feedbackText: string,
+            feedbackProfName: string,
+        }
+    >
     files: Array<FilesType>
     generation: string
     name: string

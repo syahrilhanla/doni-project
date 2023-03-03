@@ -24,14 +24,6 @@ export default function SidangList() {
   const [profDua, setProfDua] = useState<any>()
   const [studentName, setStudentName] = useState<any>()
   const [newFeedback, setNewFeedBack] = useState("")
-  const [feedbackText1, setFeedbackText1] = useState<string>("");
-  const [feedbackActivity1, setFeedbackActivity1] = useState<string>("");
-  const [feedbackProfName1, setFeedbackProfName1] = useState<string>("");
-  const [feedbackDate1, setFeedbackDate1] = useState<string>("");
-  const [feedbackText2, setFeedbackText2] = useState<string>("");
-  const [feedbackActivity2, setFeedbackActivity2] = useState<string>("");
-  const [feedbackProfName2, setFeedbackProfName2] = useState<string>("");
-  const [feedbackDate2, setFeedbackDate2] = useState<string>("");
   const [isApprovedByProfOne, setIsApprovedByProfOne] = useState<any>()
   const [isApprovedByProfTwo, setIsApprovedByProfTwo] = useState<any>()
   const [dateToBe, setDateToBe] = useState<any>()
@@ -86,17 +78,9 @@ export default function SidangList() {
     let date = newDate.getDate();
     let month = newDate.getMonth() + 1;
     let year = newDate.getFullYear();
-    return `${date}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${year}`
+    return `${date < 10 ? `0${date}` : `${date}`}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${year}`
   }
   const getValueApprove = (uid: any, name: any, profOne: any, profTwo: any,
-    feedbackActivity1: string,
-    feedbackDate1: string,
-    feedbackProfName1: string,
-    feedbackText1: string,
-    feedbackActivity2: string,
-    feedbackDate2: string,
-    feedbackProfName2: string,
-    feedbackText2: string,
     isApprovedByProfOne: any,
     isApprovedByProfTwo: any,
     dateToBe: any) => {
@@ -105,41 +89,17 @@ export default function SidangList() {
     setStudentName(name)
     setProfSatu(profOne)
     setProfDua(profTwo)
-    setFeedbackActivity1(feedbackActivity1)
-    setFeedbackDate1(feedbackDate1)
-    setFeedbackProfName1(feedbackProfName1)
-    setFeedbackText1(feedbackText1)
-    setFeedbackActivity2(feedbackActivity2)
-    setFeedbackDate2(feedbackDate2)
-    setFeedbackProfName2(feedbackProfName2)
-    setFeedbackText2(feedbackText2)
     setIsApprovedByProfOne(isApprovedByProfOne)
     setIsApprovedByProfTwo(isApprovedByProfTwo)
     setDateToBe(dateToBe)
   }
   const getValueDenied = (uid: any, name: any, profOne: any, profTwo: any,
-    feedbackActivity1: string,
-    feedbackDate1: string,
-    feedbackProfName1: string,
-    feedbackText1: string,
-    feedbackActivity2: string,
-    feedbackDate2: string,
-    feedbackProfName2: string,
-    feedbackText2: string,
     isApprovedByProfOne: any, isApprovedByProfTwo: any, dateToBe: any) => {
     setTolak(true)
     setUidUser(uid)
     setStudentName(name)
     setProfSatu(profOne)
     setProfDua(profTwo)
-    setFeedbackActivity1(feedbackActivity1)
-    setFeedbackDate1(feedbackDate1)
-    setFeedbackProfName1(feedbackProfName1)
-    setFeedbackText1(feedbackText1)
-    setFeedbackActivity2(feedbackActivity2)
-    setFeedbackDate2(feedbackDate2)
-    setFeedbackProfName2(feedbackProfName2)
-    setFeedbackText2(feedbackText2)
     setIsApprovedByProfOne(isApprovedByProfOne)
     setIsApprovedByProfTwo(isApprovedByProfTwo)
     setDateToBe(dateToBe)
@@ -150,18 +110,6 @@ export default function SidangList() {
       const value1 = {
         sidangDate: [
           {
-            feedbackNoteByProfOne: {
-              feedbackActivity: "Menerima Pengajuan Sidang Akhir",
-              feedbackDate: getCurrentDate(),
-              feedbackProfName: user.name,
-              feedbackText: newFeedback
-            },
-            feedbackNoteByProfTwo: {
-              feedbackActivity: feedbackActivity2,
-              feedbackDate: feedbackDate2,
-              feedbackProfName: feedbackProfName2,
-              feedbackText: feedbackText2
-            },
             isApprovedByProfOne: user.name,
             isApprovedByProfTwo: isApprovedByProfTwo,
             dateToBe: dateToBe
@@ -174,7 +122,13 @@ export default function SidangList() {
             text: "Kamu Telah Diperbolehkan Sidang Akhir Oleh Dosen Pembimbing 1",
             title: "Pemberitahuan"
           }
-        )
+        ),
+        activity: arrayUnion({
+          feedbackDate: getCurrentDate(),
+          feedbackText: newFeedback,
+          feedbackProfName: user.name,
+          feedbackActivity: "Menerima Pengajuan Sidang Akhir"
+        })
       }
       updateDoc(studentRef, value1)
       window.alert("Berhasil Menerima Sidang Akhir Selaku Dosen Pembimbing 1")
@@ -189,18 +143,6 @@ export default function SidangList() {
       const value2 = {
         sidangDate: [
           {
-            feedbackNoteByProfOne: {
-              feedbackActivity: feedbackActivity1,
-              feedbackDate: feedbackDate1,
-              feedbackProfName: feedbackProfName1,
-              feedbackText: feedbackText1
-            },
-            feedbackNoteByProfTwo: {
-              feedbackActivity: "Menerima Pengajuan Sidang Akhir",
-              feedbackDate: getCurrentDate(),
-              feedbackProfName: user.name,
-              feedbackText: newFeedback
-            },
             isApprovedByProfOne: isApprovedByProfOne,
             isApprovedByProfTwo: user.name,
             dateToBe: dateToBe
@@ -213,7 +155,13 @@ export default function SidangList() {
             text: "Kamu Telah Diperbolehkan Sidang Akhir Oleh Dosen Pembimbing 2",
             title: "Pemberitahuan"
           }
-        )
+        ),
+        activity: arrayUnion({
+          feedbackDate: getCurrentDate(),
+          feedbackText: newFeedback,
+          feedbackProfName: user.name,
+          feedbackActivity: "Menerima Pengajuan Sidang Akhir"
+        })
       }
       updateDoc(studentRef, value2)
       window.alert("Berhasil Menerima Sidang Akhir Selaku Dosen Pembimbing 2")
@@ -230,18 +178,6 @@ export default function SidangList() {
       const value1 = {
         sidangDate: [
           {
-            feedbackNoteByProfOne: {
-              feedbackActivity: "Menolak Pengajuan Sidang Akhir",
-              feedbackDate: getCurrentDate(),
-              feedbackProfName: user.name,
-              feedbackText: newFeedback
-            },
-            feedbackNoteByProfTwo: {
-              feedbackActivity: feedbackActivity2,
-              feedbackDate: feedbackDate2,
-              feedbackProfName: feedbackProfName2,
-              feedbackText: feedbackText2
-            },
             isApprovedByProfOne: "Denied",
             isApprovedByProfTwo: isApprovedByProfTwo,
             dateToBe: dateToBe
@@ -254,7 +190,13 @@ export default function SidangList() {
             text: "Kamu TIDAK DI PERBOLEHKAN Sidang Akhir Oleh Dosen Pembimbing 1",
             title: "Pemberitahuan"
           }
-        )
+        ),
+        activity: arrayUnion({
+          feedbackDate: getCurrentDate(),
+          feedbackText: newFeedback,
+          feedbackProfName: user.name,
+          feedbackActivity: "Menolak Pengajuan Sidang Akhir"
+        })
       }
       updateDoc(studentRef, value1)
       window.alert("Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 1")
@@ -269,18 +211,6 @@ export default function SidangList() {
       const value2 = {
         sidangDate: [
           {
-            feedbackNoteByProfOne: {
-              feedbackActivity: feedbackActivity1,
-              feedbackDate: feedbackDate1,
-              feedbackProfName: feedbackProfName1,
-              feedbackText: feedbackText1
-            },
-            feedbackNoteByProfTwo: {
-              feedbackActivity: "Menolak Pengajuan Sidang Akhir",
-              feedbackDate: getCurrentDate(),
-              feedbackProfName: user.name,
-              feedbackText: newFeedback
-            },
             isApprovedByProfOne: isApprovedByProfOne,
             isApprovedByProfTwo: "Denied",
             dateToBe: dateToBe
@@ -293,7 +223,13 @@ export default function SidangList() {
             text: "Kamu TIDAK DI PERBOLEHKAN Sidang Akhir Oleh Dosen Pembimbing 2",
             title: "Pemberitahuan"
           }
-        )
+        ),
+        activity: arrayUnion({
+          feedbackDate: getCurrentDate(),
+          feedbackText: newFeedback,
+          feedbackProfName: user.name,
+          feedbackActivity: "Menolak Pengajuan Sidang Akhir"
+        })
       }
       updateDoc(studentRef, value2)
       window.alert("Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 2")
@@ -457,14 +393,6 @@ export default function SidangList() {
                     <td className="px-6 py-2 text-right flex gap-2">
                       <button
                         onClick={() => getValueApprove(data.uid, data.name, data.profOne, data.profTwo,
-                          data.sidangDate[0].feedbackNoteByProfOne.feedbackActivity,
-                          data.sidangDate[0].feedbackNoteByProfOne.feedbackProfName,
-                          data.sidangDate[0].feedbackNoteByProfOne.feedbackDate,
-                          data.sidangDate[0].feedbackNoteByProfOne.feedbackText,
-                          data.sidangDate[0].feedbackNoteByProfTwo.feedbackActivity,
-                          data.sidangDate[0].feedbackNoteByProfTwo.feedbackProfName,
-                          data.sidangDate[0].feedbackNoteByProfTwo.feedbackDate,
-                          data.sidangDate[0].feedbackNoteByProfTwo.feedbackText,
                           data.sidangDate[0].isApprovedByProfOne, data.sidangDate[0].isApprovedByProfTwo, data.sidangDate[0].dateToBe)}
                         className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white hover:text-green-500 bg-green-500 p-2 rounded-md"
                       >
@@ -472,14 +400,6 @@ export default function SidangList() {
                       </button>
                       <button
                         onClick={() => getValueDenied(data.uid, data.name, data.profOne, data.profTwo,
-                          data.sidangDate[0].feedbackNoteByProfOne.feedbackActivity,
-                          data.sidangDate[0].feedbackNoteByProfOne.feedbackProfName,
-                          data.sidangDate[0].feedbackNoteByProfOne.feedbackDate,
-                          data.sidangDate[0].feedbackNoteByProfOne.feedbackText,
-                          data.sidangDate[0].feedbackNoteByProfTwo.feedbackActivity,
-                          data.sidangDate[0].feedbackNoteByProfTwo.feedbackProfName,
-                          data.sidangDate[0].feedbackNoteByProfTwo.feedbackDate,
-                          data.sidangDate[0].feedbackNoteByProfTwo.feedbackText,
                           data.sidangDate[0].isApprovedByProfOne, data.sidangDate[0].isApprovedByProfTwo, data.sidangDate[0].dateToBe)}
                         className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
                       >

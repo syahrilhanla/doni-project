@@ -58,11 +58,7 @@ const TableActivity = ({ user }: ActivityTable) => {
   const [activity, setActivity] = useState<dataTable[]>([])
   const getActivity = useCallback(async () => {
     try {
-
-      const titleArray1 = user.title[0].feedbackNoteByProfOne.map((item) => item);
-      const titleArray2 = user.title[0].feedbackNoteByProfTwo.map((item) => item);
-      const activityArray = [ ...titleArray1, ...titleArray2 ]
-      const arrayFix = activityArray.map((item, index) => {
+      const arrayFix = user.activity.map((item, index) => {
         return {
           id: index,
           date: item.feedbackDate,
@@ -71,22 +67,14 @@ const TableActivity = ({ user }: ActivityTable) => {
           feedbackNote: item.feedbackText
         }
       })
-      console.log(arrayFix);
-      
       setActivity(arrayFix)
-      // const ActivityArray = { titleArray1, titleArray2, seminarDateArray1, seminarDateArray2, sidangDateArray1, sidangDateArray2 }
-      // console.log(activity);
-      // console.log(user);
-
     } catch (e) {
       console.log(e);
-
     }
   }, [user])
 
 
   useEffect(() => {
-    console.log(user);
     getActivity()
   }, [user])
   return (
@@ -124,7 +112,7 @@ const TableActivity = ({ user }: ActivityTable) => {
           </tr>
         </thead>
         <tbody>
-          {activity.map((data , index: number) => (
+          {activity.length > 0 ? activity.map((data, index) => (
             <tr
               key={index}
               className="even:bg-[#f0ebf8d7] odd:bg-white border-b "
@@ -143,7 +131,19 @@ const TableActivity = ({ user }: ActivityTable) => {
                 {data.feedbackNote}
               </td>
             </tr>
-          ))}
+          )) :
+            <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
+              <td
+                scope="row"
+                colSpan={7}
+                className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+              >
+                <div className="flex items-center justify-center">
+                  Belum Ada Aktifitas Feedback
+                </div>
+              </td>
+            </tr>
+          }
         </tbody>
       </table>
     </div>
