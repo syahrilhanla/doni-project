@@ -4,6 +4,7 @@ import {
   doc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import React, { useCallback, useEffect, useState } from "react";
@@ -68,6 +69,7 @@ export default function ListDosen() {
   const getProfName = (name: string) => {
     setBuka(true);
     setProfessorName(name);
+    getData();
   };
   const getProfId = (id: any) => {
     setHapus(true);
@@ -86,6 +88,28 @@ export default function ListDosen() {
       .catch((err) => {
         alert("Tidak Bisa Menghapus Data..");
       });
+  };
+
+  const deleteProfName = (uid: string, profOne: string, profTwo: string) => {
+    const studentRef = doc(db, "studentsList", uid);
+
+    if (profOne === professorName) {
+      const valueUpdate = {
+        profOne: "",
+      };
+      updateDoc(studentRef, valueUpdate).then(() => {
+        window.alert("Data berhasil diganti");
+        getData();
+      });
+    } else if (profTwo === professorName) {
+      const valueUpdate = {
+        profTwo: "",
+      };
+      updateDoc(studentRef, valueUpdate).then(() => {
+        window.alert("Data berhasil diganti");
+        getData();
+      });
+    }
   };
 
   return (
@@ -138,6 +162,11 @@ export default function ListDosen() {
                           Sebagai
                         </div>
                       </th>
+                      <th scope="col" className="px-6 py-3">
+                        <div className="flex items-center justify-center">
+                          Aksi
+                        </div>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -168,6 +197,20 @@ export default function ListDosen() {
                                 ) : (
                                   <p>Dosen pembimbing 2</p>
                                 )}
+                              </td>
+                              <td className="px-6 py-2">
+                                <button
+                                  onClick={() =>
+                                    deleteProfName(
+                                      data.uid,
+                                      data.profOne,
+                                      data.profTwo
+                                    )
+                                  }
+                                  className="font-medium text-white hover:opacity-50 duration-150 bg-[#D0312D] p-2 rounded-md"
+                                >
+                                  <FaTrash />
+                                </button>
                               </td>
                             </>
                           ) : (
