@@ -160,6 +160,7 @@ export default function ProgresList() {
                         {data.files[0].chapterOne ? (
                           <a
                             target="_blank"
+                            rel="nonreferrer"
                             href={data.files[0].chapterOne}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
@@ -173,6 +174,7 @@ export default function ProgresList() {
                         {data.files[0].chapterTwo ? (
                           <a
                             target="_blank"
+                            rel="nonreferrer"
                             href={data.files[0].chapterTwo}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
@@ -186,6 +188,7 @@ export default function ProgresList() {
                         {data.files[0].chapterThree ? (
                           <a
                             target="_blank"
+                            rel="nonreferrer"
                             href={data.files[0].chapterThree}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
@@ -199,6 +202,7 @@ export default function ProgresList() {
                         {data.files[0].chapterFour ? (
                           <a
                             target="_blank"
+                            rel="nonreferrer"
                             href={data.files[0].chapterFour}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
@@ -212,6 +216,7 @@ export default function ProgresList() {
                         {data.files[0].chapterFive ? (
                           <a
                             target="_blank"
+                            rel="nonreferrer"
                             href={data.files[0].chapterFive}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
@@ -227,6 +232,7 @@ export default function ProgresList() {
                             {data.seminarDate[0].dateToBe}
                             <a
                               target="_blank"
+                              rel="nonreferrer"
                               href={data.fileSeminar}
                               className="hover:underline hover:text-black underline text-blue-400"
                             >
@@ -243,6 +249,7 @@ export default function ProgresList() {
                             {data.sidangDate[0].dateToBe}
                             <a
                               target="_blank"
+                              rel="nonreferrer"
                               href={data.fileSidang}
                               className="hover:underline hover:text-black underline text-blue-400"
                             >
