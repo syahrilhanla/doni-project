@@ -1,4 +1,5 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
+import Link from "next/link";
 import React, { useCallback, useEffect, useState } from "react";
 import { RiLoader5Line, RiSortDesc } from "react-icons/ri";
 import seminar from "../../pages/seminar";
@@ -158,70 +159,65 @@ export default function ProgresList() {
                       </td>
                       <td className=" text-center px-1.5 py-2">
                         {data.files[0].chapterOne ? (
-                          <a
+                          <Link
                             target="_blank"
-                            rel="nonreferrer"
                             href={data.files[0].chapterOne}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
                             Cek
-                          </a>
+                          </Link>
                         ) : (
                           <p>-</p>
                         )}
                       </td>
                       <td className=" text-center px-1.5 py-2">
                         {data.files[0].chapterTwo ? (
-                          <a
+                          <Link
                             target="_blank"
-                            rel="nonreferrer"
                             href={data.files[0].chapterTwo}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
                             Cek
-                          </a>
+                          </Link>
                         ) : (
                           <p>-</p>
                         )}
                       </td>
                       <td className=" text-center px-1.5 py-2">
                         {data.files[0].chapterThree ? (
-                          <a
+                          <Link
                             target="_blank"
-                            rel="nonreferrer"
                             href={data.files[0].chapterThree}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
                             Cek
-                          </a>
+                          </Link>
                         ) : (
                           <p>-</p>
                         )}
                       </td>
                       <td className=" text-center px-1.5 py-2">
                         {data.files[0].chapterFour ? (
-                          <a
+                          <Link
                             target="_blank"
-                            rel="nonreferrer"
                             href={data.files[0].chapterFour}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
                             Cek
-                          </a>
+                          </Link>
                         ) : (
                           <p>-</p>
                         )}
                       </td>
                       <td className=" text-center px-1.5 py-2">
                         {data.files[0].chapterFive ? (
-                          <a
+                          <Link
                             target="_blank"
-                            rel="nonreferrer"
                             href={data.files[0].chapterFive}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
                             Cek
-                          </a>
+                          </Link>
                         ) : (
                           <p>-</p>
                         )}
@@ -230,14 +226,13 @@ export default function ProgresList() {
                         {data.seminarDate[0].dateToBe && data.fileSeminar ? (
                           <div className="flex flex-col gap-1">
                             {data.seminarDate[0].dateToBe}
-                            <a
+                            <Link
                               target="_blank"
-                              rel="nonreferrer"
                               href={data.fileSeminar}
                               className="hover:underline hover:text-black underline text-blue-400"
                             >
                               Cek
-                            </a>
+                            </Link>
                           </div>
                         ) : (
                           <p>-</p>
@@ -247,14 +242,13 @@ export default function ProgresList() {
                         {data.sidangDate[0].dateToBe && data.fileSidang ? (
                           <div className="flex flex-col gap-1">
                             {data.sidangDate[0].dateToBe}
-                            <a
+                            <Link
                               target="_blank"
-                              rel="nonreferrer"
                               href={data.fileSidang}
                               className="hover:underline hover:text-black underline text-blue-400"
                             >
                               Cek
-                            </a>
+                            </Link>
                           </div>
                         ) : (
                           <p>-</p>
