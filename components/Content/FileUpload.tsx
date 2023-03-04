@@ -324,11 +324,11 @@ const FileUpload = () => {
                   type="text"
                   placeholder="Link Google Drive"
                   required
-                  disabled={!chapter1 && !chapter2}
+                  disabled={chapter1 === "" || chapter2 === "" ? true : false}
                 />
                 <button
                   onClick={handleLink3}
-                  disabled={!chapter1 && !chapter2}
+                  disabled={chapter1 === "" || chapter2 === "" ? true : false}
                   className="disabled:opacity-50 text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
                 >
                   Simpan
@@ -410,11 +410,19 @@ const FileUpload = () => {
                   type="text"
                   placeholder="Link Google Drive"
                   required
-                  disabled={!chapter1 && !chapter2 && !chapter3}
+                  disabled={
+                    chapter1 === "" || chapter2 === "" || chapter3 === ""
+                      ? true
+                      : false
+                  }
                 />
                 <button
                   onClick={handleLink4}
-                  disabled={!chapter1 && !chapter2 && !chapter3}
+                  disabled={
+                    chapter1 === "" || chapter2 === "" || chapter3 === ""
+                      ? true
+                      : false
+                  }
                   className="disabled:opacity-50 text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
                 >
                   Simpan
@@ -496,11 +504,25 @@ const FileUpload = () => {
                   type="text"
                   placeholder="Link Google Drive"
                   required
-                  disabled={!chapter1 && !chapter2 && !chapter3 && !chapter4}
+                  disabled={
+                    chapter1 === "" ||
+                    chapter2 === "" ||
+                    chapter3 === "" ||
+                    chapter4 === ""
+                      ? true
+                      : false
+                  }
                 />
                 <button
                   onClick={handleLink5}
-                  disabled={!chapter1 && !chapter2 && !chapter3 && !chapter4}
+                  disabled={
+                    chapter1 === "" ||
+                    chapter2 === "" ||
+                    chapter3 === "" ||
+                    chapter4 === ""
+                      ? true
+                      : false
+                  }
                   className="disabled:opacity-50 text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
                 >
                   Simpan
