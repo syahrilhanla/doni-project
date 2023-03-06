@@ -212,12 +212,12 @@ const FileUpload = () => {
               type="text"
               placeholder="Link Google Drive"
               required
-              disabled={!chapter1 && !chapter2}
+              disabled={!chapter2}
             />
             <button
               onClick={handleLink3}
               className=" text-white disabled:opacity-50 items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
-              disabled={!chapter1 && !chapter2}
+              disabled={!chapter2}
             >
               Simpan
             </button>
@@ -249,12 +249,12 @@ const FileUpload = () => {
               onChange={(e) => setLink4(e.target.value)}
               placeholder="Link Google Drive"
               required
-              disabled={!chapter1 && !chapter2 && !chapter3}
+              disabled={!chapter3}
             />
             <button
               onClick={handleLink4}
               className=" text-white disabled:opacity-50 items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
-              disabled={!chapter1 && !chapter2 && !chapter3}
+              disabled={!chapter3}
             >
               Simpan
             </button>
@@ -288,13 +288,13 @@ const FileUpload = () => {
               onChange={(e) => setLink5(e.target.value)}
               placeholder="Link Google Drive"
               required
-              disabled={!chapter1 && !chapter2 && !chapter3 && !chapter4}
+              disabled={!chapter4}
             />
             <button
               onClick={handleLink5}
               className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10
 				disabled:opacity-50"
-              disabled={!chapter1 && !chapter2 && !chapter3 && !chapter4}
+              disabled={!chapter4}
             >
               Simpan
             </button>

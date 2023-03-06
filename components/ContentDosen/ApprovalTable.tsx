@@ -4,7 +4,6 @@ import {
   doc,
   DocumentData,
   getDocs,
-  orderBy,
   query,
   updateDoc,
   where,
@@ -39,8 +38,6 @@ export default function ApprovalTable() {
   const [profDua, setProfDua] = useState<string>("");
   const [studentName, setStudentName] = useState<string>("");
   const [newFeedback, setNewFeedBack] = useState("");
-  const [feedbackNoteUser1, setFeedbackNoteUser1] = useState<string>("");
-  const [feedbackNoteUser2, setFeedbackNoteUser2] = useState<string>("");
   const [isApprovedByProfOne, setIsApprovedByProfOne] = useState<string>("");
   const [isApprovedByProfTwo, setIsApprovedByProfTwo] = useState<string>("");
   const [titleTextUser, setTitleTextUser] = useState<string>("");
@@ -62,11 +59,13 @@ export default function ApprovalTable() {
       const studentsData1 = (await getDocs(studentRef1)).docs
         .map((item) => item)
         .map((item) => item.data())
-        .filter((item) => item.title[0].isApprovedByProfOne !== "Denied");
+        .filter((item) => item.title[0].isApprovedByProfOne !== "Denied")
+        .filter((item) => item.title[0].titleText !== "");
       const studentsData2 = (await getDocs(studentRef2)).docs
         .map((item) => item)
         .map((item) => item.data())
-        .filter((item) => item.title[0].isApprovedByProfTwo !== "Denied");
+        .filter((item) => item.title[0].isApprovedByProfTwo !== "Denied")
+        .filter((item) => item.title[0].titleText !== "");
 
       const arrayStudents = [...studentsData1, ...studentsData2].filter(
         (item) => item.profOne === user.name || item.profTwo === user.name
@@ -86,14 +85,19 @@ export default function ApprovalTable() {
       console.log(e);
     }
   }, [user]);
+  const getCurrentDate = (separator = '-') => {
+    let newDate = new Date()
+    let date = newDate.getDate();
+    let month = newDate.getMonth() + 1;
+    let year = newDate.getFullYear();
+    return `${date < 10 ? `0${date}` : `${date}`}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${year}`
+  }
 
   const getValueApprove = (
     uid: string,
     name: string,
     profOne: string,
     profTwo: string,
-    feedbackNote1: string,
-    feedbackNote2: string,
     isApprovedByProfOne: string,
     isApprovedByProfTwo: string,
     titleText: string
@@ -102,8 +106,6 @@ export default function ApprovalTable() {
     setUidUser(uid);
     setProfSatu(profOne);
     setProfDua(profTwo);
-    setFeedbackNoteUser1(feedbackNote1);
-    setFeedbackNoteUser2(feedbackNote2);
     setIsApprovedByProfOne(isApprovedByProfOne);
     setIsApprovedByProfTwo(isApprovedByProfTwo);
     setTitleTextUser(titleText);
@@ -115,8 +117,6 @@ export default function ApprovalTable() {
     name: string,
     profOne: string,
     profTwo: string,
-    feedbackNote1: string,
-    feedbackNote2: string,
     isApprovedByProfOne: string,
     isApprovedByProfTwo: string,
     titleText: string
@@ -125,8 +125,6 @@ export default function ApprovalTable() {
     setUidUser(uid);
     setProfSatu(profOne);
     setProfDua(profTwo);
-    setFeedbackNoteUser1(feedbackNote1);
-    setFeedbackNoteUser2(feedbackNote2);
     setIsApprovedByProfOne(isApprovedByProfOne);
     setIsApprovedByProfTwo(isApprovedByProfTwo);
     setTitleTextUser(titleText);
@@ -139,8 +137,6 @@ export default function ApprovalTable() {
       const value1 = {
         title: [
           {
-            feedbackNoteByProfOne: newFeedback,
-            feedbackNoteByProfTwo: feedbackNoteUser2,
             isApprovedByProfOne: user.name,
             isApprovedByProfTwo: isApprovedByProfTwo,
             titleText: titleTextUser,
@@ -152,6 +148,12 @@ export default function ApprovalTable() {
           text: "Judul Skripsi Kamu Telah Di Terima Dosen Pembimbing 1",
           title: "Pemberitahuan",
         }),
+        activity: arrayUnion({
+          feedbackDate: getCurrentDate(),
+          feedbackText: newFeedback,
+          feedbackProfName: user.name,
+          feedbackActivity: "Menerima Judul Skripsi"
+        })
       };
       updateDoc(studentRef, value1);
       window.alert("Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 1");
@@ -164,8 +166,6 @@ export default function ApprovalTable() {
       const value2 = {
         title: [
           {
-            feedbackNoteByProfOne: feedbackNoteUser1,
-            feedbackNoteByProfTwo: newFeedback,
             isApprovedByProfOne: isApprovedByProfOne,
             isApprovedByProfTwo: user.name,
             titleText: titleTextUser,
@@ -177,6 +177,12 @@ export default function ApprovalTable() {
           text: "Judul Skripsi Kamu Telah Di Terima Dosen Pembimbing 2",
           title: "Pemberitahuan",
         }),
+        activity: arrayUnion({
+          feedbackDate: getCurrentDate(),
+          feedbackText: newFeedback,
+          feedbackProfName: user.name,
+          feedbackActivity: "Menerima Judul Skripsi"
+        })
       };
       updateDoc(studentRef, value2);
       window.alert("Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 2");
@@ -194,8 +200,6 @@ export default function ApprovalTable() {
       const value1 = {
         title: [
           {
-            feedbackNoteByProfOne: newFeedback,
-            feedbackNoteByProfTwo: feedbackNoteUser2,
             isApprovedByProfOne: "Denied",
             isApprovedByProfTwo: isApprovedByProfTwo,
             titleText: titleTextUser,
@@ -207,6 +211,12 @@ export default function ApprovalTable() {
           text: "Judul Skripsi Kamu Di TOLAK Dosen Pembimbing 1",
           title: "Pemberitahuan",
         }),
+        activity: arrayUnion({
+          feedbackDate: getCurrentDate(),
+          feedbackText: newFeedback,
+          feedbackProfName: user.name,
+          feedbackActivity: "Menolak Judul Skripsi"
+        })
       };
       updateDoc(studentRef, value1);
       window.alert("Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 1");
@@ -219,8 +229,6 @@ export default function ApprovalTable() {
       const value2 = {
         title: [
           {
-            feedbackNoteByProfOne: feedbackNoteUser1,
-            feedbackNoteByProfTwo: newFeedback,
             isApprovedByProfOne: isApprovedByProfOne,
             isApprovedByProfTwo: "Denied",
             titleText: titleTextUser,
@@ -232,6 +240,12 @@ export default function ApprovalTable() {
           text: "Judul Skripsi Kamu Di TOLAK Dosen Pembimbing 2",
           title: "Pemberitahuan",
         }),
+        activity: arrayUnion({
+          feedbackDate: getCurrentDate(),
+          feedbackText: newFeedback,
+          feedbackProfName: user.name,
+          feedbackActivity: "Menolak Judul Skripsi"
+        })
       };
       updateDoc(studentRef, value2);
       window.alert("Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 2");
@@ -320,50 +334,61 @@ export default function ApprovalTable() {
           </div>
         </div>
       )}
-      {!loading ? (
-        <RiLoader5Line className="animate-spin text-3xl mt-5" />
-      ) : (
-        <div className="inline-block overflow-auto shadow-md sm:rounded-lg sm:max-w-full max-w-[350px] max-h-[500px] ">
-          <table className="text-sm text-left text-gray-900 capitalize ">
-            <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto ">
-              <tr>
-                <th scope="col" className="px-6 py-3 max-w-[20%]">
-                  <div className="flex items-center gap-2">
-                    Nama
-                    <a href="#">
-                      <RiSortDesc />
-                    </a>
-                  </div>
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  <div className="flex items-center justify-center gap-2">
-                    Judul
-                    <a href="#">
-                      <RiSortDesc />
-                    </a>
-                  </div>
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  <div className="flex items-center gap-2">
-                    Angkatan
-                    <a href="#">
-                      <RiSortDesc />
-                    </a>
-                  </div>
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  <div className="flex items-center gap-2">
-                    Sebagai
-                    <a href="#">
-                      <RiSortDesc />
-                    </a>
-                  </div>
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  <div className="flex items-center justify-center">Aksi</div>
-                </th>
-              </tr>
-            </thead>
+
+      <div className="inline-block overflow-auto shadow-md sm:rounded-lg sm:max-w-full max-w-[350px] max-h-[500px] ">
+        <table className="text-sm text-left text-gray-900 capitalize ">
+          <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto ">
+            <tr>
+              <th scope="col" className="px-6 py-3 max-w-[20%]">
+                <div className="flex items-center gap-2">
+                  Nama
+                  <a href="#">
+                    <RiSortDesc />
+                  </a>
+                </div>
+              </th>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center justify-center gap-2">
+                  Judul
+                  <a href="#">
+                    <RiSortDesc />
+                  </a>
+                </div>
+              </th>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center gap-2">
+                  Angkatan
+                  <a href="#">
+                    <RiSortDesc />
+                  </a>
+                </div>
+              </th>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center gap-2">
+                  Sebagai
+                  <a href="#">
+                    <RiSortDesc />
+                  </a>
+                </div>
+              </th>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center justify-center">Aksi</div>
+              </th>
+            </tr>
+          </thead>
+          {!loading ? (
+            <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
+              <td
+                scope="row"
+                colSpan={7}
+                className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+              >
+                <div className="flex items-center justify-center">
+                  <RiLoader5Line className="text-center animate-spin text-3xl mt-5" />
+                </div>
+              </td>
+            </tr>
+          ) : (
             <tbody>
               {student.length > 0 ? (
                 student.map((data, index) => (
@@ -371,90 +396,98 @@ export default function ApprovalTable() {
                     key={index}
                     className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
                   >
-                    <>
+                    <td
+                      scope="row"
+                      className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+                    >
+                      {data.name}
+                    </td>
+                    {data.title.map((item: TitleType, index: number) => (
                       <td
-                        scope="row"
-                        className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+                        key={index}
+                        className="px-6 py-2 max-w-[20%] text-center"
                       >
-                        {data.name}
+                        {item.titleText ? item.titleText : "-"}
                       </td>
-                      {data.title.map((item: TitleType, index: number) => (
-                        <td
-                          key={index}
-                          className="px-6 py-2 max-w-[20%] text-center"
-                        >
-                          {item.titleText ? item.titleText : "-"}
-                        </td>
-                      ))}
-                      <td className="px-6 py-2">{data.generation}</td>
-                      <td className="px-6 py-2">
-                        {data.profOne === user.name
-                          ? "Dospem 1"
-                          : data.profTwo === user.name
+                    ))}
+                    <td className="px-6 py-2">{data.generation}</td>
+                    <td className="px-6 py-2">
+                      {data.profOne === user.name
+                        ? "Dospem 1"
+                        : data.profTwo === user.name
                           ? "Dospem 2"
                           : "None"}
+                    </td>
+                    {data.title.map((item: TitleType, index: number) => (
+                      <td
+                        key={index}
+                        className="px-6 py-2 flex justify-center gap-2"
+                      >
+                        {item.titleText !== "" ? (
+                          <>
+                            <button
+                              onClick={() =>
+                                getValueApprove(
+                                  data.uid,
+                                  data.name,
+                                  data.profOne,
+                                  data.profTwo,
+                                  item.isApprovedByProfOne,
+                                  item.isApprovedByProfTwo,
+                                  item.titleText
+                                )
+                              }
+                              className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white hover:text-green-500 bg-green-500 p-2 rounded-md"
+                            >
+                              <RiCheckboxCircleLine className="text-2xl" />
+                            </button>
+                            <button
+                              onClick={() =>
+                                getValueDenied(
+                                  data.uid,
+                                  data.name,
+                                  data.profOne,
+                                  data.profTwo,
+                                  item.isApprovedByProfOne,
+                                  item.isApprovedByProfTwo,
+                                  item.titleText
+                                )
+                              }
+                              className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
+                            >
+                              <RiCloseCircleLine className="text-2xl" />
+                            </button>
+                          </>
+                        ) : (
+                          <p className="flex justify-center text-center">
+                            {"-"}
+                          </p>
+                        )}
                       </td>
-                      {data.title.map((item: TitleType, index: number) => (
-                        <td
-                          key={index}
-                          className="px-6 py-2 flex justify-center gap-2"
-                        >
-                          {item.titleText !== "" ? (
-                            <>
-                              <button
-                                onClick={() =>
-                                  getValueApprove(
-                                    data.uid,
-                                    data.name,
-                                    data.profOne,
-                                    data.profTwo,
-                                    item.feedbackNoteByProfOne,
-                                    item.feedbackNoteByProfTwo,
-                                    item.isApprovedByProfOne,
-                                    item.isApprovedByProfTwo,
-                                    item.titleText
-                                  )
-                                }
-                                className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white hover:text-green-500 bg-green-500 p-2 rounded-md"
-                              >
-                                <RiCheckboxCircleLine className="text-2xl" />
-                              </button>
-                              <button
-                                onClick={() =>
-                                  getValueDenied(
-                                    data.uid,
-                                    data.name,
-                                    data.profOne,
-                                    data.profTwo,
-                                    item.feedbackNoteByProfOne,
-                                    item.feedbackNoteByProfTwo,
-                                    item.isApprovedByProfOne,
-                                    item.isApprovedByProfTwo,
-                                    item.titleText
-                                  )
-                                }
-                                className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
-                              >
-                                <RiCloseCircleLine className="text-2xl" />
-                              </button>
-                            </>
-                          ) : (
-                            <p className="flex justify-center text-center">
-                              {"-"}
-                            </p>
-                          )}
-                        </td>
-                      ))}
-                    </>
+
+                    ))}
+
                   </tr>
                 ))
               ) : (
-                <></>
+                <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
+                  <td
+                    scope="row"
+                    colSpan={7}
+                    className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+                  >
+                    <div className="flex items-center justify-center">
+                      Belum Ada Yang Mengajukan Judul Skripsi
+                    </div>
+                  </td>
+                </tr>
+
               )}
             </tbody>
-          </table>
-        </div>
-      )}
+          )}
+        </table>
+      </div>
+
     </div>
   );
 }
