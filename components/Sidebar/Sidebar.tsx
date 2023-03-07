@@ -33,7 +33,7 @@ const Sidebar = () => {
   const { user } = useAuth();
   useEffect(() => {}, [user]);
   return (
-    <div className="flex flex-1 z-50 min-h-full">
+    <div className="flex flex-1 z-50 h-full">
       {/* sidebar  */}
       <div className="bg-[#F0EBF8] p-2 min-w-[300px]">
         <ul className="space-y-2 mt-5">

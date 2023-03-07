@@ -115,8 +115,6 @@ export const AuthContextProvider = ({
             seminarDate: [
               {
                 dateToBe: "",
-                feedbackNoteByProfOne: "",
-                feedbackNoteByProfTwo: "",
                 isApprovedByProfOne: "",
                 isApprovedByProfTwo: "",
               },
@@ -124,21 +122,26 @@ export const AuthContextProvider = ({
             sidangDate: [
               {
                 dateToBe: "",
-                feedbackNoteByProfOne: "",
-                feedbackNoteByProfTwo: "",
                 isApprovedByProfOne: "",
                 isApprovedByProfTwo: "",
               },
             ],
             title: [
               {
-                feedbackNoteByProfOne: "",
-                feedbackNoteByProfTwo: "",
+
                 isApprovedByProfOne: "",
                 isApprovedByProfTwo: "",
                 titleText: "",
               },
             ],
+            activity: [
+              {
+                feedbackActivity: "",
+                feedbackDate: "",
+                feedbackProfName: "",
+                feedbackText: ""
+              }
+            ]
           });
         } catch (e) {
           console.log(e);

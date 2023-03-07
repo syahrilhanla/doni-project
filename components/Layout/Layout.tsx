@@ -30,11 +30,11 @@ const Layout = ({ children }: DashboardLayoutProps) => {
   }, [user]);
   return (
     <ProtectedRoute>
-      <div className="text-center flex flex-col min-h-screen relative">
+      <div className="text-center flex flex-col min-h-full relative">
         {approve && (
           <>
             <Navbar />
-            <div className="w-full min-h-[90vh] flex flex-row">
+            <div className="w-full min-h-full flex flex-row">
               <span className="hidden sm:block">
                 <Sidebar />
               </span>
