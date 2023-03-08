@@ -10,12 +10,15 @@ import { db } from "../Store/firebase";
 const FileSidang = () => {
   const [jadwal, setJadwal] = useState<String>();
   const { user } = useAuth();
-  const [file, setFile] = useState<String>();
+  const [file, setFile] = useState<string>();
   const [link1, setLink1] = useState("");
+  const [enable, setEnable] = useState(false);
+
   useEffect(() => {
     if (user.sidangDate) {
       setJadwal(user.sidangDate[0].dateToBe);
       setFile(user.fileSidang);
+      setEnable(user.fileSidang ? false : true);
     }
   }, [user]);
   const handleLink1 = async () => {
@@ -23,6 +26,8 @@ const FileSidang = () => {
     const link1Value = {
       fileSidang: link1,
     };
+    setEnable(true);
+
     await updateDoc(docRef, link1Value);
     setLink1("");
   };
@@ -83,7 +88,7 @@ const FileSidang = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col my-4 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-full py-2 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
+        {/* <div className="flex flex-col my-4 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-full py-2 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
           <label className="block mt-1 text-md font-medium text-gray-900 ">
             Link File Sidang Akhir
           </label>
@@ -117,6 +122,93 @@ const FileSidang = () => {
               Silahkan Di Cek
             </Link>
           )}
+        </div> */}
+
+        <div className="flex flex-col my-4 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-50 py-2 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
+          {!file && (
+            <label className="block mt-2 text-sm font-medium text-gray-500 ">
+              File Belum Ada
+            </label>
+          )}
+          {/* {chapter1 && (
+            
+          )} */}
+          {file && (
+            <label className="block mt-1 text-sm font-medium text-gray-900 ">
+              File Sidang
+            </label>
+          )}
+          <div className="flex justify-between items-center w-full">
+            {!file && (
+              <>
+                <input
+                  className="bg-gray-50 items-center border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
+                  value={link1}
+                  onChange={(e) => setLink1(e.target.value)}
+                  type="text"
+                  placeholder="Link Google Drive"
+                  required
+                />
+                <button
+                  onClick={handleLink1}
+                  className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
+                >
+                  Simpan
+                </button>
+              </>
+            )}
+            {file && (
+              <>
+                <input
+                  className="disabled:bg-slate-200 bg-gray-50 items-center border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
+                  value={link1}
+                  onChange={(e) => setLink1(e.target.value)}
+                  type="text"
+                  placeholder={file}
+                  disabled={enable ? false : true}
+                />
+
+                {enable && (
+                  <>
+                    <button
+                      onClick={handleLink1}
+                      className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
+                    >
+                      Submit
+                    </button>
+                    <button
+                      onClick={() => {
+                        setEnable(false);
+                        setLink1(file);
+                      }}
+                      className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
+                    >
+                      Cancel
+                    </button>
+                  </>
+                )}
+
+                {!enable && (
+                  <button
+                    onClick={() => setEnable(true)}
+                    className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
+                  >
+                    Edit
+                  </button>
+                )}
+
+                <Link
+                  target="_blank"
+                  href={`${file}`}
+                  className="tex  t-sm font-medium text-gray-900 hover:text-[#835876]"
+                >
+                  <button className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10">
+                    Cek
+                  </button>
+                </Link>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React, { Key, useCallback, useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCheckLg, BsTrash } from "react-icons/bs";
-import { RiSortDesc, RiCloseLine } from "react-icons/ri";
+import { RiSortDesc, RiCloseLine, RiLoader5Line } from "react-icons/ri";
 import { FaTrash } from "react-icons/fa";
 import FilterSection from "../Layout/FilterSection";
 import {
@@ -12,6 +12,7 @@ import {
   updateDoc,
   where,
   getDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../Store/firebase";
 import { async } from "@firebase/util";
@@ -32,6 +33,7 @@ export default function ListMahasiswa() {
   const [student, setStudent] = useState<any>([]);
   const [useridSeminar, setUseridSeminar] = useState("");
   const [useridSidang, setUseridSidang] = useState("");
+  const [studentId, setStudentId] = useState<any>();
 
   const [hapus, setHapus] = useState<any>(false);
   const [examiner, setExaminer] = useState<any>([]);
@@ -41,14 +43,28 @@ export default function ListMahasiswa() {
   const [examinerTwo, setExaminerTwo] = useState("");
   const [seminarDate, setSeminarDate] = useState<any>();
   const [sidangDate, setSidangDate] = useState<any>();
-  const [feedbackUserSeminar, setFeedbackUserSeminar] = useState<any>();
+  const [
+    feedbackUserSeminarByProfOne,
+    setFeedbackUserSeminarByProfOne,
+  ] = useState<any>();
+  const [
+    feedbackUserSeminarByProfTwo,
+    setFeedbackUserSeminarByProfTwo,
+  ] = useState<any>();
   const [isApprovedByProfOneSeminar, setIsApprovedByProfOneSeminar] = useState<
     any
   >();
   const [isApprovedByProfTwoSeminar, setIsApprovedByProfTwoSeminar] = useState<
     any
   >();
-  const [feedbackUserSidang, setFeedbackUserSidang] = useState<any>();
+  const [
+    feedbackUserSidangByProfOne,
+    setFeedbackUserSidangByProfOne,
+  ] = useState<any>();
+  const [
+    feedbackUserSidangByProfTwo,
+    setFeedbackUserSidangByProfTwo,
+  ] = useState<any>();
   const [isApprovedByProfOneSidang, setIsApprovedByProfOneSidang] = useState<
     any
   >();
@@ -56,7 +72,11 @@ export default function ListMahasiswa() {
     any
   >();
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const getData = useCallback(async () => {
+    setLoading(false);
+
     const studentRef = query(
       collection(db, "studentsList"),
       where("statusApprove", "==", true)
@@ -68,6 +88,7 @@ export default function ListMahasiswa() {
         .map((item) => item.data());
 
       setStudent(studentsData);
+      setLoading(true);
     } catch (e) {
       console.log(e);
     }
@@ -99,26 +120,30 @@ export default function ListMahasiswa() {
 
   const getStatusSeminar = (
     uid: any,
-    feedbackNote: any,
+    feedbackNoteByProfOne: any,
+    feedbackNoteByProfTwo: any,
     isApprovedByProfOne: any,
     isApprovedByProfTwo: any
   ) => {
     setAssignSeminar(true);
     setUseridSeminar(uid);
-    setFeedbackUserSeminar(feedbackNote);
+    setFeedbackUserSeminarByProfOne(feedbackNoteByProfOne);
+    setFeedbackUserSeminarByProfTwo(feedbackNoteByProfTwo);
     setIsApprovedByProfOneSeminar(isApprovedByProfOne);
     setIsApprovedByProfTwoSeminar(isApprovedByProfTwo);
   };
 
   const getStatusSidang = (
     uid: any,
-    feedbackNote: any,
+    feedbackNoteByProfOne: any,
+    feedbackNoteByProfTwo: any,
     isApprovedByProfOne: any,
     isApprovedByProfTwo: any
   ) => {
     setAssignSidang(true);
     setUseridSidang(uid);
-    setFeedbackUserSidang(feedbackNote);
+    setFeedbackUserSidangByProfOne(feedbackNoteByProfOne);
+    setFeedbackUserSidangByProfTwo(feedbackNoteByProfTwo);
     setIsApprovedByProfOneSidang(isApprovedByProfOne);
     setIsApprovedByProfTwoSidang(isApprovedByProfTwo);
   };
@@ -134,7 +159,8 @@ export default function ListMahasiswa() {
       seminarDate: [
         {
           dateToBe: seminarDate,
-          feedbackNote: feedbackUserSeminar,
+          feedbackNoteByProfOne: feedbackUserSeminarByProfOne,
+          feedbackNoteByProfTwo: feedbackUserSeminarByProfTwo,
           isApprovedByProfOne: isApprovedByProfOneSeminar,
           isApprovedByProfTwo: isApprovedByProfTwoSeminar,
         },
@@ -161,7 +187,8 @@ export default function ListMahasiswa() {
       sidangDate: [
         {
           dateToBe: sidangDate,
-          feedbackNote: feedbackUserSidang,
+          feedbackNoteByProfOne: feedbackUserSidangByProfOne,
+          feedbackNoteByProfTwo: feedbackUserSidangByProfTwo,
           isApprovedByProfOne: isApprovedByProfOneSidang,
           isApprovedByProfTwo: isApprovedByProfTwoSidang,
         },
@@ -205,6 +232,24 @@ export default function ListMahasiswa() {
 
   const selectExaminerTwo = (itemData: any) => {
     setExaminerTwo(itemData);
+  };
+
+  const getStudentId = (uid: any) => {
+    setHapus(true);
+    setStudentId(uid);
+  };
+  const deleteData = () => {
+    let fieldEdit = doc(db, "studentsList", studentId);
+
+    deleteDoc(fieldEdit)
+      .then(() => {
+        alert("Data Berhasil Dihapus");
+        setHapus(!hapus);
+        getData();
+      })
+      .catch((err) => {
+        alert("Tidak Bisa Menghapus Data..");
+      });
   };
 
   return (
@@ -302,7 +347,7 @@ export default function ListMahasiswa() {
                   </p>
                   <div className="p-4 flex gap-2 justify-end items-end">
                     <ErrorButton
-                      handleClick={() => setHapus(false)}
+                      handleClick={() => deleteData()}
                       buttonText="Hapus"
                     />
                     <SendButton
@@ -370,7 +415,7 @@ export default function ListMahasiswa() {
               </tr>
             </thead>
             <tbody>
-              {student ? (
+              {loading ? (
                 student.map((data: any, index: any) => (
                   <tr
                     key={index}
@@ -388,13 +433,14 @@ export default function ListMahasiswa() {
 
                     {data.seminarDate.map((item: any, index: any) => (
                       <td key={index} className="px-6 py-2 text-center ">
-                        {item.isApprovedByProfOne &&
-                        item.isApprovedByProfTwo ? (
+                        {item.isApprovedByProfOne === "Approved" &&
+                        item.isApprovedByProfTwo === "Approved" ? (
                           <button
                             onClick={() =>
                               getStatusSeminar(
                                 data.uid,
-                                item.feedbackNote,
+                                item.feedbackNoteByProfOne,
+                                item.feedbackNoteByProfTwo,
                                 item.isApprovedByProfOne,
                                 item.isApprovedByProfTwo
                               )
@@ -410,13 +456,14 @@ export default function ListMahasiswa() {
                     ))}
                     {data.sidangDate.map((item: any, index: any) => (
                       <td key={index} className="px-6 py-2 text-center ">
-                        {item.isApprovedByProfOne &&
-                        item.isApprovedByProfTwo ? (
+                        {item.isApprovedByProfOne === "Approved" &&
+                        item.isApprovedByProfTwo === "Approved" ? (
                           <button
                             onClick={() =>
                               getStatusSidang(
                                 data.uid,
-                                item.feedbackNote,
+                                item.feedbackNoteByProfOne,
+                                item.feedbackNoteByProfTwo,
                                 item.isApprovedByProfOne,
                                 item.isApprovedByProfTwo
                               )
@@ -432,7 +479,7 @@ export default function ListMahasiswa() {
                     ))}
                     <td className="px-6 py-2">
                       <button
-                        onClick={() => setHapus(!hapus)}
+                        onClick={() => getStudentId(data.uid)}
                         className="font-medium text-white hover:opacity-50 duration-150 bg-[#D0312D] p-2 rounded-md"
                       >
                         <FaTrash />
@@ -448,7 +495,9 @@ export default function ListMahasiswa() {
                       colSpan={7}
                       className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
                     >
-                      Tidak ada data untuk ditampilkan
+                      <div className="flex items-center justify-center">
+                        <RiLoader5Line className="animate-spin text-3xl my-5 " />
+                      </div>
                     </td>
                   </tr>
                 </>
