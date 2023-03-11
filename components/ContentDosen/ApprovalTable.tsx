@@ -85,13 +85,15 @@ export default function ApprovalTable() {
       console.log(e);
     }
   }, [user]);
-  const getCurrentDate = (separator = '-') => {
-    let newDate = new Date()
+  const getCurrentDate = (separator = "-") => {
+    let newDate = new Date();
     let date = newDate.getDate();
     let month = newDate.getMonth() + 1;
     let year = newDate.getFullYear();
-    return `${date < 10 ? `0${date}` : `${date}`}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${year}`
-  }
+    return `${date < 10 ? `0${date}` : `${date}`}${separator}${
+      month < 10 ? `0${month}` : `${month}`
+    }${separator}${year}`;
+  };
 
   const getValueApprove = (
     uid: string,
@@ -152,8 +154,8 @@ export default function ApprovalTable() {
           feedbackDate: getCurrentDate(),
           feedbackText: newFeedback,
           feedbackProfName: user.name,
-          feedbackActivity: "Menerima Judul Skripsi"
-        })
+          feedbackActivity: "Menerima Judul Skripsi",
+        }),
       };
       updateDoc(studentRef, value1);
       window.alert("Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 1");
@@ -181,8 +183,8 @@ export default function ApprovalTable() {
           feedbackDate: getCurrentDate(),
           feedbackText: newFeedback,
           feedbackProfName: user.name,
-          feedbackActivity: "Menerima Judul Skripsi"
-        })
+          feedbackActivity: "Menerima Judul Skripsi",
+        }),
       };
       updateDoc(studentRef, value2);
       window.alert("Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 2");
@@ -215,8 +217,8 @@ export default function ApprovalTable() {
           feedbackDate: getCurrentDate(),
           feedbackText: newFeedback,
           feedbackProfName: user.name,
-          feedbackActivity: "Menolak Judul Skripsi"
-        })
+          feedbackActivity: "Menolak Judul Skripsi",
+        }),
       };
       updateDoc(studentRef, value1);
       window.alert("Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 1");
@@ -244,8 +246,8 @@ export default function ApprovalTable() {
           feedbackDate: getCurrentDate(),
           feedbackText: newFeedback,
           feedbackProfName: user.name,
-          feedbackActivity: "Menolak Judul Skripsi"
-        })
+          feedbackActivity: "Menolak Judul Skripsi",
+        }),
       };
       updateDoc(studentRef, value2);
       window.alert("Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 2");
@@ -415,8 +417,8 @@ export default function ApprovalTable() {
                       {data.profOne === user.name
                         ? "Dospem 1"
                         : data.profTwo === user.name
-                          ? "Dospem 2"
-                          : "None"}
+                        ? "Dospem 2"
+                        : "None"}
                     </td>
                     {data.title.map((item: TitleType, index: number) => (
                       <td
@@ -464,9 +466,7 @@ export default function ApprovalTable() {
                           </p>
                         )}
                       </td>
-
                     ))}
-
                   </tr>
                 ))
               ) : (
@@ -481,13 +481,11 @@ export default function ApprovalTable() {
                     </div>
                   </td>
                 </tr>
-
               )}
             </tbody>
           )}
         </table>
       </div>
-
     </div>
   );
 }

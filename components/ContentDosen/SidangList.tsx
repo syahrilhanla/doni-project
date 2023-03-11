@@ -61,14 +61,12 @@ export default function SidangList() {
       const studentsData1 = (await getDocs(studentRef1)).docs
         .map((item) => item)
         .map((item) => item.data())
-        .filter((item) => item.sidangDate[0].isApprovedByProfOne !== "Denied")
-        .filter((item) => item.title[0].titleText !== "");
+        .filter((item) => item.sidangDate[0].isApprovedByProfOne !== "Denied");
 
       const studentsData2 = (await getDocs(studentRef2)).docs
         .map((item) => item)
         .map((item) => item.data())
-        .filter((item) => item.sidangDate[0].isApprovedByProfTwo !== "Denied")
-        .filter((item) => item.title[0].titleText !== "");
+        .filter((item) => item.sidangDate[0].isApprovedByProfTwo !== "Denied");
 
       const arrayStudents = [...studentsData1, ...studentsData2].filter(
         (item: any) => item.profOne === user.name || item.profTwo === user.name
@@ -167,6 +165,7 @@ export default function SidangList() {
         return item.uid !== uidUser;
       });
       setStudent(newStudentData);
+    } else if (profDua === user.name) {
     } else if (profDua === user.name) {
       const value2 = {
         sidangDate: [

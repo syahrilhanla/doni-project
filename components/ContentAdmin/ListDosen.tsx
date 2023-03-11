@@ -1,87 +1,51 @@
-import { collection, getDocs, query } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import React, { useCallback, useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCheckLg, BsTrash } from "react-icons/bs";
 import { FaTrash } from "react-icons/fa";
-import { RiSortDesc, RiCloseLine } from "react-icons/ri";
+import { RiSortDesc, RiCloseLine, RiLoader5Line } from "react-icons/ri";
+import { SendButton } from "../Common/Buttons";
+import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
 
-interface dataTable {
-  id: number;
-  name: string;
-  nip: string;
-}
-interface dataTableMhs {
-  id: number;
-  name: string;
-  nim: string;
-  title: string;
-}
-
 export default function ListDosen() {
+  const { registerProf } = useAuth();
   const [hapus, setHapus] = useState<any>(false);
   const [buka, setBuka] = useState<any>(false);
   const [professor, setProfessor] = useState<any>([]);
-  // const content: dataTable[] = [
-  //   {
-  //     id: 1,
-  //     name: "nama 1",
-  //     nip: "nip 1",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "nama 12",
-  //     nip: "nip 12",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "nama 13",
-  //     nip: "nip 13",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "nama 14",
-  //     nip: "nip 14",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "nama 15",
-  //     nip: "nip 15",
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "nama 16",
-  //     nip: "nip 16",
-  //   },
-  // ];
-  const dataMahasiswa: dataTableMhs[] = [
-    {
-      id: 1,
-      name: "nama 1",
-      nim: "17292290292827",
-      title: "title 1",
-    },
-    {
-      id: 2,
-      name: "nama 2",
-      nim: "17292290292827",
-      title: "title 1",
-    },
-    {
-      id: 1,
-      name: "nama 1",
-      nim: "17292290292827",
-      title: "title 1",
-    },
-    {
-      id: 1,
-      name: "nama 1",
-      nim: "17292290292827",
-      title: "title 1",
-    },
-  ];
+  const [professorName, setProfessorName] = useState<string>("");
+  const [professorId, setProfessorId] = useState<string>("");
+  const [student, setStudent] = useState<any>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const getData = useCallback(async () => {
+    const studentRef = query(
+      collection(db, "studentsList"),
+      where("statusApprove", "==", true)
+    );
+
+    try {
+      const studentsData = (await getDocs(studentRef)).docs
+        .map((item) => item)
+        .map((item) => item.data());
+
+      setStudent(studentsData);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [student]);
 
   const getProf = async () => {
+    setLoading(false);
+
     let unsubscribe = false;
     await getDocs(collection(db, "professorList"))
       .then((profRef) => {
@@ -91,6 +55,7 @@ export default function ListDosen() {
           id: doc.id,
         }));
         setProfessor(newProfData);
+        setLoading(true);
       })
       .catch((err) => {
         if (unsubscribe) return;
@@ -101,7 +66,54 @@ export default function ListDosen() {
 
   useEffect(() => {
     getProf();
+    getData();
   }, []);
+
+  const getProfName = (name: string) => {
+    setBuka(true);
+    setProfessorName(name);
+    getData();
+  };
+  const getProfId = (id: any) => {
+    setHapus(true);
+    setProfessorId(id);
+  };
+
+  const deleteData = () => {
+    let fieldEdit = doc(db, "professorList", professorId);
+
+    deleteDoc(fieldEdit)
+      .then(() => {
+        alert("Data Berhasil Dihapus");
+        setHapus(!hapus);
+        getProf();
+      })
+      .catch((err) => {
+        alert("Tidak Bisa Menghapus Data..");
+      });
+  };
+
+  const deleteProfName = (uid: string, profOne: string, profTwo: string) => {
+    const studentRef = doc(db, "studentsList", uid);
+
+    if (profOne === professorName) {
+      const valueUpdate = {
+        profOne: "",
+      };
+      updateDoc(studentRef, valueUpdate).then(() => {
+        window.alert("Data berhasil diganti");
+        getData();
+      });
+    } else if (profTwo === professorName) {
+      const valueUpdate = {
+        profTwo: "",
+      };
+      updateDoc(studentRef, valueUpdate).then(() => {
+        window.alert("Data berhasil diganti");
+        getData();
+      });
+    }
+  };
 
   return (
     <div>
@@ -148,25 +160,65 @@ export default function ListDosen() {
                           Judul
                         </div>
                       </th>
+                      <th scope="col" className="px-6 py-3">
+                        <div className="flex items-center justify-center">
+                          Sebagai
+                        </div>
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        <div className="flex items-center justify-center">
+                          Aksi
+                        </div>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {dataMahasiswa ? (
-                      dataMahasiswa.map((data) => (
+                    {student ? (
+                      student.map((data: any, index: any) => (
                         <tr
-                          key={data.id}
+                          key={index}
                           className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
                         >
-                          <th
-                            scope="row"
-                            className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
-                          >
-                            {data.name}
-                          </th>
-                          <td className="px-6 py-2 max-w-[20%]">{data.nim}</td>
-                          <td className="px-6 py-2 max-w-[20%]">
-                            {data.title}
-                          </td>
+                          {data.profOne === professorName ||
+                          data.profTwo === professorName ? (
+                            <>
+                              <th
+                                scope="row"
+                                className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+                              >
+                                {data.name}
+                              </th>
+                              <td className="px-6 py-2 max-w-[20%]">
+                                {data.nim}
+                              </td>
+                              <td className="px-6 py-2 max-w-[20%]">
+                                {data.title[0].titleText}
+                              </td>
+                              <td className="px-6 py-2 max-w-[20%]">
+                                {data.profOne === professorName ? (
+                                  <p>Dosen pembimbing 1</p>
+                                ) : (
+                                  <p>Dosen pembimbing 2</p>
+                                )}
+                              </td>
+                              <td className="px-6 py-2">
+                                <button
+                                  onClick={() =>
+                                    deleteProfName(
+                                      data.uid,
+                                      data.profOne,
+                                      data.profTwo
+                                    )
+                                  }
+                                  className="font-medium text-white hover:opacity-50 duration-150 bg-[#D0312D] p-2 rounded-md"
+                                >
+                                  <FaTrash />
+                                </button>
+                              </td>
+                            </>
+                          ) : (
+                            ""
+                          )}
                         </tr>
                       ))
                     ) : (
@@ -208,12 +260,14 @@ export default function ListDosen() {
                 </p>
                 <div className="p-4 flex gap-2 justify-end items-end">
                   <button
+                    onClick={() => deleteData()}
                     type="button"
                     className=" text-white bg-green-500    rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3 hover:opacity-50 focus:z-10"
                   >
                     Iya
                   </button>
                   <button
+                    onClick={() => setHapus(!hapus)}
                     type="button"
                     className=" text-white bg-red-500    rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3 hover:opacity-50 focus:z-10"
                   >
@@ -225,7 +279,17 @@ export default function ListDosen() {
           </div>
         </div>
       )}
-
+      <SendButton
+        handleClick={() =>
+          registerProf(
+            "dosen2@dosen.ulm.ac.id",
+            "reminz123",
+            "dosen2@dosen.ulm.ac.id",
+            "Dosen2"
+          )
+        }
+        buttonText="Tambah Dosen"
+      />
       <div className="inline-block overflow-auto shadow-md sm:rounded-lg sm:max-w-full max-w-[350px] max-h-[500px] ">
         <table className="text-sm text-left text-gray-900 capitalize ">
           <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto ">
@@ -258,37 +322,53 @@ export default function ListDosen() {
             </tr>
           </thead>
           <tbody>
-            {professor.map((data: any, index: any) => (
-              <tr
-                key={index}
-                className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
-              >
-                <th
-                  scope="row"
-                  className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+            {loading ? (
+              professor.map((data: any, index: any) => (
+                <tr
+                  key={index}
+                  className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
                 >
-                  {data.name}
-                </th>
-                <td className="px-6 py-2 max-w-[20%]">{data.nip}</td>
-                <td className="px-6 py-2 max-w-[20%]">
-                  <button
-                    onClick={() => setBuka(!buka)}
-                    className="font-medium text-white hover:opacity-50 duration-150 bg-[#59b42f] p-2 rounded-md"
+                  <th
+                    scope="row"
+                    className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
                   >
-                    Lihat daftar
-                  </button>
-                </td>
+                    {data.name}
+                  </th>
+                  <td className="px-6 py-2 max-w-[20%]">{data.nip}</td>
+                  <td className="px-6 py-2 max-w-[20%]">
+                    <button
+                      onClick={() => getProfName(data.name)}
+                      className="font-medium text-white hover:opacity-50 duration-150 bg-[#59b42f] p-2 rounded-md"
+                    >
+                      Lihat daftar
+                    </button>
+                  </td>
 
-                <td className="px-6 py-2">
-                  <button
-                    onClick={() => setHapus(!hapus)}
-                    className="font-medium text-white hover:opacity-50 duration-150 bg-[#D0312D] p-2 rounded-md"
+                  <td className="px-6 py-2">
+                    <button
+                      onClick={() => getProfId(data.id)}
+                      className="font-medium text-white hover:opacity-50 duration-150 bg-[#D0312D] p-2 rounded-md"
+                    >
+                      <FaTrash />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <>
+                <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
+                  <td
+                    scope="row"
+                    colSpan={4}
+                    className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
                   >
-                    <FaTrash />
-                  </button>
-                </td>
-              </tr>
-            ))}
+                    <div className="flex items-center justify-center">
+                      <RiLoader5Line className="animate-spin text-3xl my-5 " />
+                    </div>
+                  </td>
+                </tr>
+              </>
+            )}
           </tbody>
         </table>
       </div>
