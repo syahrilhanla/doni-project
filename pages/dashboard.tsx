@@ -25,8 +25,8 @@ const Dashboard = () => {
   const [newtitle, setNewtitle] = useState("");
   const [feedbackOne, setFeedbackOne] = useState<String>();
   const [feedbackTwo, setFeedbackTwo] = useState<String>();
-  const [uidProf1, setUidProf1] = useState<any>("");
-  const [uidProf2, setUidProf2] = useState<any>("");
+  const [uidProf1, setUidProf1] = useState<string>("");
+  const [uidProf2, setUidProf2] = useState<string>("");
 
   useEffect(() => {
     if (user.title) {
@@ -58,36 +58,29 @@ const Dashboard = () => {
           },
         ],
       };
-      const notifProf1 = {
-        notifications: arrayUnion({
-          id: user.uid,
-          isRead: false,
-          text: `${user.name} mengajukan judul skripsi`,
-          title: "Pemberitahuan"
-        })
-      }
 
       const profRef1 = query(collection(db, "professorList"), where("name", "==", user.profOne));
-      const prof1Data = (await getDocs(profRef1)).docs
-        .map((item) => item)
-        .map((item) => setUidProf1(item.data()?.uid))
+      const prof1Data = await (await getDocs(profRef1)).docs[0].id
       const profRef2 = query(collection(db, "professorList"), where("name", "==", user.profTwo));
-      const prof2Data = (await getDocs(profRef2)).docs
-        .map((item) => item)
-        .map((item) => setUidProf2(item.data()?.uid))
-      // console.log(uidProf2, uidProf1);
+      const prof2Data = (await getDocs(profRef2)).docs[0].id
 
-      window.alert("Judul Skripsi Telah Diajukan");
-      await updateDoc(docRef, titleValue);
-      if (uidProf1 !== null) {
-        console.log(uidProf1);
-        await updateDoc(doc(db, "professorList", uidProf1), notifProf1);
+      if (prof1Data !== "") {
+        console.log(prof1Data);
+        const notifProf1 = {
+          notifications: arrayUnion({
+            id: user.uid,
+            isRead: false,
+            text: `${user.name} mengajukan judul skripsi`,
+            title: "Pemberitahuan"
+          })
+        }
+        await updateDoc(doc(db, "professorList",prof1Data), notifProf1);
       }
       else {
         return
       }
-      if (uidProf2 !== null) {
-        console.log(uidProf2);
+      if (prof2Data !== "") {
+        console.log(prof2Data);
         const notifProf2 = {
           notifications: arrayUnion({
             id: user.uid,
@@ -96,12 +89,14 @@ const Dashboard = () => {
             title: "Pemberitahuan"
           }),
         }
-        const ref = doc(db, "professorList", uidProf2)
+        const ref = doc(db, "professorList", prof2Data)
         await updateDoc(ref, notifProf2);
       }
       else {
         return
       }
+      await updateDoc(docRef, titleValue);
+      window.alert("Judul Skripsi Telah Diajukan");
       setAjukan(false)
       setNewtitle("");
     } catch (e) {
