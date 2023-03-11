@@ -13,11 +13,13 @@ import {
   where,
   getDoc,
   deleteDoc,
+  arrayUnion,
 } from "firebase/firestore";
 import { db } from "../Store/firebase";
 import { async } from "@firebase/util";
 import { CloseButton, ErrorButton, SendButton } from "../Common/Buttons";
 import Dropdown from "../Common/Dropdown";
+import { useAuth } from "../Context/AuthContext";
 
 interface dataTable {
   id: number;
@@ -30,6 +32,8 @@ interface dataTable {
 }
 
 export default function ListMahasiswa() {
+  const { user } = useAuth();
+
   const [student, setStudent] = useState<any>([]);
   const [useridSeminar, setUseridSeminar] = useState("");
   const [useridSidang, setUseridSidang] = useState("");
@@ -43,6 +47,8 @@ export default function ListMahasiswa() {
   const [examinerTwo, setExaminerTwo] = useState("");
   const [seminarDate, setSeminarDate] = useState<any>();
   const [sidangDate, setSidangDate] = useState<any>();
+  const [feedbackTextAreaSeminar, setFeedbackTextAreaSeminar] = useState("");
+  const [feedbackTextAreaSidang, setFeedbackTextAreaSidang] = useState("");
   const [
     feedbackUserSeminarByProfOne,
     setFeedbackUserSeminarByProfOne,
@@ -120,32 +126,34 @@ export default function ListMahasiswa() {
 
   const getStatusSeminar = (
     uid: any,
-    feedbackNoteByProfOne: any,
-    feedbackNoteByProfTwo: any,
     isApprovedByProfOne: any,
     isApprovedByProfTwo: any
   ) => {
     setAssignSeminar(true);
     setUseridSeminar(uid);
-    setFeedbackUserSeminarByProfOne(feedbackNoteByProfOne);
-    setFeedbackUserSeminarByProfTwo(feedbackNoteByProfTwo);
     setIsApprovedByProfOneSeminar(isApprovedByProfOne);
     setIsApprovedByProfTwoSeminar(isApprovedByProfTwo);
   };
 
   const getStatusSidang = (
     uid: any,
-    feedbackNoteByProfOne: any,
-    feedbackNoteByProfTwo: any,
     isApprovedByProfOne: any,
     isApprovedByProfTwo: any
   ) => {
     setAssignSidang(true);
     setUseridSidang(uid);
-    setFeedbackUserSidangByProfOne(feedbackNoteByProfOne);
-    setFeedbackUserSidangByProfTwo(feedbackNoteByProfTwo);
     setIsApprovedByProfOneSidang(isApprovedByProfOne);
     setIsApprovedByProfTwoSidang(isApprovedByProfTwo);
+  };
+
+  const getCurrentDate = (separator = "-") => {
+    let newDate = new Date();
+    let date = newDate.getDate();
+    let month = newDate.getMonth() + 1;
+    let year = newDate.getFullYear();
+    return `${date < 10 ? `0${date}` : `${date}`}${separator}${
+      month < 10 ? `0${month}` : `${month}`
+    }${separator}${year}`;
   };
 
   const getUpdateSeminar = async () => {
@@ -156,18 +164,43 @@ export default function ListMahasiswa() {
     const valueUpdate = {
       examinerOne: examinerOneData.name,
       examinerTwo: examinerTwoData.name,
+      activity: arrayUnion({
+        feedbackDate: getCurrentDate(),
+        feedbackText: feedbackTextAreaSeminar,
+        feedbackProfName: user.name,
+        feedbackActivity: "Menetapkan jadwal seminar hasil",
+      }),
       seminarDate: [
         {
           dateToBe: seminarDate,
-          feedbackNoteByProfOne: feedbackUserSeminarByProfOne,
-          feedbackNoteByProfTwo: feedbackUserSeminarByProfTwo,
           isApprovedByProfOne: isApprovedByProfOneSeminar,
           isApprovedByProfTwo: isApprovedByProfTwoSeminar,
         },
       ],
     };
 
+    const profOneRef = doc(db, "professorList", examinerOneData.uid);
+    const notifProfOne = {
+      activity: arrayUnion({
+        feedbackDate: getCurrentDate(),
+        feedbackText: "Anda ditetapkan sebagai penguji",
+        feedbackProfName: user.name,
+        feedbackActivity: "Menetapkan jadwal seminar hasil",
+      }),
+    };
+
+    const profTwoRef = doc(db, "professorList", examinerTwoData.uid);
+    const notifProfTwo = {
+      activity: arrayUnion({
+        feedbackDate: getCurrentDate(),
+        feedbackText: "Anda ditetapkan sebagai penguji",
+        feedbackProfName: user.name,
+        feedbackActivity: "Menetapkan jadwal seminar hasil",
+      }),
+    };
     await updateDoc(studentRef, valueUpdate).then(() => {
+      updateDoc(profOneRef, notifProfOne);
+      updateDoc(profTwoRef, notifProfTwo);
       window.alert("Seminar hasil berhasil diatur");
       setAssignSeminar(false);
       setSeminarDate("");
@@ -184,11 +217,15 @@ export default function ListMahasiswa() {
     const valueUpdate = {
       examinerOne: examinerOneData.name,
       examinerTwo: examinerTwoData.name,
+      activity: arrayUnion({
+        feedbackDate: getCurrentDate(),
+        feedbackText: feedbackTextAreaSidang,
+        feedbackProfName: user.name,
+        feedbackActivity: "Menetapkan jadwal sidang akhir",
+      }),
       sidangDate: [
         {
           dateToBe: sidangDate,
-          feedbackNoteByProfOne: feedbackUserSidangByProfOne,
-          feedbackNoteByProfTwo: feedbackUserSidangByProfTwo,
           isApprovedByProfOne: isApprovedByProfOneSidang,
           isApprovedByProfTwo: isApprovedByProfTwoSidang,
         },
@@ -217,12 +254,14 @@ export default function ListMahasiswa() {
   };
 
   const handleAssignSeminar = () => {
-    if (examinerOne && examinerTwo && seminarDate) getUpdateSeminar();
+    if (examinerOne && examinerTwo && seminarDate && feedbackTextAreaSeminar)
+      getUpdateSeminar();
     else alert("Lengkapi data terlebih dahulu!");
   };
 
   const handleAssignSidang = () => {
-    if (examinerOne && examinerTwo && sidangDate) getUpdateSidang();
+    if (examinerOne && examinerTwo && sidangDate && feedbackTextAreaSidang)
+      getUpdateSidang();
     else alert("Lengkapi data terlebih dahulu!");
   };
 
@@ -287,6 +326,17 @@ export default function ListMahasiswa() {
                       dropdownData={examiner}
                     />
                   </div>
+                  <div className="relative xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full">
+                    <textarea
+                      placeholder="Masukkan Catatan"
+                      className="min-h-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:outline-none block w-full p-2.5"
+                      required
+                      value={feedbackTextAreaSeminar}
+                      onChange={(e) =>
+                        setFeedbackTextAreaSeminar(e.target.value)
+                      }
+                    />
+                  </div>
                   <div className="p-4 flex gap-2 justify-end items-end">
                     <SendButton handleClick={handleAssignSeminar} />
                   </div>
@@ -324,6 +374,17 @@ export default function ListMahasiswa() {
                       displayText="Pilih Dosen Penguji 2"
                       handleClickItem={selectExaminerTwo}
                       dropdownData={examiner}
+                    />
+                  </div>
+                  <div className="relative xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full">
+                    <textarea
+                      placeholder="Masukkan Catatan"
+                      className="min-h-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:outline-none block w-full p-2.5"
+                      required
+                      value={feedbackTextAreaSidang}
+                      onChange={(e) =>
+                        setFeedbackTextAreaSidang(e.target.value)
+                      }
                     />
                   </div>
                   <div className="p-4 flex gap-2 justify-end items-end">
@@ -439,8 +500,6 @@ export default function ListMahasiswa() {
                             onClick={() =>
                               getStatusSeminar(
                                 data.uid,
-                                item.feedbackNoteByProfOne,
-                                item.feedbackNoteByProfTwo,
                                 item.isApprovedByProfOne,
                                 item.isApprovedByProfTwo
                               )
@@ -462,8 +521,6 @@ export default function ListMahasiswa() {
                             onClick={() =>
                               getStatusSidang(
                                 data.uid,
-                                item.feedbackNoteByProfOne,
-                                item.feedbackNoteByProfTwo,
                                 item.isApprovedByProfOne,
                                 item.isApprovedByProfTwo
                               )
