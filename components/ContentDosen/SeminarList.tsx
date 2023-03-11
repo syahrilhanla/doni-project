@@ -1,7 +1,22 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { RiCloseLine, RiSortDesc, RiLoader5Line, RiCheckboxCircleLine, RiCloseCircleLine } from "react-icons/ri";
+import {
+  RiCloseLine,
+  RiSortDesc,
+  RiLoader5Line,
+  RiCheckboxCircleLine,
+  RiCloseCircleLine,
+} from "react-icons/ri";
 import { useAuth } from "../Context/AuthContext";
-import { arrayUnion, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
+import {
+  arrayUnion,
+  collection,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../Store/firebase";
 
 import Link from "next/link";
@@ -16,24 +31,23 @@ interface dataTable {
 }
 
 export default function SeminarList() {
-  const { user } = useAuth()
+  const { user } = useAuth();
   const [setuju, setSetuju] = useState<any>(false);
   const [tolak, setTolak] = useState<any>(false);
   const [student, setStudent] = useState<any>([]);
-  const [uidUser, setUidUser] = useState<any>()
-  const [profSatu, setProfSatu] = useState<any>()
-  const [profDua, setProfDua] = useState<any>()
-  const [studentName, setStudentName] = useState<any>()
-  const [newFeedback, setNewFeedBack] = useState("")
-  const [isApprovedByProfOne, setIsApprovedByProfOne] = useState<any>()
-  const [isApprovedByProfTwo, setIsApprovedByProfTwo] = useState<any>()
-  const [dateToBe, setDateToBe] = useState<any>()
-  const [loading, setLoading] = useState(false)
+  const [uidUser, setUidUser] = useState<any>();
+  const [profSatu, setProfSatu] = useState<any>();
+  const [profDua, setProfDua] = useState<any>();
+  const [studentName, setStudentName] = useState<any>();
+  const [newFeedback, setNewFeedBack] = useState("");
+  const [isApprovedByProfOne, setIsApprovedByProfOne] = useState<any>();
+  const [isApprovedByProfTwo, setIsApprovedByProfTwo] = useState<any>();
+  const [dateToBe, setDateToBe] = useState<any>();
+  const [loading, setLoading] = useState(false);
 
   const getStudent = useCallback(async () => {
-    setLoading(false)
+    setLoading(false);
     try {
-
       const studentRef1 = query(
         collection(db, "studentsList"),
         where("statusApprove", "==", true),
@@ -57,57 +71,74 @@ export default function SeminarList() {
         .filter((item) => item.seminarDate[0].isApprovedByProfTwo !== "Denied")
         .filter((item) => item.title[0].titleText !== "");
 
-      const arrayStudents = [...studentsData1, ...studentsData2].filter((item: any) => item.profOne === user.name || item.profTwo === user.name)
+      const arrayStudents = [...studentsData1, ...studentsData2].filter(
+        (item: any) => item.profOne === user.name || item.profTwo === user.name
+      );
 
-      const fixArray = arrayStudents.map((item: any) => {
-        if (item.profOne === user.name) {
-          if (item.seminarDate[0].isApprovedByProfOne !== user.name) return item;
-        }
-        else if (item.profTwo === user.name) {
-          if (item.seminarDate[0].isApprovedByProfTwo !== user.name) return item;
-        }
-      }
-      ).filter((item: any) => item !== undefined)
+      const fixArray = arrayStudents
+        .map((item: any) => {
+          if (item.profOne === user.name) {
+            if (item.seminarDate[0].isApprovedByProfOne !== user.name)
+              return item;
+          } else if (item.profTwo === user.name) {
+            if (item.seminarDate[0].isApprovedByProfTwo !== user.name)
+              return item;
+          }
+        })
+        .filter((item: any) => item !== undefined);
       setStudent(fixArray);
-      setLoading(true)
-
+      setLoading(true);
     } catch (e) {
       console.log(e);
     }
-  }, [user])
-  const getCurrentDate = (separator = '-') => {
-    let newDate = new Date()
+  }, [user]);
+  const getCurrentDate = (separator = "-") => {
+    let newDate = new Date();
     let date = newDate.getDate();
     let month = newDate.getMonth() + 1;
     let year = newDate.getFullYear();
-    return `${date < 10 ? `0${date}` : `${date}`}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${year}`
-  }
+    return `${date < 10 ? `0${date}` : `${date}`}${separator}${
+      month < 10 ? `0${month}` : `${month}`
+    }${separator}${year}`;
+  };
 
-  const getValueApprove = (uid: any, name: any, profOne: any, profTwo: any,
+  const getValueApprove = (
+    uid: any,
+    name: any,
+    profOne: any,
+    profTwo: any,
 
     isApprovedByProfOne: any,
     isApprovedByProfTwo: any,
-    dateToBe: any) => {
-    setSetuju(true)
-    setUidUser(uid)
-    setStudentName(name)
-    setProfSatu(profOne)
-    setProfDua(profTwo)
-    setIsApprovedByProfOne(isApprovedByProfOne)
-    setIsApprovedByProfTwo(isApprovedByProfTwo)
-    setDateToBe(dateToBe)
-  }
-  const getValueDenied = (uid: any, name: any, profOne: any, profTwo: any,
-    isApprovedByProfOne: any, isApprovedByProfTwo: any, dateToBe: any) => {
-    setTolak(true)
-    setUidUser(uid)
-    setStudentName(name)
-    setProfSatu(profOne)
-    setProfDua(profTwo)
-    setIsApprovedByProfOne(isApprovedByProfOne)
-    setIsApprovedByProfTwo(isApprovedByProfTwo)
-    setDateToBe(dateToBe)
-  }
+    dateToBe: any
+  ) => {
+    setSetuju(true);
+    setUidUser(uid);
+    setStudentName(name);
+    setProfSatu(profOne);
+    setProfDua(profTwo);
+    setIsApprovedByProfOne(isApprovedByProfOne);
+    setIsApprovedByProfTwo(isApprovedByProfTwo);
+    setDateToBe(dateToBe);
+  };
+  const getValueDenied = (
+    uid: any,
+    name: any,
+    profOne: any,
+    profTwo: any,
+    isApprovedByProfOne: any,
+    isApprovedByProfTwo: any,
+    dateToBe: any
+  ) => {
+    setTolak(true);
+    setUidUser(uid);
+    setStudentName(name);
+    setProfSatu(profOne);
+    setProfDua(profTwo);
+    setIsApprovedByProfOne(isApprovedByProfOne);
+    setIsApprovedByProfTwo(isApprovedByProfTwo);
+    setDateToBe(dateToBe);
+  };
   const updateApprove = async () => {
     const studentRef = doc(db, "studentsList", uidUser);
     if (profSatu === user.name) {
@@ -116,66 +147,62 @@ export default function SeminarList() {
           {
             isApprovedByProfOne: user.name,
             isApprovedByProfTwo: isApprovedByProfTwo,
-            dateToBe: dateToBe
+            dateToBe: dateToBe,
           },
         ],
-        notifications: arrayUnion(
-          {
-            id: user.uid,
-            isRead: false,
-            text: "Kamu Telah Diperbolehkan Seminar Hasil Oleh Dosen Pembimbing 1",
-            title: "Pemberitahuan"
-          }
-        ),
+        notifications: arrayUnion({
+          id: user.uid,
+          isRead: false,
+          text:
+            "Kamu Telah Diperbolehkan Seminar Hasil Oleh Dosen Pembimbing 1",
+          title: "Pemberitahuan",
+        }),
         activity: arrayUnion({
           feedbackDate: getCurrentDate(),
           feedbackText: newFeedback,
           feedbackProfName: user.name,
-          feedbackActivity: "Menerima Pengajuan Seminar Hasil"
-        })
-      }
-      updateDoc(studentRef, value1)
-      window.alert("Berhasil Menerima Seminar Hasil Selaku Dosen Pembimbing 1")
-      setSetuju(false)
+          feedbackActivity: "Menerima Pengajuan Seminar Hasil",
+        }),
+      };
+      updateDoc(studentRef, value1);
+      window.alert("Berhasil Menerima Seminar Hasil Selaku Dosen Pembimbing 1");
+      setSetuju(false);
       const newStudentData = student.filter((item: any) => {
-        return item.uid !== uidUser
-      })
+        return item.uid !== uidUser;
+      });
       setStudent(newStudentData);
-
-    }
-    else if (profDua === user.name) {
+    } else if (profDua === user.name) {
       const value2 = {
         seminarDate: [
           {
             isApprovedByProfOne: isApprovedByProfOne,
             isApprovedByProfTwo: user.name,
-            dateToBe: dateToBe
+            dateToBe: dateToBe,
           },
         ],
-        notifications: arrayUnion(
-          {
-            id: user.uid,
-            isRead: false,
-            text: "Kamu Telah Diperbolehkan Seminar Hasil Oleh Dosen Pembimbing 2",
-            title: "Pemberitahuan"
-          }
-        ),
+        notifications: arrayUnion({
+          id: user.uid,
+          isRead: false,
+          text:
+            "Kamu Telah Diperbolehkan Seminar Hasil Oleh Dosen Pembimbing 2",
+          title: "Pemberitahuan",
+        }),
         activity: arrayUnion({
           feedbackDate: getCurrentDate(),
           feedbackText: newFeedback,
           feedbackProfName: user.name,
-          feedbackActivity: "Menerima Pengajuan Seminar Hasil"
-        })
-      }
-      updateDoc(studentRef, value2)
-      window.alert("Berhasil Menerima Seminar Hasil Selaku Dosen Pembimbing 2")
-      setSetuju(false)
+          feedbackActivity: "Menerima Pengajuan Seminar Hasil",
+        }),
+      };
+      updateDoc(studentRef, value2);
+      window.alert("Berhasil Menerima Seminar Hasil Selaku Dosen Pembimbing 2");
+      setSetuju(false);
       const newStudentData = student.filter((item: any) => {
-        return item.uid !== uidUser
-      })
+        return item.uid !== uidUser;
+      });
       setStudent(newStudentData);
     }
-  }
+  };
   const updateDenied = async () => {
     const studentRef = doc(db, "studentsList", uidUser);
     if (profSatu === user.name) {
@@ -184,85 +211,81 @@ export default function SeminarList() {
           {
             isApprovedByProfOne: "Denied",
             isApprovedByProfTwo: isApprovedByProfTwo,
-            dateToBe: dateToBe
+            dateToBe: dateToBe,
           },
         ],
-        notifications: arrayUnion(
-          {
-            id: user.uid,
-            isRead: false,
-            text: "Kamu TIDAK DI PERBOLEHKAN Seminar Hasil Oleh Dosen Pembimbing 1",
-            title: "Pemberitahuan"
-          }
-        ),
+        notifications: arrayUnion({
+          id: user.uid,
+          isRead: false,
+          text:
+            "Kamu TIDAK DI PERBOLEHKAN Seminar Hasil Oleh Dosen Pembimbing 1",
+          title: "Pemberitahuan",
+        }),
         activity: arrayUnion({
           feedbackDate: getCurrentDate(),
           feedbackText: newFeedback,
           feedbackProfName: user.name,
-          feedbackActivity: "Menolak Pengajuan Seminar Hasil"
-        })
-      }
-      updateDoc(studentRef, value1)
-      window.alert("Berhasil Menolak Seminar Hasil Selaku Dosen Pembimbing 1")
-      setTolak(false)
+          feedbackActivity: "Menolak Pengajuan Seminar Hasil",
+        }),
+      };
+      updateDoc(studentRef, value1);
+      window.alert("Berhasil Menolak Seminar Hasil Selaku Dosen Pembimbing 1");
+      setTolak(false);
       const newStudentData = student.filter((item: any) => {
-        return item.uid !== uidUser
-      })
+        return item.uid !== uidUser;
+      });
       setStudent(newStudentData);
-
-    }
-    else if (profDua === user.name) {
+    } else if (profDua === user.name) {
       const value2 = {
         seminarDate: [
           {
             isApprovedByProfOne: isApprovedByProfOne,
             isApprovedByProfTwo: "Denied",
-            dateToBe: dateToBe
+            dateToBe: dateToBe,
           },
         ],
-        notifications: arrayUnion(
-          {
-            id: user.uid,
-            isRead: false,
-            text: "Kamu TIDAK DI PERBOLEHKAN Diperbolehkan Seminar Hasil Oleh Dosen Pembimbing 2",
-            title: "Pemberitahuan"
-          }
-        ),
+        notifications: arrayUnion({
+          id: user.uid,
+          isRead: false,
+          text:
+            "Kamu TIDAK DI PERBOLEHKAN Diperbolehkan Seminar Hasil Oleh Dosen Pembimbing 2",
+          title: "Pemberitahuan",
+        }),
         activity: arrayUnion({
           feedbackDate: getCurrentDate(),
           feedbackText: newFeedback,
           feedbackProfName: user.name,
-          feedbackActivity: "Menolak Pengajuan Seminar Hasil"
-        })
-      }
-      updateDoc(studentRef, value2)
-      window.alert("Berhasil Menolak Seminar Hasil Selaku Dosen Pembimbing 2")
-      setTolak(false)
+          feedbackActivity: "Menolak Pengajuan Seminar Hasil",
+        }),
+      };
+      updateDoc(studentRef, value2);
+      window.alert("Berhasil Menolak Seminar Hasil Selaku Dosen Pembimbing 2");
+      setTolak(false);
       const newStudentData = student.filter((item: any) => {
-        return item.uid !== uidUser
-      })
+        return item.uid !== uidUser;
+      });
       setStudent(newStudentData);
     }
-  }
+  };
   useEffect(() => {
-    getStudent()
-  }, [])
+    getStudent();
+  }, []);
   const handleCloseModal = () => {
     setSetuju(!setuju);
-    setNewFeedBack("")
-  }
+    setNewFeedBack("");
+  };
   const handleCloseModalTolak = () => {
     setTolak(!tolak);
-    setNewFeedBack("")
-  }
+    setNewFeedBack("");
+  };
   const handleAssignSeminarDate = () => {
     if (newFeedback) updateApprove();
-    else alert("Lengkapi data terlebih dahulu!")
-  }
+    else alert("Lengkapi data terlebih dahulu!");
+  };
   const handleDeniedSeminarDate = () => {
     if (newFeedback) updateDenied();
-    else alert("Lengkapi data terlebih dahulu!")
-  }
+    else alert("Lengkapi data terlebih dahulu!");
+  };
   return (
     <div>
       {setuju && (
@@ -275,11 +298,13 @@ export default function SeminarList() {
                 <p className="block text-lg mt-6 font-medium text-gray-900 ">
                   {`Apakah anda ingin menyetujui ${studentName} melakukan seminar hasil?`}
                 </p>
-                <textarea placeholder="Berikan Masukkan Untuk Mahasiswa Bimbingan"
+                <textarea
+                  placeholder="Berikan Masukkan Untuk Mahasiswa Bimbingan"
                   className="min-h-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:outline-none block w-full p-2.5"
                   required
                   value={newFeedback}
-                  onChange={(e) => setNewFeedBack(e.target.value)} />
+                  onChange={(e) => setNewFeedBack(e.target.value)}
+                />
                 <div className="p-4 flex gap-2 justify-end items-end">
                   <SendButton handleClick={handleAssignSeminarDate} />
                 </div>
@@ -299,11 +324,13 @@ export default function SeminarList() {
                 <p className="block text-lg mt-6 font-medium text-gray-900 ">
                   {`Apakah anda ingin tidak menginjinkan ${studentName} melakukan seminar hasil ?`}
                 </p>
-                <textarea placeholder="Berikan Masukkan Untuk Mahasiswa Bimbingan"
+                <textarea
+                  placeholder="Berikan Masukkan Untuk Mahasiswa Bimbingan"
                   className="min-h-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:outline-none block w-full p-2.5"
                   required
                   value={newFeedback}
-                  onChange={(e) => setNewFeedBack(e.target.value)} />
+                  onChange={(e) => setNewFeedBack(e.target.value)}
+                />
                 <div className="p-4 flex gap-2 justify-end items-end">
                   <SendButton handleClick={handleDeniedSeminarDate} />
                 </div>
@@ -352,7 +379,7 @@ export default function SeminarList() {
               </th>
             </tr>
           </thead>
-          {!loading ?
+          {!loading ? (
             <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
               <td
                 scope="row"
@@ -363,70 +390,87 @@ export default function SeminarList() {
                   <RiLoader5Line className="text-center animate-spin text-3xl mt-5" />
                 </div>
               </td>
-            </tr> :
+            </tr>
+          ) : (
             <tbody>
-              {student.length > 0 ? student.map((data: any, index: any) => (
-                <tr
-                  key={index}
-                  className="even:bg-[#f0ebf8d7] odd:bg-white border-b "
-                >
-                  <th
-                    scope="row"
-                    className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+              {student.length > 0 ? (
+                student.map((data: any, index: any) => (
+                  <tr
+                    key={index}
+                    className="even:bg-[#f0ebf8d7] odd:bg-white border-b "
                   >
-                    {data.name}
-                  </th>
-                  <td className="px-6 py-2 max-w-[20%] text-center">{data.title[0].titleText ? data.title[0].titleText : "-"}</td>
-                  <td className="px-6 py-2 text-center">{data.generation}</td>
-                  <td className="py-1">
-                    <div className="flex flex-col items-center">
-                      {data.seminarDate[0].dateToBe ? data.seminarDate[0].dateToBe : "-"}
-                      <Link
-                        target="_blank"
-                        className="hover:underline hover:text-black underline:none text-purple-500"
-                        href={`${data.fileSeminar}`}
-                      >
-                        {data.fileSeminar ? "Cek" : ""}
-                      </Link>
-                    </div>
-                  </td>
-                  <td className="px-6 py-2">
-                    {data.profOne === user.name ? "Dospem 1" : data.profTwo === user.name ? "Dospem 2" : "None"}
-                  </td>
-                  {data.fileSeminar ?
-                    <td className="px-6 py-2 text-right flex gap-2">
-                      <button
-                        onClick={() => getValueApprove(
-                          data.uid,
-                          data.name,
-                          data.profOne,
-                          data.profTwo,
-                          data.seminarDate[0].isApprovedByProfOne,
-                          data.seminarDate[0].isApprovedByProfTwo,
-                          data.seminarDate[0].dateToBe)}
-                        className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white hover:text-green-500 bg-green-500 p-2 rounded-md"
-                      >
-                        <RiCheckboxCircleLine className="text-2xl" />
-                      </button>
-                      <button
-                        onClick={() => getValueDenied(data.uid,
-                          data.name,
-                          data.profOne,
-                          data.profTwo,
-                          data.seminarDate[0].isApprovedByProfOne,
-                          data.seminarDate[0].isApprovedByProfTwo,
-                          data.seminarDate[0].dateToBe)}
-                        className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
-                      >
-                        <RiCloseCircleLine className="text-2xl" />
-                      </button>
+                    <th
+                      scope="row"
+                      className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+                    >
+                      {data.name}
+                    </th>
+                    <td className="px-6 py-2 max-w-[20%] text-center">
+                      {data.title[0].titleText ? data.title[0].titleText : "-"}
                     </td>
-                    :
-                    <td className="text-center">{"-"}</td>
-                  }
-
-                </tr>
-              )) :
+                    <td className="px-6 py-2 text-center">{data.generation}</td>
+                    <td className="py-1">
+                      <div className="flex flex-col items-center">
+                        {data.seminarDate[0].dateToBe
+                          ? data.seminarDate[0].dateToBe
+                          : "-"}
+                        <Link
+                          target="_blank"
+                          className="hover:underline hover:text-black underline:none text-purple-500"
+                          href={`${data.fileSeminar}`}
+                        >
+                          {data.fileSeminar ? "Cek" : ""}
+                        </Link>
+                      </div>
+                    </td>
+                    <td className="px-6 py-2">
+                      {data.profOne === user.name
+                        ? "Dospem 1"
+                        : data.profTwo === user.name
+                        ? "Dospem 2"
+                        : "None"}
+                    </td>
+                    {data.fileSeminar ? (
+                      <td className="px-6 py-2 text-right flex gap-2">
+                        <button
+                          onClick={() =>
+                            getValueApprove(
+                              data.uid,
+                              data.name,
+                              data.profOne,
+                              data.profTwo,
+                              data.seminarDate[0].isApprovedByProfOne,
+                              data.seminarDate[0].isApprovedByProfTwo,
+                              data.seminarDate[0].dateToBe
+                            )
+                          }
+                          className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white hover:text-green-500 bg-green-500 p-2 rounded-md"
+                        >
+                          <RiCheckboxCircleLine className="text-2xl" />
+                        </button>
+                        <button
+                          onClick={() =>
+                            getValueDenied(
+                              data.uid,
+                              data.name,
+                              data.profOne,
+                              data.profTwo,
+                              data.seminarDate[0].isApprovedByProfOne,
+                              data.seminarDate[0].isApprovedByProfTwo,
+                              data.seminarDate[0].dateToBe
+                            )
+                          }
+                          className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
+                        >
+                          <RiCloseCircleLine className="text-2xl" />
+                        </button>
+                      </td>
+                    ) : (
+                      <td className="text-center">{"-"}</td>
+                    )}
+                  </tr>
+                ))
+              ) : (
                 <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
                   <td
                     scope="row"
@@ -438,12 +482,11 @@ export default function SeminarList() {
                     </div>
                   </td>
                 </tr>
-              }
+              )}
             </tbody>
-          }
+          )}
         </table>
       </div>
-
     </div>
   );
 }
