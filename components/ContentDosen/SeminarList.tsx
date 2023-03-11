@@ -40,8 +40,6 @@ export default function SeminarList() {
   const [profDua, setProfDua] = useState<any>();
   const [studentName, setStudentName] = useState<any>();
   const [newFeedback, setNewFeedBack] = useState("");
-  const [feedbackNoteUser1, setFeedbackNoteUser1] = useState<any>();
-  const [feedbackNoteUser2, setFeedbackNoteUser2] = useState<any>();
   const [isApprovedByProfOne, setIsApprovedByProfOne] = useState<any>();
   const [isApprovedByProfTwo, setIsApprovedByProfTwo] = useState<any>();
   const [dateToBe, setDateToBe] = useState<any>();
@@ -64,12 +62,14 @@ export default function SeminarList() {
       const studentsData1 = (await getDocs(studentRef1)).docs
         .map((item) => item)
         .map((item) => item.data())
-        .filter((item) => item.seminarDate[0].isApprovedByProfOne !== "Denied");
+        .filter((item) => item.seminarDate[0].isApprovedByProfOne !== "Denied")
+        .filter((item) => item.title[0].titleText !== "");
 
       const studentsData2 = (await getDocs(studentRef2)).docs
         .map((item) => item)
         .map((item) => item.data())
-        .filter((item) => item.seminarDate[0].isApprovedByProfTwo !== "Denied");
+        .filter((item) => item.seminarDate[0].isApprovedByProfTwo !== "Denied")
+        .filter((item) => item.title[0].titleText !== "");
 
       const arrayStudents = [...studentsData1, ...studentsData2].filter(
         (item: any) => item.profOne === user.name || item.profTwo === user.name
@@ -92,13 +92,22 @@ export default function SeminarList() {
       console.log(e);
     }
   }, [user]);
+  const getCurrentDate = (separator = "-") => {
+    let newDate = new Date();
+    let date = newDate.getDate();
+    let month = newDate.getMonth() + 1;
+    let year = newDate.getFullYear();
+    return `${date < 10 ? `0${date}` : `${date}`}${separator}${
+      month < 10 ? `0${month}` : `${month}`
+    }${separator}${year}`;
+  };
+
   const getValueApprove = (
     uid: any,
     name: any,
     profOne: any,
     profTwo: any,
-    feedbackNote1: any,
-    feedbackNote2: any,
+
     isApprovedByProfOne: any,
     isApprovedByProfTwo: any,
     dateToBe: any
@@ -108,8 +117,6 @@ export default function SeminarList() {
     setStudentName(name);
     setProfSatu(profOne);
     setProfDua(profTwo);
-    setFeedbackNoteUser1(feedbackNote1);
-    setFeedbackNoteUser2(feedbackNote2);
     setIsApprovedByProfOne(isApprovedByProfOne);
     setIsApprovedByProfTwo(isApprovedByProfTwo);
     setDateToBe(dateToBe);
@@ -119,8 +126,6 @@ export default function SeminarList() {
     name: any,
     profOne: any,
     profTwo: any,
-    feedbackNote1: any,
-    feedbackNote2: any,
     isApprovedByProfOne: any,
     isApprovedByProfTwo: any,
     dateToBe: any
@@ -130,8 +135,6 @@ export default function SeminarList() {
     setStudentName(name);
     setProfSatu(profOne);
     setProfDua(profTwo);
-    setFeedbackNoteUser1(feedbackNote1);
-    setFeedbackNoteUser2(feedbackNote2);
     setIsApprovedByProfOne(isApprovedByProfOne);
     setIsApprovedByProfTwo(isApprovedByProfTwo);
     setDateToBe(dateToBe);
@@ -142,8 +145,6 @@ export default function SeminarList() {
       const value1 = {
         seminarDate: [
           {
-            feedbackNoteByProfOne: newFeedback,
-            feedbackNoteByProfTwo: feedbackNoteUser2,
             isApprovedByProfOne: user.name,
             isApprovedByProfTwo: isApprovedByProfTwo,
             dateToBe: dateToBe,
@@ -155,6 +156,12 @@ export default function SeminarList() {
           text:
             "Kamu Telah Diperbolehkan Seminar Hasil Oleh Dosen Pembimbing 1",
           title: "Pemberitahuan",
+        }),
+        activity: arrayUnion({
+          feedbackDate: getCurrentDate(),
+          feedbackText: newFeedback,
+          feedbackProfName: user.name,
+          feedbackActivity: "Menerima Pengajuan Seminar Hasil",
         }),
       };
       updateDoc(studentRef, value1);
@@ -168,8 +175,6 @@ export default function SeminarList() {
       const value2 = {
         seminarDate: [
           {
-            feedbackNoteByProfOne: feedbackNoteUser1,
-            feedbackNoteByProfTwo: newFeedback,
             isApprovedByProfOne: isApprovedByProfOne,
             isApprovedByProfTwo: user.name,
             dateToBe: dateToBe,
@@ -181,6 +186,12 @@ export default function SeminarList() {
           text:
             "Kamu Telah Diperbolehkan Seminar Hasil Oleh Dosen Pembimbing 2",
           title: "Pemberitahuan",
+        }),
+        activity: arrayUnion({
+          feedbackDate: getCurrentDate(),
+          feedbackText: newFeedback,
+          feedbackProfName: user.name,
+          feedbackActivity: "Menerima Pengajuan Seminar Hasil",
         }),
       };
       updateDoc(studentRef, value2);
@@ -198,8 +209,6 @@ export default function SeminarList() {
       const value1 = {
         seminarDate: [
           {
-            feedbackNoteByProfOne: newFeedback,
-            feedbackNoteByProfTwo: feedbackNoteUser2,
             isApprovedByProfOne: "Denied",
             isApprovedByProfTwo: isApprovedByProfTwo,
             dateToBe: dateToBe,
@@ -211,6 +220,12 @@ export default function SeminarList() {
           text:
             "Kamu TIDAK DI PERBOLEHKAN Seminar Hasil Oleh Dosen Pembimbing 1",
           title: "Pemberitahuan",
+        }),
+        activity: arrayUnion({
+          feedbackDate: getCurrentDate(),
+          feedbackText: newFeedback,
+          feedbackProfName: user.name,
+          feedbackActivity: "Menolak Pengajuan Seminar Hasil",
         }),
       };
       updateDoc(studentRef, value1);
@@ -224,8 +239,6 @@ export default function SeminarList() {
       const value2 = {
         seminarDate: [
           {
-            feedbackNoteByProfOne: feedbackNoteUser1,
-            feedbackNoteByProfTwo: newFeedback,
             isApprovedByProfOne: isApprovedByProfOne,
             isApprovedByProfTwo: "Denied",
             dateToBe: dateToBe,
@@ -237,6 +250,12 @@ export default function SeminarList() {
           text:
             "Kamu TIDAK DI PERBOLEHKAN Diperbolehkan Seminar Hasil Oleh Dosen Pembimbing 2",
           title: "Pemberitahuan",
+        }),
+        activity: arrayUnion({
+          feedbackDate: getCurrentDate(),
+          feedbackText: newFeedback,
+          feedbackProfName: user.name,
+          feedbackActivity: "Menolak Pengajuan Seminar Hasil",
         }),
       };
       updateDoc(studentRef, value2);
@@ -320,133 +339,154 @@ export default function SeminarList() {
           </div>
         </div>
       )}
-      {!loading ? (
-        <RiLoader5Line className="animate-spin text-3xl mt-5" />
-      ) : (
-        <div className=" inline-block overflow-x-auto shadow-md sm:rounded-lg max-h-[500px] max-w-[350px] sm:max-w-full">
-          <table className="text-sm text-left text-gray-900 capitalize ">
-            <thead className="text-xs text-white  bg-patternTwo sticky top-0 z-auto ">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  <div className="flex items-center gap-2">
-                    Nama
-                    <a href="#">
-                      <RiSortDesc />
-                    </a>
-                  </div>
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  <div className="flex items-center justify-center  gap-2">
-                    Judul
-                    <a href="#">
-                      <RiSortDesc />
-                    </a>
-                  </div>
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  <div className="flex items-center gap-2">
-                    Angkatan
-                    <a href="#">
-                      <RiSortDesc />
-                    </a>
-                  </div>
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  <div className="flex items-center">Berkas</div>
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  <div className="flex items-center">Sebagai</div>
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  <div className="flex items-center justify-center">Aksi</div>
-                </th>
-              </tr>
-            </thead>
+
+      <div className=" inline-block overflow-x-auto shadow-md sm:rounded-lg max-h-[500px] max-w-[350px] sm:max-w-full">
+        <table className="text-sm text-left text-gray-900 capitalize ">
+          <thead className="text-xs text-white  bg-patternTwo sticky top-0 z-auto ">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center gap-2">
+                  Nama
+                  <a href="#">
+                    <RiSortDesc />
+                  </a>
+                </div>
+              </th>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center justify-center  gap-2">
+                  Judul
+                  <a href="#">
+                    <RiSortDesc />
+                  </a>
+                </div>
+              </th>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center gap-2">
+                  Angkatan
+                  <a href="#">
+                    <RiSortDesc />
+                  </a>
+                </div>
+              </th>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center">Berkas</div>
+              </th>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center">Sebagai</div>
+              </th>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center justify-center">Aksi</div>
+              </th>
+            </tr>
+          </thead>
+          {!loading ? (
+            <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
+              <td
+                scope="row"
+                colSpan={7}
+                className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+              >
+                <div className="flex items-center justify-center">
+                  <RiLoader5Line className="text-center animate-spin text-3xl mt-5" />
+                </div>
+              </td>
+            </tr>
+          ) : (
             <tbody>
-              {student.map((data: any, index: any) => (
-                <tr
-                  key={index}
-                  className="even:bg-[#f0ebf8d7] odd:bg-white border-b "
-                >
-                  <th
-                    scope="row"
-                    className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+              {student.length > 0 ? (
+                student.map((data: any, index: any) => (
+                  <tr
+                    key={index}
+                    className="even:bg-[#f0ebf8d7] odd:bg-white border-b "
                   >
-                    {data.name}
-                  </th>
-                  <td className="px-6 py-2 max-w-[20%] text-center">
-                    {data.title[0].titleText ? data.title[0].titleText : "-"}
-                  </td>
-                  <td className="px-6 py-2 text-center">{data.generation}</td>
-                  <td className="py-1">
-                    <div className="flex flex-col items-center">
-                      {data.seminarDate[0].dateToBe
-                        ? data.seminarDate[0].dateToBe
-                        : "-"}
-                      <Link
-                        target="_blank"
-                        className="hover:underline hover:text-black underline:none text-purple-500"
-                        href={`${data.fileSeminar}`}
-                      >
-                        {data.fileSeminar ? "Cek" : ""}
-                      </Link>
+                    <th
+                      scope="row"
+                      className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+                    >
+                      {data.name}
+                    </th>
+                    <td className="px-6 py-2 max-w-[20%] text-center">
+                      {data.title[0].titleText ? data.title[0].titleText : "-"}
+                    </td>
+                    <td className="px-6 py-2 text-center">{data.generation}</td>
+                    <td className="py-1">
+                      <div className="flex flex-col items-center">
+                        {data.seminarDate[0].dateToBe
+                          ? data.seminarDate[0].dateToBe
+                          : "-"}
+                        <Link
+                          target="_blank"
+                          className="hover:underline hover:text-black underline:none text-purple-500"
+                          href={`${data.fileSeminar}`}
+                        >
+                          {data.fileSeminar ? "Cek" : ""}
+                        </Link>
+                      </div>
+                    </td>
+                    <td className="px-6 py-2">
+                      {data.profOne === user.name
+                        ? "Dospem 1"
+                        : data.profTwo === user.name
+                        ? "Dospem 2"
+                        : "None"}
+                    </td>
+                    {data.fileSeminar ? (
+                      <td className="px-6 py-2 text-right flex gap-2">
+                        <button
+                          onClick={() =>
+                            getValueApprove(
+                              data.uid,
+                              data.name,
+                              data.profOne,
+                              data.profTwo,
+                              data.seminarDate[0].isApprovedByProfOne,
+                              data.seminarDate[0].isApprovedByProfTwo,
+                              data.seminarDate[0].dateToBe
+                            )
+                          }
+                          className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white hover:text-green-500 bg-green-500 p-2 rounded-md"
+                        >
+                          <RiCheckboxCircleLine className="text-2xl" />
+                        </button>
+                        <button
+                          onClick={() =>
+                            getValueDenied(
+                              data.uid,
+                              data.name,
+                              data.profOne,
+                              data.profTwo,
+                              data.seminarDate[0].isApprovedByProfOne,
+                              data.seminarDate[0].isApprovedByProfTwo,
+                              data.seminarDate[0].dateToBe
+                            )
+                          }
+                          className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
+                        >
+                          <RiCloseCircleLine className="text-2xl" />
+                        </button>
+                      </td>
+                    ) : (
+                      <td className="text-center">{"-"}</td>
+                    )}
+                  </tr>
+                ))
+              ) : (
+                <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
+                  <td
+                    scope="row"
+                    colSpan={7}
+                    className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+                  >
+                    <div className="flex items-center justify-center">
+                      Belum Ada Yang Mengajukan Seminar Hasil
                     </div>
                   </td>
-                  <td className="px-6 py-2">
-                    {data.profOne === user.name
-                      ? "Dospem 1"
-                      : data.profTwo === user.name
-                      ? "Dospem 2"
-                      : "None"}
-                  </td>
-                  {data.fileSeminar ? (
-                    <td className="px-6 py-2 text-right flex gap-2">
-                      <button
-                        onClick={() =>
-                          getValueApprove(
-                            data.uid,
-                            data.name,
-                            data.profOne,
-                            data.profTwo,
-                            data.seminarDate[0].feedbackNoteByProfOne,
-                            data.seminarDate[0].feedbackNoteByProfTwo,
-                            data.seminarDate[0].isApprovedByProfOne,
-                            data.seminarDate[0].isApprovedByProfTwo,
-                            data.seminarDate[0].dateToBe
-                          )
-                        }
-                        className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white hover:text-green-500 bg-green-500 p-2 rounded-md"
-                      >
-                        <RiCheckboxCircleLine className="text-2xl" />
-                      </button>
-                      <button
-                        onClick={() =>
-                          getValueDenied(
-                            data.uid,
-                            data.name,
-                            data.profOne,
-                            data.profTwo,
-                            data.seminarDate[0].feedbackNoteByProfOne,
-                            data.seminarDate[0].feedbackNoteByProfTwo,
-                            data.seminarDate[0].isApprovedByProfOne,
-                            data.seminarDate[0].isApprovedByProfTwo,
-                            data.seminarDate[0].dateToBe
-                          )
-                        }
-                        className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
-                      >
-                        <RiCloseCircleLine className="text-2xl" />
-                      </button>
-                    </td>
-                  ) : (
-                    <td className="text-center">{"-"}</td>
-                  )}
                 </tr>
-              ))}
+              )}
             </tbody>
-          </table>
-        </div>
-      )}
+          )}
+        </table>
+      </div>
     </div>
   );
 }
