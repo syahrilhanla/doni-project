@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Layout from "../components/Layout/Layout";
 import { BsFillPersonFill } from "react-icons/bs";
 import { RiCloseLine } from "react-icons/ri";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../components/Context/AuthContext";
-import { doc, updateDoc } from "firebase/firestore";
+import { arrayUnion, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../components/Store/firebase";
 import { User } from "firebase/auth";
 import TableActivity from "../components/Content/TableActivity";
@@ -25,6 +25,8 @@ const Dashboard = () => {
   const [newtitle, setNewtitle] = useState("");
   const [feedbackOne, setFeedbackOne] = useState<String>();
   const [feedbackTwo, setFeedbackTwo] = useState<String>();
+  const [uidProf1, setUidProf1] = useState<any>("");
+  const [uidProf2, setUidProf2] = useState<any>("");
 
   useEffect(() => {
     if (user.title) {
@@ -41,28 +43,76 @@ const Dashboard = () => {
       setTerimaProfSatu(user.title[0].isApprovedByProfOne);
       setTerimaProfDua(user.title[0].isApprovedByProfTwo);
     }
+
   }, [user]);
+
   const handleNewTitle = async () => {
-    const docRef = doc(db, "studentsList", user.uid);
-    const titleValue = {
-      title: [
-        {
-          feedbackNoteByProfOne: user.title[0].feedbackNoteByProfOne,
-          feedbackNoteByProfTwo: user.title[0].feedbackNoteByProfTwo,
-          isApprovedByProfOne: user.title[0].isApprovedByProfOne,
-          isApprovedByProfTwo: user.title[0].isApprovedByProfTwo,
-          titleText: newtitle,
-        },
-      ],
-    };
-    window.alert("Judul Skripsi Telah Diajukan");
-    await updateDoc(docRef, titleValue);
-    setNewtitle("");
+    try {
+      const docRef = doc(db, "studentsList", user.uid);
+      const titleValue = {
+        title: [
+          {
+            isApprovedByProfOne: user.title[0].isApprovedByProfOne,
+            isApprovedByProfTwo: user.title[0].isApprovedByProfTwo,
+            titleText: newtitle,
+          },
+        ],
+      };
+      const notifProf1 = {
+        notifications: arrayUnion({
+          id: user.uid,
+          isRead: false,
+          text: `${user.name} mengajukan judul skripsi`,
+          title: "Pemberitahuan"
+        })
+      }
+
+      const profRef1 = query(collection(db, "professorList"), where("name", "==", user.profOne));
+      const prof1Data = (await getDocs(profRef1)).docs
+        .map((item) => item)
+        .map((item) => setUidProf1(item.data()?.uid))
+      const profRef2 = query(collection(db, "professorList"), where("name", "==", user.profTwo));
+      const prof2Data = (await getDocs(profRef2)).docs
+        .map((item) => item)
+        .map((item) => setUidProf2(item.data()?.uid))
+      // console.log(uidProf2, uidProf1);
+
+      window.alert("Judul Skripsi Telah Diajukan");
+      await updateDoc(docRef, titleValue);
+      if (uidProf1 !== null) {
+        console.log(uidProf1);
+        await updateDoc(doc(db, "professorList", uidProf1), notifProf1);
+      }
+      else {
+        return
+      }
+      if (uidProf2 !== null) {
+        console.log(uidProf2);
+        const notifProf2 = {
+          notifications: arrayUnion({
+            id: user.uid,
+            isRead: false,
+            text: `${user.name} mengajukan judul skripsi`,
+            title: "Pemberitahuan"
+          }),
+        }
+        const ref = doc(db, "professorList", uidProf2)
+        await updateDoc(ref, notifProf2);
+      }
+      else {
+        return
+      }
+      setAjukan(false)
+      setNewtitle("");
+    } catch (e) {
+      console.log(e);
+
+    }
   };
   return (
     <Layout>
       <div className="h-full px-4  py-4">
-        
+
         <div className="flex lg:space-between xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col  mt-5 mb-2 mx-4">
           <div className="grid justify-items-start xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 py-4 px-3 w-2/5 h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
             <div className=" text-lg text-center font-sans">
@@ -163,9 +213,8 @@ const Dashboard = () => {
               <div className="text-2xl">Dosen Pembimbing 1</div>
             </div>
             <div
-              className={`text-center font-bold ${
-                dosen1 === "" ? "text-sm italic text-gray-400" : "text-4xl"
-              }`}
+              className={`text-center font-bold ${dosen1 === "" ? "text-sm italic text-gray-400" : "text-4xl"
+                }`}
             >
               {!dosen1 && "Kamu Belum Mendapatkan Dosen Pembimbing 1"}
               {dosen1}
@@ -179,9 +228,8 @@ const Dashboard = () => {
               <div className="text-2xl">Dosen Pembimbing 2</div>
             </div>
             <div
-              className={`text-center font-bold ${
-                dosen2 === "" ? "text-sm italic text-gray-400" : "text-4xl"
-              }`}
+              className={`text-center font-bold ${dosen2 === "" ? "text-sm italic text-gray-400" : "text-4xl"
+                }`}
             >
               {!dosen2 && "Kamu Belum Mendapatkan Dosen Pembimbing 2"}
               {dosen2}
@@ -192,9 +240,8 @@ const Dashboard = () => {
         {/* sempro,seminar,sidang  */}
         <div className="flex justify-center xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col mt-7 mx-3">
           <div
-            className={`grid justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full mr-2 py-6 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${
-              proposal ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"
-            } text-[#707070] rounded-2xl shadow-xl`}
+            className={`grid justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full mr-2 py-6 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${proposal ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"
+              } text-[#707070] rounded-2xl shadow-xl`}
           >
             <div className=" text-xl flex justify-center items-center">
               <p className="mx-2">Tanggal Seminar Proposal</p>{" "}
@@ -205,18 +252,16 @@ const Dashboard = () => {
               )}
             </div>
             <p
-              className={` ${
-                proposal ? "text-3xl font-light" : "italic font-light"
-              } `}
+              className={` ${proposal ? "text-3xl font-light" : "italic font-light"
+                } `}
             >
               {!proposal && "Anda belum mengajukan proposal"}
               {proposal}
             </p>
           </div>
           <div
-            className={`grid justify-center xxs:max-sm:w-full xxs:max-sm:my-3 sm:max-md:w-full sm:max-md:my-3 md:max-lg:w-full md:max-lg:my-3 mr-2 py-5 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${
-              seminar ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"
-            }  text-[#707070] rounded-2xl shadow-xl`}
+            className={`grid justify-center xxs:max-sm:w-full xxs:max-sm:my-3 sm:max-md:w-full sm:max-md:my-3 md:max-lg:w-full md:max-lg:my-3 mr-2 py-5 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${seminar ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"
+              }  text-[#707070] rounded-2xl shadow-xl`}
           >
             <div className=" text-xl flex justify-center items-center ">
               <p className="mx-2">Tanggal Seminar Hasil</p>{" "}
@@ -227,16 +272,15 @@ const Dashboard = () => {
               )}
             </div>
             <p
-              className={` ${
-                seminar ? "text-3xl font-light" : "italic font-light"
-              } `}
+              className={` ${seminar ? "text-3xl font-light" : "italic font-light"
+                } `}
             >
               {!seminar &&
                 "Anda belum mengajukan seminar hasil, lengkapi file upload di halaman berkas terlebih dahulu"}
               {seminar}
             </p>
           </div>
-          <div className="grid justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full mr-2 py-5 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 border-[#f3caca] text-[#707070] rounded-2xl shadow-xl">
+          <div className={`grid justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full mr-2 py-5 px-4 w-1/3 h-40 bg-[#f1e8f252] border-4 ${seminar ? "border-4 border-[#caf3e0]" : "border-[#f3caca]"} text-[#707070] rounded-2xl shadow-xl`}>
             <div className=" text-xl flex justify-center items-center ">
               <p className="mx-2">Tanggal Sidang Akhir</p>{" "}
               {sidang ? (
@@ -246,9 +290,8 @@ const Dashboard = () => {
               )}
             </div>
             <p
-              className={` ${
-                sidang ? "text-3xl font-light" : "italic font-light"
-              } `}
+              className={` ${sidang ? "text-3xl font-light" : "italic font-light"
+                } `}
             >
               {!sidang &&
                 "	Anda belum mengajukan sidang akhir, lakukan seminar hasil terlebih dahulu."}
