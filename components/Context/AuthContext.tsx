@@ -128,7 +128,6 @@ export const AuthContextProvider = ({
             ],
             title: [
               {
-
                 isApprovedByProfOne: "",
                 isApprovedByProfTwo: "",
                 titleText: "",
@@ -139,9 +138,59 @@ export const AuthContextProvider = ({
                 feedbackActivity: "",
                 feedbackDate: "",
                 feedbackProfName: "",
-                feedbackText: ""
-              }
-            ]
+                feedbackText: "",
+              },
+            ],
+          });
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    );
+  };
+
+  const registerProf = (
+    email: string,
+    password: string,
+    username: string,
+    name: string
+  ) => {
+    return createUserWithEmailAndPassword(auth, email, password).then(
+      (response) => {
+        const user1 = username + Math.random() * 10000;
+        const emailType = user.email?.split("@")[1];
+
+        if (!emailType) return;
+
+        const userRole = (emailType: string) => {
+          switch (emailType) {
+            case "mhs.ulm.ac.id":
+              return "mhs";
+            case "dosen.ulm.ac.id":
+              return "dosen";
+            default:
+              return "admin";
+          }
+        };
+
+        try {
+          user.email;
+          const professorCol = setDoc(doc(db, "professorList", user1), {
+            uid: user1,
+            email: email,
+            password: password,
+            username: username,
+            name: name,
+            profilePict: "",
+            role: "dosen",
+            activity: [
+              {
+                feedbackActivity: "",
+                feedbackDate: "",
+                feedbackProfName: "",
+                feedbackText: "",
+              },
+            ],
           });
         } catch (e) {
           console.log(e);
@@ -209,7 +258,15 @@ export const AuthContextProvider = ({
   };
   return (
     <AuthContext.Provider
-      value={{ user, signUp, logIn, logOut, logInDosen, logInAdmin }}
+      value={{
+        user,
+        signUp,
+        logIn,
+        logOut,
+        logInDosen,
+        logInAdmin,
+        registerProf,
+      }}
     >
       {loading ? null : children}
     </AuthContext.Provider>
