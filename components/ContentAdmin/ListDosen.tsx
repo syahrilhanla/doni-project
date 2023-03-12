@@ -15,9 +15,9 @@ import { RiSortDesc, RiCloseLine, RiLoader5Line } from "react-icons/ri";
 import { SendButton } from "../Common/Buttons";
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
+import AddProf from "./AddProf";
 
 export default function ListDosen() {
-  const { registerProf } = useAuth();
   const [hapus, setHapus] = useState<any>(false);
   const [buka, setBuka] = useState<any>(false);
   const [professor, setProfessor] = useState<any>([]);
@@ -279,17 +279,9 @@ export default function ListDosen() {
           </div>
         </div>
       )}
-      <SendButton
-        handleClick={() =>
-          registerProf(
-            "dosen2@dosen.ulm.ac.id",
-            "reminz123",
-            "dosen2@dosen.ulm.ac.id",
-            "Dosen2"
-          )
-        }
-        buttonText="Tambah Dosen"
-      />
+      <div className="ml-96 -mr-28 my-2">
+        <AddProf />
+      </div>
       <div className="inline-block overflow-auto shadow-md sm:rounded-lg sm:max-w-full max-w-[350px] max-h-[500px] ">
         <table className="text-sm text-left text-gray-900 capitalize ">
           <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto ">
@@ -334,7 +326,7 @@ export default function ListDosen() {
                   >
                     {data.name}
                   </th>
-                  <td className="px-6 py-2 max-w-[20%]">{data.nip}</td>
+                  <td className="px-6 py-2 max-w-[20%]">{data.username}</td>
                   <td className="px-6 py-2 max-w-[20%]">
                     <button
                       onClick={() => getProfName(data.name)}

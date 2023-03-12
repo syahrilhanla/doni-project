@@ -181,21 +181,21 @@ export default function ListMahasiswa() {
 
     const profOneRef = doc(db, "professorList", examinerOneData.uid);
     const notifProfOne = {
-      activity: arrayUnion({
-        feedbackDate: getCurrentDate(),
-        feedbackText: "Anda ditetapkan sebagai penguji",
-        feedbackProfName: user.name,
-        feedbackActivity: "Menetapkan jadwal seminar hasil",
+      notifications: arrayUnion({
+        id: user.uid,
+        isRead: false,
+        text: "Anda ditetapkan sebagai penguji seminar hasil",
+        title: "Pemberitahuan",
       }),
     };
 
     const profTwoRef = doc(db, "professorList", examinerTwoData.uid);
     const notifProfTwo = {
-      activity: arrayUnion({
-        feedbackDate: getCurrentDate(),
-        feedbackText: "Anda ditetapkan sebagai penguji",
-        feedbackProfName: user.name,
-        feedbackActivity: "Menetapkan jadwal seminar hasil",
+      notifications: arrayUnion({
+        id: user.uid,
+        isRead: false,
+        text: "Anda ditetapkan sebagai pengujib seminar hasil",
+        title: "Pemberitahuan",
       }),
     };
     await updateDoc(studentRef, valueUpdate).then(() => {
@@ -232,7 +232,29 @@ export default function ListMahasiswa() {
       ],
     };
 
+    const profOneRef = doc(db, "professorList", examinerOneData.uid);
+    const notifProfOne = {
+      notifications: arrayUnion({
+        id: user.uid,
+        isRead: false,
+        text: "Anda ditetapkan sebagai penguji sidang akhir",
+        title: "Pemberitahuan",
+      }),
+    };
+
+    const profTwoRef = doc(db, "professorList", examinerTwoData.uid);
+    const notifProfTwo = {
+      notifications: arrayUnion({
+        id: user.uid,
+        isRead: false,
+        text: "Anda ditetapkan sebagai penguji sidang akhir",
+        title: "Pemberitahuan",
+      }),
+    };
+
     await updateDoc(studentRef, valueUpdate).then(() => {
+      updateDoc(profOneRef, notifProfOne);
+      updateDoc(profTwoRef, notifProfTwo);
       window.alert("Sidang akhir berhasil diatur");
       setAssignSidang(false);
       setSidangDate("");
