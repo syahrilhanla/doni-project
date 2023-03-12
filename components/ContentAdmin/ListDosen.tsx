@@ -279,11 +279,10 @@ export default function ListDosen() {
           </div>
         </div>
       )}
-
+      <div className="ml-96 -mr-28 my-2">
+        <AddProf />
+      </div>
       <div className="inline-block overflow-auto shadow-md sm:rounded-lg sm:max-w-full max-w-[350px] max-h-[500px] ">
-        <div className=" ml-96 my-2">
-          <AddProf />
-        </div>
         <table className="text-sm text-left text-gray-900 capitalize ">
           <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto ">
             <tr>
