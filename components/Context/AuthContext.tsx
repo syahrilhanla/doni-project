@@ -183,12 +183,12 @@ export const AuthContextProvider = ({
             name: name,
             profilePict: "",
             role: "dosen",
-            activity: [
+            notifications: [
               {
-                feedbackActivity: "",
-                feedbackDate: "",
-                feedbackProfName: "",
-                feedbackText: "",
+                id: user1,
+                isRead: false,
+                text: "",
+                title: "",
               },
             ],
           });
