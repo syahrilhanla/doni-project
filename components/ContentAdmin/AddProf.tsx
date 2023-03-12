@@ -54,6 +54,7 @@ export default function AddProf() {
     try {
       await registerProf(data.email, data.password, data.username, data.name);
       setAddProf(false);
+      alert("Data berhasil ditambahkan");
     } catch (error) {
       console.log(error);
     }
