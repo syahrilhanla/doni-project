@@ -132,13 +132,13 @@ const Dashboard = () => {
                     {terimaProfSatu && !terimaProfDua && (
                       <div className="w-full">
                         <p>{judul}</p>
-                        <p>{"(Menunggu Acc Dosen Pembimbing Satu)"}</p>
+                        <p>{"(Menunggu Acc Dosen Pembimbing Dua)"}</p>
                       </div>
                     )}
                     {!terimaProfSatu && terimaProfDua && (
                       <div className="w-full">
                         <p>{judul}</p>
-                        <p>{"(Menunggu Acc Dosen Pembimbing Dua)"}</p>
+                        <p>{"(Menunggu Acc Dosen Pembimbing Satu)"}</p>
                       </div>
                     )}
                     {deniedTitle && (
@@ -152,7 +152,7 @@ const Dashboard = () => {
                         <div className="px-4">
                           <button
                             className="text-white  bg-patternTwo hover:text-gray-900 hover:bg-[#c9c2d2] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center whitespace-nowrap"
-                            onClick={() => setAjukan(!ajukan)}
+                            onClick={() => setAjukan(true)}
                           >
                             Ajukan Judul
                           </button>
@@ -171,50 +171,50 @@ const Dashboard = () => {
                   <div>
                     <button
                       className="text-white  bg-patternTwo hover:text-gray-900 hover:bg-[#c9c2d2] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
-                      onClick={() => setAjukan(!ajukan)}
+                      onClick={() => setAjukan(true)}
                     >
                       Ajukan Judul
                     </button>
                   </div>
+                </div>
 
-                  {ajukan && (
-                    <>
-                      <div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
-                        <div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />
-                        <div className="gap-4 relative  w-3/5 h-full  flex justify-center items-center">
-                          <div className="relative bg-white border-purple-600 rounded-2xl shadow w-3/5 xxs:max-md:w-full md:max-lg:w-full min-h-fit ">
-                            <button
-                              onClick={() => setAjukan(!ajukan)}
-                              type="button"
-                              className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-red-500 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-                            >
-                              <RiCloseLine className="text-black hover:text-white" />
-                            </button>
-                            <label className="block text-xl mt-4 font-medium text-gray-900 ">
-                              Judul Skripsi
-                            </label>
-                            <div className="px-8 py-7 flex flex-col items-center">
-                              <form action="" className="px-2 w-full">
-                                <textarea
-                                  placeholder="Masukkan Judul Skripsi"
-                                  className="min-h-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:outline-none block w-full p-2.5"
-                                  required
-                                  value={newtitle}
-                                  onChange={(e) => setNewtitle(e.target.value)}
-                                />
-                              </form>
-                              <button
-                                onClick={handleNewTitle}
-                                className=" text-white bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-white focus:z-10"
-                              >
-                                Ajukan
-                              </button>
-                            </div>
-                          </div>
-                        </div>
+              </>
+            )}
+            {ajukan && (
+              <>
+                <div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
+                  <div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />
+                  <div className="gap-4 relative  w-3/5 h-full  flex justify-center items-center">
+                    <div className="relative bg-white border-purple-600 rounded-2xl shadow w-3/5 xxs:max-md:w-full md:max-lg:w-full min-h-fit ">
+                      <button
+                        onClick={() => setAjukan(false)}
+                        type="button"
+                        className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-red-500 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                      >
+                        <RiCloseLine className="text-black hover:text-white" />
+                      </button>
+                      <label className="block text-xl mt-4 font-medium text-gray-900 ">
+                        Judul Skripsi
+                      </label>
+                      <div className="px-8 py-7 flex flex-col items-center">
+                        <form action="" className="px-2 w-full">
+                          <textarea
+                            placeholder="Masukkan Judul Skripsi"
+                            className="min-h-[100px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:outline-none block w-full p-2.5"
+                            required
+                            value={newtitle}
+                            onChange={(e) => setNewtitle(e.target.value)}
+                          />
+                        </form>
+                        <button
+                          onClick={handleNewTitle}
+                          className=" text-white bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-white focus:z-10"
+                        >
+                          Ajukan
+                        </button>
                       </div>
-                    </>
-                  )}
+                    </div>
+                  </div>
                 </div>
               </>
             )}
