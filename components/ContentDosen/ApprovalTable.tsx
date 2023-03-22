@@ -272,8 +272,11 @@ export default function ApprovalTable() {
     setNewFeedBack("");
   };
 
-  const handleAssignTitle = () => {
-    if (newFeedback) updateApprove();
+  const handleAssignTitle = async () => {
+    if (newFeedback) {
+      await updateApprove();
+      setSetuju(false);
+    }
     else alert("Lengkapi data terlebih dahulu!");
   };
 
