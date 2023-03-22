@@ -2,25 +2,8 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import Link from "next/link";
 import React, { useCallback, useEffect, useState } from "react";
 import { RiLoader5Line, RiSortDesc } from "react-icons/ri";
-import seminar from "../../pages/seminar";
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
-
-// interface dataTable {
-//   id: number;
-//   name: string;
-//   title: string;
-//   bab1: string;
-//   bab2: string;
-//   bab3: string;
-//   bab4: string;
-//   bab5: string;
-//   seminarHasil: string;
-//   sidang: string;
-//   generation: number;
-//   seminarDate: string;
-//   sidangDate: string;
-// }
 
 export default function ProgresList() {
   const [student, setStudent] = useState<any>([]);
@@ -28,19 +11,35 @@ export default function ProgresList() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const getData = useCallback(async () => {
-    setLoading(false);
-    const studentRef = query(
-      collection(db, "studentsList"),
-      where("statusApprove", "==", true)
-    );
+    setLoading(true);
 
     try {
-      const studentsData = (await getDocs(studentRef)).docs
+      const studentRef1 = query(
+        collection(db, "studentsList"),
+        where("statusApprove", "==", true),
+        where("profOne", "==", user.name)
+      );
+      const studentRef2 = query(
+        collection(db, "studentsList"),
+        where("statusApprove", "==", true),
+        where("profTwo", "==", user.name)
+      );
+
+      const studentsData1 = (await getDocs(studentRef1)).docs
         .map((item) => item)
         .map((item) => item.data());
 
-      setStudent(studentsData);
-      setLoading(true);
+      const studentsData2 = (await getDocs(studentRef2)).docs
+        .map((item) => item)
+        .map((item) => item.data());
+
+      const arrayStudents = [...studentsData1, ...studentsData2].filter(
+        (item) => item.profOne === user.name || item.profTwo === user.name
+      );
+
+      console.log({ arrayStudents })
+      setStudent(arrayStudents);
+      setLoading(false);
     } catch (e) {
       console.log(e);
     }
@@ -124,7 +123,7 @@ export default function ProgresList() {
               </th>
             </tr>
           </thead>
-          {!loading ? (
+          {loading ? (
             <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
               <td
                 scope="row"
