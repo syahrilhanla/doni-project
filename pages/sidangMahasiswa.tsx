@@ -13,7 +13,7 @@ export default function sidangMahasiswa() {
       <FilterSection />
 
       <div className="flex p-4 flex-col justify-center items-center">
-        <SidangList></SidangList>
+        <SidangList />
       </div>
     </LayoutDosen>
   );
