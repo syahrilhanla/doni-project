@@ -286,9 +286,9 @@ export default function ApprovalTable() {
   };
 
   return (
-    <div>
+    <div className="w-full">
       {setuju && (
-        <div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
+        <div className="flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
           <div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />
           <div className="gap-4 relative  w-3/5 h-full  flex justify-center items-center">
             <div className="relative bg-white border-purple-600 rounded-2xl shadow w-3/5 xxs:max-md:w-full md:max-lg:w-full min-h-fit ">
@@ -339,11 +339,11 @@ export default function ApprovalTable() {
         </div>
       )}
 
-      <div className="inline-block overflow-auto shadow-md sm:rounded-lg sm:max-w-full max-w-[350px] max-h-[500px] ">
-        <table className="text-sm text-left text-gray-900 capitalize ">
-          <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto ">
+      <div className="inline-block overflow-auto w-full px-12">
+        <table className="text-sm text-left text-gray-900 shadow-md capitalize w-full">
+          <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto rounded-tl-lg">
             <tr>
-              <th scope="col" className="px-6 py-3 max-w-[20%]">
+              <th scope="col" className="px-6 py-3 max-w-[20%] rounded-tl-lg">
                 <div className="flex items-center gap-2">
                   Nama
                   <a href="#">
@@ -375,7 +375,7 @@ export default function ApprovalTable() {
                   </a>
                 </div>
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3 rounded-tr-lg">
                 <div className="flex items-center justify-center">Aksi</div>
               </th>
             </tr>

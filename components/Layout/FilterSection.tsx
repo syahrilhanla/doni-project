@@ -22,7 +22,7 @@ const FilterSection = () => {
   return (
     <>
       <div
-        className={`flex justify-center items-center my-5 py-4 w-5/6  xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col `}
+        className={`w-full flex justify-start items-center my-5 py-4  xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col `}
       >
         <div className="realtive xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full">
           <Dropdown
@@ -32,7 +32,7 @@ const FilterSection = () => {
           />
         </div>
         <div
-          className={`relative w-full sm:w-[50vw] lg:ml-3 xxs:max-sm:mt-2 sm:max-md:mt-2 md:max-lg:mt-2`}
+          className={`relative w-full lg:ml-3 xxs:max-sm:mt-2 sm:max-md:mt-2 md:max-lg:mt-2`}
         >
           <input
             type="text"
@@ -58,9 +58,6 @@ const FilterSection = () => {
             </svg>
           </div>
         </div>
-      </div>
-      <div className="flex justify-center items-center mt-0">
-        <p className="text-center">{title}</p>
       </div>
     </>
   );
