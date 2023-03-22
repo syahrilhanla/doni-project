@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../components/Layout/Layout";
 import { BsFillPersonFill } from "react-icons/bs";
 import { RiCloseLine } from "react-icons/ri";
@@ -6,7 +6,6 @@ import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { useAuth } from "../components/Context/AuthContext";
 import { arrayUnion, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../components/Store/firebase";
-import { User } from "firebase/auth";
 import TableActivity from "../components/Content/TableActivity";
 
 const Dashboard = () => {
@@ -25,8 +24,7 @@ const Dashboard = () => {
   const [newtitle, setNewtitle] = useState("");
   const [feedbackOne, setFeedbackOne] = useState<String>();
   const [feedbackTwo, setFeedbackTwo] = useState<String>();
-  const [uidProf1, setUidProf1] = useState<string>("");
-  const [uidProf2, setUidProf2] = useState<string>("");
+  const [deniedTitle, setDeniedTitle] = useState(false);
 
   useEffect(() => {
     if (user.title) {
@@ -42,6 +40,10 @@ const Dashboard = () => {
       setFeedbackTwo(user.title[0].feedbackNoteByProfTwo);
       setTerimaProfSatu(user.title[0].isApprovedByProfOne);
       setTerimaProfDua(user.title[0].isApprovedByProfTwo);
+
+      if (user.title[0].isApprovedByProfOne === "Denied" && user.title[0].isApprovedByProfTwo === "Denied") {
+        setDeniedTitle(true);
+      }
     }
 
   }, [user]);
@@ -74,7 +76,7 @@ const Dashboard = () => {
             title: "Pemberitahuan"
           })
         }
-        await updateDoc(doc(db, "professorList",prof1Data), notifProf1);
+        await updateDoc(doc(db, "professorList", prof1Data), notifProf1);
       }
       else {
         return
@@ -118,28 +120,46 @@ const Dashboard = () => {
           <div className="flex justify-center xxs:w-full items-center sm:max-md:w-full  md:max-lg:w-full  md:max-lg:mt-3 w-3/5 h-24 bg-[#f2e8f24f] text-[#683ab7d5] rounded-lg shadow-md">
             {judul ? (
               <>
-                <div className="flex justify-items-center font-sans italic">
-                  <p>
-                    {terimaProfSatu && terimaProfDua && <p>{judul}</p>}
+                <div className="w-full font-sans italic">
+                  <div className="w-full flex justify-center">
+                    {!deniedTitle && terimaProfSatu && terimaProfDua && <p>{judul}</p>}
                     {!terimaProfSatu && !terimaProfDua && (
-                      <p>
+                      <div className="w-full">
                         <p>{judul}</p>
                         <p>{"(Menunggu Acc Dosen Pembimbing Satu dan Dua)"}</p>
-                      </p>
+                      </div>
                     )}
                     {terimaProfSatu && !terimaProfDua && (
-                      <p>
+                      <div className="w-full">
                         <p>{judul}</p>
                         <p>{"(Menunggu Acc Dosen Pembimbing Satu)"}</p>
-                      </p>
+                      </div>
                     )}
                     {!terimaProfSatu && terimaProfDua && (
-                      <p>
+                      <div className="w-full">
                         <p>{judul}</p>
                         <p>{"(Menunggu Acc Dosen Pembimbing Dua)"}</p>
-                      </p>
+                      </div>
                     )}
-                  </p>
+                    {deniedTitle && (
+                      <div className="w-full flex justify-between">
+                        <div className="w-full flex flex-col">
+                          <p>{judul}</p>
+                          <p className="text-red-400 font-semibold">
+                            Ditolak Oleh Kedua Dosen
+                          </p>
+                        </div>
+                        <div className="px-4">
+                          <button
+                            className="text-white  bg-patternTwo hover:text-gray-900 hover:bg-[#c9c2d2] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center whitespace-nowrap"
+                            onClick={() => setAjukan(!ajukan)}
+                          >
+                            Ajukan Judul
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </>
             ) : (
