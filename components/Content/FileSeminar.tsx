@@ -20,6 +20,7 @@ const FileSeminar = () => {
     }
     // console.log(user.fileSeminar);
   }, [user]);
+
   const handleLink1 = async () => {
     const docRef = doc(db, "studentsList", user.uid);
     const link1Value = {
@@ -36,6 +37,7 @@ const FileSeminar = () => {
     await updateDoc(docRef, link1Value);
     setLink1("");
   };
+
   return (
     <div className="h-screen px-4 w-5/6 overflow-auto py-4 mt-4">
       <div className="flex justify-center">

@@ -21,13 +21,20 @@ const FileSidang = () => {
       setEnable(user.fileSidang ? false : true);
     }
   }, [user]);
+
   const handleLink1 = async () => {
     const docRef = doc(db, "studentsList", user.uid);
     const link1Value = {
       fileSidang: link1,
+      sidangDate: [
+        {
+          dateToBe: "",
+          isApprovedByProfOne: "",
+          isApprovedByProfTwo: "",
+        },
+      ],
     };
     setEnable(true);
-
     await updateDoc(docRef, link1Value);
     setLink1("");
   };
@@ -63,9 +70,8 @@ const FileSidang = () => {
               <div className="text-xl">Dosen Penguji 1</div>
             </div>
             <div
-              className={`text-center font-bold text-4xl ${
-                !user.examinerOne && "text-sm italic text-gray-400"
-              }`}
+              className={`text-center font-bold text-4xl ${!user.examinerOne && "text-sm italic text-gray-400"
+                }`}
             >
               {!user.examinerOne && "Kamu Belum Mendapatkan Dosen Penguji 1"}
               {user.examinerOne}
@@ -79,9 +85,8 @@ const FileSidang = () => {
               <div className="text-xl">Dosen Penguji 2</div>
             </div>
             <div
-              className={`text-center font-bold text-4xl ${
-                !user.examinerTwo && "text-sm italic text-gray-400"
-              }`}
+              className={`text-center font-bold text-4xl ${!user.examinerTwo && "text-sm italic text-gray-400"
+                }`}
             >
               {!user.examinerTwo && "Kamu Belum Mendapatkan Dosen Penguji 1"}
               {user.examinerTwo}
