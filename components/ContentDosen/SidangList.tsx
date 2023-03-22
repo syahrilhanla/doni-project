@@ -20,6 +20,7 @@ import {
 import { db } from "../Store/firebase";
 import Link from "next/link";
 import { CloseButton, SendButton } from "../Common/Buttons";
+import moment from "moment";
 interface dataTable {
   id: number;
   name: string;
@@ -89,15 +90,14 @@ export default function SidangList() {
       console.log(e);
     }
   }, [user]);
+
   const getCurrentDate = (separator = "-") => {
     let newDate = new Date();
-    let date = newDate.getDate();
-    let month = newDate.getMonth() + 1;
-    let year = newDate.getFullYear();
-    return `${date < 10 ? `0${date}` : `${date}`}${separator}${
-      month < 10 ? `0${month}` : `${month}`
-    }${separator}${year}`;
+
+    const formattedDate = moment(newDate).format("DD MMM YYYY");
+    return formattedDate;
   };
+
   const getValueApprove = (
     uid: any,
     name: any,
@@ -421,8 +421,8 @@ export default function SidangList() {
                       {data.profOne === user.name
                         ? "Dospem 1"
                         : data.profTwo === user.name
-                        ? "Dospem 2"
-                        : "None"}
+                          ? "Dospem 2"
+                          : "None"}
                     </td>
                     {data.fileSidang ? (
                       <td className="px-6 py-2 text-right flex gap-2">

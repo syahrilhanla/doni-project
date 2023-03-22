@@ -12,7 +12,7 @@ export default function seminarMahasiswa() {
       <FilterSection />
 
       <div className="flex p-4 flex-col justify-center items-center">
-        <SeminarList></SeminarList>
+        <SeminarList />
       </div>
     </LayoutDosen>
   );

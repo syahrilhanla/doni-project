@@ -8,6 +8,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
+import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   RiSortDesc,
@@ -85,14 +86,12 @@ export default function ApprovalTable() {
       console.log(e);
     }
   }, [user]);
+
   const getCurrentDate = (separator = "-") => {
     let newDate = new Date();
-    let date = newDate.getDate();
-    let month = newDate.getMonth() + 1;
-    let year = newDate.getFullYear();
-    return `${date < 10 ? `0${date}` : `${date}`}${separator}${
-      month < 10 ? `0${month}` : `${month}`
-    }${separator}${year}`;
+
+    const formattedDate = moment(newDate).format("DD MMM YYYY");
+    return formattedDate;
   };
 
   const getValueApprove = (
@@ -273,8 +272,11 @@ export default function ApprovalTable() {
     setNewFeedBack("");
   };
 
-  const handleAssignTitle = () => {
-    if (newFeedback) updateApprove();
+  const handleAssignTitle = async () => {
+    if (newFeedback) {
+      await updateApprove();
+      setSetuju(false);
+    }
     else alert("Lengkapi data terlebih dahulu!");
   };
 
@@ -417,8 +419,8 @@ export default function ApprovalTable() {
                       {data.profOne === user.name
                         ? "Dospem 1"
                         : data.profTwo === user.name
-                        ? "Dospem 2"
-                        : "None"}
+                          ? "Dospem 2"
+                          : "None"}
                     </td>
                     {data.title.map((item: TitleType, index: number) => (
                       <td

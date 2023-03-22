@@ -1,7 +1,5 @@
-import React, { Key, useCallback, useEffect, useState } from "react";
-import { AiOutlineClose } from "react-icons/ai";
-import { BsCheckLg, BsTrash } from "react-icons/bs";
-import { RiSortDesc, RiCloseLine, RiLoader5Line } from "react-icons/ri";
+import { useCallback, useEffect, useState } from "react";
+import { RiSortDesc, RiLoader5Line } from "react-icons/ri";
 import { FaTrash } from "react-icons/fa";
 import FilterSection from "../Layout/FilterSection";
 import {
@@ -11,15 +9,14 @@ import {
   query,
   updateDoc,
   where,
-  getDoc,
   deleteDoc,
   arrayUnion,
 } from "firebase/firestore";
 import { db } from "../Store/firebase";
-import { async } from "@firebase/util";
 import { CloseButton, ErrorButton, SendButton } from "../Common/Buttons";
 import Dropdown from "../Common/Dropdown";
 import { useAuth } from "../Context/AuthContext";
+import moment from "moment";
 
 interface dataTable {
   id: number;
@@ -122,7 +119,7 @@ export default function ListMahasiswa() {
   useEffect(() => {
     getData();
     getProf();
-  }, []);
+  }, [user]);
 
   const getStatusSeminar = (
     uid: any,
@@ -148,12 +145,9 @@ export default function ListMahasiswa() {
 
   const getCurrentDate = (separator = "-") => {
     let newDate = new Date();
-    let date = newDate.getDate();
-    let month = newDate.getMonth() + 1;
-    let year = newDate.getFullYear();
-    return `${date < 10 ? `0${date}` : `${date}`}${separator}${
-      month < 10 ? `0${month}` : `${month}`
-    }${separator}${year}`;
+
+    const formattedDate = moment(newDate).format("DD MMM YYYY");
+    return formattedDate;
   };
 
   const getUpdateSeminar = async () => {
@@ -516,8 +510,8 @@ export default function ListMahasiswa() {
 
                     {data.seminarDate.map((item: any, index: any) => (
                       <td key={index} className="px-6 py-2 text-center ">
-                        {item.isApprovedByProfOne === "Approved" &&
-                        item.isApprovedByProfTwo === "Approved" ? (
+                        {(item.isApprovedByProfOne !== "") &&
+                          (item.isApprovedByProfTwo !== "") ? (
                           <button
                             onClick={() =>
                               getStatusSeminar(
@@ -537,8 +531,8 @@ export default function ListMahasiswa() {
                     ))}
                     {data.sidangDate.map((item: any, index: any) => (
                       <td key={index} className="px-6 py-2 text-center ">
-                        {item.isApprovedByProfOne === "Approved" &&
-                        item.isApprovedByProfTwo === "Approved" ? (
+                        {(item.isApprovedByProfOne !== "") &&
+                          (item.isApprovedByProfTwo !== "") ? (
                           <button
                             onClick={() =>
                               getStatusSidang(

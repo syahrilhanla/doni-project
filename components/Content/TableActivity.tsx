@@ -27,7 +27,7 @@ const TableActivity = ({ user }: ActivityTable) => {
           activity: item.feedbackActivity,
           feedbackNote: item.feedbackText
         }
-      }).filter((item)=> item.activity !== "" && item.date !=="" && item.feedbackNote!=="" && item.name !== "")
+      }).filter((item) => item.activity !== "" && item.date !== "" && item.feedbackNote !== "" && item.name !== "")
       setActivity(arrayFix)
     } catch (e) {
       console.log(e);

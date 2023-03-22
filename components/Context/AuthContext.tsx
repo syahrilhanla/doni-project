@@ -90,14 +90,7 @@ export const AuthContextProvider = ({
                 chapterFive: "",
               },
             ],
-            notifications: [
-              {
-                id: user1,
-                isRead: true,
-                text: "",
-                title: "",
-              },
-            ],
+            notifications: [],
             seminarDate: [
               {
                 dateToBe: "",
@@ -156,14 +149,7 @@ export const AuthContextProvider = ({
             name: name,
             profilePict: "",
             role: "dosen",
-            notifications: [
-              {
-                id: user1,
-                isRead: false,
-                text: "",
-                title: "",
-              },
-            ],
+            notifications: [],
           });
         } catch (e) {
           console.log(e);
