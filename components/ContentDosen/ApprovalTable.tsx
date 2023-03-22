@@ -86,15 +86,11 @@ export default function ApprovalTable() {
       console.log(e);
     }
   }, [user]);
+
   const getCurrentDate = (separator = "-") => {
     let newDate = new Date();
-    let date = newDate.getDate();
-    let month = newDate.getMonth() + 1;
-    let year = newDate.getFullYear();
 
     const formattedDate = moment(newDate).format("DD MMM YYYY");
-    console.log({ formattedDate })
-
     return formattedDate;
   };
 
