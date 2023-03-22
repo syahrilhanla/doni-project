@@ -54,8 +54,8 @@ const Dashboard = () => {
       const titleValue = {
         title: [
           {
-            isApprovedByProfOne: user.title[0].isApprovedByProfOne,
-            isApprovedByProfTwo: user.title[0].isApprovedByProfTwo,
+            isApprovedByProfOne: "",
+            isApprovedByProfTwo: "",
             titleText: newtitle,
           },
         ],
@@ -64,10 +64,9 @@ const Dashboard = () => {
       const profRef1 = query(collection(db, "professorList"), where("name", "==", user.profOne));
       const prof1Data = await (await getDocs(profRef1)).docs[0].id
       const profRef2 = query(collection(db, "professorList"), where("name", "==", user.profTwo));
-      const prof2Data = (await getDocs(profRef2)).docs[0].id
+      const prof2Data = (await getDocs(profRef2)).docs[0].id;
 
       if (prof1Data !== "") {
-        console.log(prof1Data);
         const notifProf1 = {
           notifications: arrayUnion({
             id: user.uid,
@@ -77,12 +76,12 @@ const Dashboard = () => {
           })
         }
         await updateDoc(doc(db, "professorList", prof1Data), notifProf1);
+
       }
       else {
         return
       }
       if (prof2Data !== "") {
-        console.log(prof2Data);
         const notifProf2 = {
           notifications: arrayUnion({
             id: user.uid,

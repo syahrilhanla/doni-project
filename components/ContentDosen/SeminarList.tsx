@@ -21,6 +21,7 @@ import { db } from "../Store/firebase";
 
 import Link from "next/link";
 import { CloseButton, SendButton } from "../Common/Buttons";
+import moment from "moment";
 interface dataTable {
   id: number;
   name: string;
@@ -92,15 +93,14 @@ export default function SeminarList() {
       console.log(e);
     }
   }, [user]);
+
   const getCurrentDate = (separator = "-") => {
     let newDate = new Date();
-    let date = newDate.getDate();
-    let month = newDate.getMonth() + 1;
-    let year = newDate.getFullYear();
-    return `${date < 10 ? `0${date}` : `${date}`}${separator}${
-      month < 10 ? `0${month}` : `${month}`
-    }${separator}${year}`;
+
+    const formattedDate = moment(newDate).format("DD MMM YYYY");
+    return formattedDate;
   };
+
 
   const getValueApprove = (
     uid: any,
@@ -411,9 +411,6 @@ export default function SeminarList() {
                     <td className="px-6 py-2 text-center">{data.generation}</td>
                     <td className="py-1">
                       <div className="flex flex-col items-center">
-                        {data.seminarDate[0].dateToBe
-                          ? data.seminarDate[0].dateToBe
-                          : "-"}
                         <Link
                           target="_blank"
                           className="hover:underline hover:text-black underline:none text-purple-500"
@@ -427,8 +424,8 @@ export default function SeminarList() {
                       {data.profOne === user.name
                         ? "Dospem 1"
                         : data.profTwo === user.name
-                        ? "Dospem 2"
-                        : "None"}
+                          ? "Dospem 2"
+                          : "None"}
                     </td>
                     {data.fileSeminar ? (
                       <td className="px-6 py-2 text-right flex gap-2">
