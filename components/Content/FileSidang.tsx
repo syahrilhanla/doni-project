@@ -93,41 +93,6 @@ const FileSidang = () => {
             </div>
           </div>
         </div>
-        {/* <div className="flex flex-col my-4 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-full py-2 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
-          <label className="block mt-1 text-md font-medium text-gray-900 ">
-            Link File Sidang Akhir
-          </label>
-          <div className="flex justify-between items-center w-full">
-            <input
-              className="bg-gray-50 items-center border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
-              type="text"
-              value={link1}
-              onChange={(e) => setLink1(e.target.value)}
-              placeholder="Link Google Drive"
-              required
-            />
-            <button
-              onClick={handleLink1}
-              className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
-            >
-              Simpan
-            </button>
-          </div>
-          {!file && (
-            <label className="block mt-2 text-sm font-medium text-gray-500 ">
-              File Belum Ada
-            </label>
-          )}
-          {file && (
-            <Link
-              target="_blank"
-              href={`${file}`}
-              className="block mt-2 text-sm font-medium text-gray-900 hover:text-[#835876]"
-            >
-              Silahkan Di Cek
-            </Link>
-          )}
-        </div> */}
 
         <div className="flex flex-col my-4 justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-full h-50 py-2 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
           {!file && (
