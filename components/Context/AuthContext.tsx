@@ -58,20 +58,6 @@ export const AuthContextProvider = ({
     return createUserWithEmailAndPassword(auth, email, password).then(
       (response) => {
         const user1 = response.user.uid;
-        const emailType = user.email?.split("@")[1];
-
-        if (!emailType) return;
-
-        const userRole = (emailType: string) => {
-          switch (emailType) {
-            case "mhs.ulm.ac.id":
-              return "mhs";
-            case "dosen.ulm.ac.id":
-              return "dosen";
-            default:
-              return "admin";
-          }
-        };
 
         try {
           user.email;
@@ -94,7 +80,7 @@ export const AuthContextProvider = ({
             note: "",
             statusApprove: false,
             progressStatus: "",
-            role: userRole(String(emailType)),
+            role: "mhs",
             files: [
               {
                 chapterOne: "",
@@ -143,7 +129,8 @@ export const AuthContextProvider = ({
             ],
           });
         } catch (e) {
-          console.log(e);
+          console.error("ga bisa bikin akun bang")
+          console.error(e);
         }
       }
     );
@@ -157,21 +144,7 @@ export const AuthContextProvider = ({
   ) => {
     return createUserWithEmailAndPassword(auth, email, password).then(
       (response) => {
-        const user1 = username + Math.random() * 10000;
-        const emailType = user.email?.split("@")[1];
-
-        if (!emailType) return;
-
-        const userRole = (emailType: string) => {
-          switch (emailType) {
-            case "mhs.ulm.ac.id":
-              return "mhs";
-            case "dosen.ulm.ac.id":
-              return "dosen";
-            default:
-              return "admin";
-          }
-        };
+        const user1 = response.user.uid;
 
         try {
           user.email;
@@ -225,6 +198,7 @@ export const AuthContextProvider = ({
   const logInDosen = (email: string, password: string) => {
     return signInWithEmailAndPassword(auth, email, password).then(
       (response) => {
+        console.log({ response });
         setUser(response.user);
         getDoc(doc(db, "professorList", response.user.uid)).then(
           (userData: any) => {
