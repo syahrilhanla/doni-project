@@ -1,18 +1,14 @@
-import React from "react";
 import FileSidang from "../components/Content/FileSidang";
 import Layout from "../components/Layout/Layout";
 
-
-const sidang = () => {
+const Sidang = () => {
 	return (
-		
 		<Layout>
 			<div className="flex h-full flex-col justify-center items-center">
 				<FileSidang />
 			</div>
 		</Layout>
-
 	);
 };
 
-export default sidang;
+export default Sidang;

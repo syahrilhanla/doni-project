@@ -1,4 +1,3 @@
-import React from "react";
 import ListDosen from "../components/ContentAdmin/ListDosen";
 import LayoutAdmin from "../components/Layout/LayoutAdmin";
 

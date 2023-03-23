@@ -1,4 +1,3 @@
-import React from "react";
 import ProgresList from "../components/ContentDosen/ProgresList";
 import FilterSection from "../components/Layout/FilterSection";
 import LayoutDosen from "../components/Layout/LayoutDosen";

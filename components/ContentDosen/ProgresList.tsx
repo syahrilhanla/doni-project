@@ -1,7 +1,7 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import moment from "moment";
 import Link from "next/link";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { RiLoader5Line, RiSortDesc } from "react-icons/ri";
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";

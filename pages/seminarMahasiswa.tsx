@@ -1,4 +1,3 @@
-import React from "react";
 import SeminarList from "../components/ContentDosen/SeminarList";
 import FilterSection from "../components/Layout/FilterSection";
 import LayoutDosen from "../components/Layout/LayoutDosen";

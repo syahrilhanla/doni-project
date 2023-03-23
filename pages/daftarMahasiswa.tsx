@@ -1,4 +1,3 @@
-import React from "react";
 import ListMahasiswa from "../components/ContentAdmin/ListMahasiswa";
 import LayoutAdmin from "../components/Layout/LayoutAdmin";
 

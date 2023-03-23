@@ -1,4 +1,3 @@
-import React from "react";
 import FileSeminar from "../components/Content/FileSeminar";
 import Layout from "../components/Layout/Layout";
 import ProtectedRoute from "../components/ProtectedRoute";

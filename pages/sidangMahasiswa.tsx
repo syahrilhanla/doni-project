@@ -1,4 +1,3 @@
-import React from "react";
 import SidangList from "../components/ContentDosen/SidangList";
 import FilterSection from "../components/Layout/FilterSection";
 
