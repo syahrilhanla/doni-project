@@ -1,4 +1,5 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
+import moment from "moment";
 import Link from "next/link";
 import React, { useCallback, useEffect, useState } from "react";
 import { RiLoader5Line, RiSortDesc } from "react-icons/ri";
@@ -223,7 +224,7 @@ export default function ProgresList() {
                       <td className=" text-center py-1  w-[10%]">
                         {data.seminarDate[0].dateToBe && data.fileSeminar ? (
                           <div className="flex flex-col gap-1">
-                            {data.seminarDate[0].dateToBe}
+                            {moment(data.seminarDate[0].dateToBe).format("DD MMM YYYY")}
                             <Link
                               target="_blank"
                               href={data.fileSeminar}
@@ -239,7 +240,7 @@ export default function ProgresList() {
                       <td className=" text-center w-[10%]">
                         {data.sidangDate[0].dateToBe && data.fileSidang ? (
                           <div className="flex flex-col gap-1">
-                            {data.sidangDate[0].dateToBe}
+                            {moment(data.sidangDate[0].dateToBe).format("DD MMM YYYY")}
                             <Link
                               target="_blank"
                               href={data.fileSidang}
