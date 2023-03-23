@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   RiCloseLine,
   RiSortDesc,
@@ -416,7 +416,7 @@ export default function SeminarList() {
                           className="hover:underline hover:text-black underline:none text-purple-500"
                           href={`${data.fileSeminar}`}
                         >
-                          {data.fileSeminar ? "Cek" : ""}
+                          {data.fileSeminar ? "File" : ""}
                         </Link>
                       </div>
                     </td>
@@ -475,7 +475,7 @@ export default function SeminarList() {
                     className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
                   >
                     <div className="flex items-center justify-center">
-                      Belum Ada Yang Mengajukan Seminar Hasil
+                      Tidak Ada Seminar Hasil yang Diajukan
                     </div>
                   </td>
                 </tr>

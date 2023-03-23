@@ -1,6 +1,7 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
+import moment from "moment";
 import Link from "next/link";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { RiLoader5Line, RiSortDesc } from "react-icons/ri";
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
@@ -37,17 +38,16 @@ export default function ProgresList() {
         (item) => item.profOne === user.name || item.profTwo === user.name
       );
 
-      console.log({ arrayStudents })
       setStudent(arrayStudents);
       setLoading(false);
     } catch (e) {
       console.log(e);
     }
-  }, [student]);
+  }, [user]);
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [user]);
 
   return (
     <div>
@@ -163,7 +163,7 @@ export default function ProgresList() {
                             href={data.files[0].chapterOne}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
-                            Cek
+                            File
                           </Link>
                         ) : (
                           <p>-</p>
@@ -176,7 +176,7 @@ export default function ProgresList() {
                             href={data.files[0].chapterTwo}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
-                            Cek
+                            File
                           </Link>
                         ) : (
                           <p>-</p>
@@ -189,7 +189,7 @@ export default function ProgresList() {
                             href={data.files[0].chapterThree}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
-                            Cek
+                            File
                           </Link>
                         ) : (
                           <p>-</p>
@@ -202,7 +202,7 @@ export default function ProgresList() {
                             href={data.files[0].chapterFour}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
-                            Cek
+                            File
                           </Link>
                         ) : (
                           <p>-</p>
@@ -215,7 +215,7 @@ export default function ProgresList() {
                             href={data.files[0].chapterFive}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
-                            Cek
+                            File
                           </Link>
                         ) : (
                           <p>-</p>
@@ -224,13 +224,13 @@ export default function ProgresList() {
                       <td className=" text-center py-1  w-[10%]">
                         {data.seminarDate[0].dateToBe && data.fileSeminar ? (
                           <div className="flex flex-col gap-1">
-                            {data.seminarDate[0].dateToBe}
+                            {moment(data.seminarDate[0].dateToBe).format("DD MMM YYYY")}
                             <Link
                               target="_blank"
                               href={data.fileSeminar}
                               className="hover:underline hover:text-black underline text-blue-400"
                             >
-                              Cek
+                              File
                             </Link>
                           </div>
                         ) : (
@@ -240,13 +240,13 @@ export default function ProgresList() {
                       <td className=" text-center w-[10%]">
                         {data.sidangDate[0].dateToBe && data.fileSidang ? (
                           <div className="flex flex-col gap-1">
-                            {data.sidangDate[0].dateToBe}
+                            {moment(data.sidangDate[0].dateToBe).format("DD MMM YYYY")}
                             <Link
                               target="_blank"
                               href={data.fileSidang}
                               className="hover:underline hover:text-black underline text-blue-400"
                             >
-                              Cek
+                              File
                             </Link>
                           </div>
                         ) : (

@@ -1,4 +1,3 @@
-import React from "react";
 import RequestTable from "../components/ContentAdmin/RequestTable";
 import LayoutAdmin from "../components/Layout/LayoutAdmin";
 

@@ -1,4 +1,3 @@
-import React from "react";
 import LayoutDosen from "../components/Layout/LayoutDosen";
 import ApprovalTable from "../components/ContentDosen/ApprovalTable";
 import FilterSection from "../components/Layout/FilterSection";

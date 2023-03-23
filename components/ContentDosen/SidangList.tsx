@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   RiCheckboxCircleLine,
   RiCloseCircleLine,
-  RiCloseLine,
   RiLoader5Line,
   RiSortDesc,
 } from "react-icons/ri";
@@ -12,7 +11,6 @@ import {
   collection,
   doc,
   getDocs,
-  orderBy,
   query,
   updateDoc,
   where,
@@ -21,14 +19,15 @@ import { db } from "../Store/firebase";
 import Link from "next/link";
 import { CloseButton, SendButton } from "../Common/Buttons";
 import moment from "moment";
-interface dataTable {
-  id: number;
-  name: string;
-  title: string;
-  file: string;
-  generation: number;
-  sidangDate: string;
-}
+
+// interface dataTable {
+//   id: number;
+//   name: string;
+//   title: string;
+//   file: string;
+//   generation: number;
+//   sidangDate: string;
+// }
 
 export default function SidangList() {
   const { user } = useAuth();
@@ -409,15 +408,12 @@ export default function SidangList() {
                     <td className="px-6 py-2 text-center">{data.generation}</td>
                     <td className="py-1">
                       <div className="flex flex-col items-center">
-                        {data.sidangDate[0].dateToBe
-                          ? data.sidangDate[0].dateToBe
-                          : "-"}
                         <Link
                           target="_blank"
                           className="hover:underline hover:text-black underline:none text-purple-500"
                           href={`${data.fileSidang}`}
                         >
-                          {data.fileSidang ? "Cek" : ""}
+                          {data.fileSidang ? "File" : ""}
                         </Link>
                       </div>
                     </td>
@@ -476,7 +472,7 @@ export default function SidangList() {
                     className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
                   >
                     <div className="flex items-center justify-center">
-                      Belum Ada Yang Mengajukan Sidang Akhir
+                      Tidak Ada Sidang Akhir yang Diajukan
                     </div>
                   </td>
                 </tr>
