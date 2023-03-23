@@ -416,7 +416,7 @@ export default function SeminarList() {
                           className="hover:underline hover:text-black underline:none text-purple-500"
                           href={`${data.fileSeminar}`}
                         >
-                          {data.fileSeminar ? "Cek" : ""}
+                          {data.fileSeminar ? "File" : ""}
                         </Link>
                       </div>
                     </td>

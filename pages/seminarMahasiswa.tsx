@@ -8,7 +8,7 @@ export default function seminarMahasiswa() {
     <LayoutDosen>
       <div className="w-full flex flex-col justify-start xl:p-8">
         <h1 className="text-4xl text-[#9F86C4] text-left capitalize font-bold font-montserrat">
-          File Skripsi Seminar Hasil
+          Persetujuan Skripsi Seminar Hasil
         </h1>
 
         {/* <FilterSection /> */}

@@ -413,7 +413,7 @@ export default function SidangList() {
                           className="hover:underline hover:text-black underline:none text-purple-500"
                           href={`${data.fileSidang}`}
                         >
-                          {data.fileSidang ? "Cek" : ""}
+                          {data.fileSidang ? "File" : ""}
                         </Link>
                       </div>
                     </td>
