@@ -472,7 +472,7 @@ export default function SidangList() {
                     className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
                   >
                     <div className="flex items-center justify-center">
-                      Belum Ada Yang Mengajukan Sidang Akhir
+                      Tidak Ada Sidang Akhir yang Diajukan
                     </div>
                   </td>
                 </tr>
