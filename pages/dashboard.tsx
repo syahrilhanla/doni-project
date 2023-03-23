@@ -41,7 +41,7 @@ const Dashboard = () => {
       setTerimaProfSatu(user.title[0].isApprovedByProfOne);
       setTerimaProfDua(user.title[0].isApprovedByProfTwo);
 
-      if (user.title[0].isApprovedByProfOne === "Denied" && user.title[0].isApprovedByProfTwo === "Denied") {
+      if (user.title[0].isApprovedByProfOne === "Denied" || user.title[0].isApprovedByProfTwo === "Denied") {
         setDeniedTitle(true);
       }
     }
@@ -50,6 +50,8 @@ const Dashboard = () => {
 
   const handleNewTitle = async () => {
     try {
+      setDeniedTitle(false);
+
       const docRef = doc(db, "studentsList", user.uid);
       const titleValue = {
         title: [
@@ -122,19 +124,19 @@ const Dashboard = () => {
                 <div className="w-full font-sans italic">
                   <div className="w-full flex justify-center">
                     {!deniedTitle && terimaProfSatu && terimaProfDua && <p>{judul}</p>}
-                    {!terimaProfSatu && !terimaProfDua && (
+                    {!deniedTitle && !terimaProfSatu && !terimaProfDua && (
                       <div className="w-full">
                         <p>{judul}</p>
                         <p>{"(Menunggu Acc Dosen Pembimbing Satu dan Dua)"}</p>
                       </div>
                     )}
-                    {terimaProfSatu && !terimaProfDua && (
+                    {!deniedTitle && terimaProfSatu && !terimaProfDua && (
                       <div className="w-full">
                         <p>{judul}</p>
                         <p>{"(Menunggu Acc Dosen Pembimbing Dua)"}</p>
                       </div>
                     )}
-                    {!terimaProfSatu && terimaProfDua && (
+                    {!deniedTitle && !terimaProfSatu && terimaProfDua && (
                       <div className="w-full">
                         <p>{judul}</p>
                         <p>{"(Menunggu Acc Dosen Pembimbing Satu)"}</p>
@@ -145,7 +147,7 @@ const Dashboard = () => {
                         <div className="w-full flex flex-col">
                           <p>{judul}</p>
                           <p className="text-red-400 font-semibold">
-                            Ditolak Oleh Kedua Dosen
+                            Judul ditolak oleh salah satu atau kedua dosen. Ajukan kembali.
                           </p>
                         </div>
                         <div className="px-4">

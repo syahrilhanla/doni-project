@@ -162,14 +162,14 @@ export default function SidangList() {
           feedbackActivity: "Menerima Pengajuan Sidang Akhir",
         }),
       };
-      updateDoc(studentRef, value1);
+
+      await updateDoc(studentRef, value1);
       window.alert("Berhasil Menerima Sidang Akhir Selaku Dosen Pembimbing 1");
       setSetuju(false);
       const newStudentData = student.filter((item: any) => {
         return item.uid !== uidUser;
       });
       setStudent(newStudentData);
-    } else if (profDua === user.name) {
     } else if (profDua === user.name) {
       const value2 = {
         sidangDate: [

@@ -201,6 +201,8 @@ export default function ListMahasiswa() {
       setExaminerOne("");
       setExaminerTwo("");
     });
+
+    getData();
   };
 
   const getUpdateSidang = async () => {
@@ -255,6 +257,8 @@ export default function ListMahasiswa() {
       setExaminerOne("");
       setExaminerTwo("");
     });
+
+    getData();
   };
 
   const handleCloseSeminarModal = () => {
@@ -510,44 +514,82 @@ export default function ListMahasiswa() {
 
                     {data.seminarDate.map((item: any, index: any) => (
                       <td key={index} className="px-6 py-2 text-center ">
-                        {(item.isApprovedByProfOne !== "") &&
-                          (item.isApprovedByProfTwo !== "") ? (
-                          <button
-                            onClick={() =>
-                              getStatusSeminar(
-                                data.uid,
-                                item.isApprovedByProfOne,
-                                item.isApprovedByProfTwo
+                        {
+                          data.seminarDate[0].dateToBe !== ""
+                            ? <div>
+                              <p>{item.dateToBe}</p>
+                              <button
+                                onClick={() =>
+                                  getStatusSeminar(
+                                    data.uid,
+                                    item.isApprovedByProfOne,
+                                    item.isApprovedByProfTwo
+                                  )
+                                }
+                                className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
+                              >
+                                Tanggal Seminar
+                              </button>
+                            </div>
+                            :
+                            (item.isApprovedByProfOne !== "") &&
+                              (item.isApprovedByProfTwo !== "") ? (
+                              <button
+                                onClick={() =>
+                                  getStatusSeminar(
+                                    data.uid,
+                                    item.isApprovedByProfOne,
+                                    item.isApprovedByProfTwo
+                                  )
+                                }
+                                className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
+                              >
+                                Tanggal Seminar
+                              </button>
+                            )
+                              : (
+                                <p>Belum ditentukan</p>
                               )
-                            }
-                            className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
-                          >
-                            Tanggal Seminar
-                          </button>
-                        ) : (
-                          <p>Belum ditentukan</p>
-                        )}
+                        }
                       </td>
                     ))}
                     {data.sidangDate.map((item: any, index: any) => (
                       <td key={index} className="px-6 py-2 text-center ">
-                        {(item.isApprovedByProfOne !== "") &&
-                          (item.isApprovedByProfTwo !== "") ? (
-                          <button
-                            onClick={() =>
-                              getStatusSidang(
-                                data.uid,
-                                item.isApprovedByProfOne,
-                                item.isApprovedByProfTwo
-                              )
-                            }
-                            className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
-                          >
-                            Tanggal sidang
-                          </button>
-                        ) : (
-                          <p>Belum ditentukan</p>
-                        )}
+                        {
+                          data.sidangDate[0].dateToBe !== ""
+                            ? <div>
+                              <p>{item.dateToBe}</p>
+                              <button
+                                onClick={() =>
+                                  getStatusSidang(
+                                    data.uid,
+                                    item.isApprovedByProfOne,
+                                    item.isApprovedByProfTwo
+                                  )
+                                }
+                                className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
+                              >
+                                Tanggal Sidang
+                              </button>
+                            </div>
+                            :
+                            (item.isApprovedByProfOne !== "") &&
+                              (item.isApprovedByProfTwo !== "") ? (
+                              <button
+                                onClick={() =>
+                                  getStatusSidang(
+                                    data.uid,
+                                    item.isApprovedByProfOne,
+                                    item.isApprovedByProfTwo
+                                  )
+                                }
+                                className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
+                              >
+                                Tanggal Sidang
+                              </button>
+                            ) : (
+                              <p>Belum ditentukan</p>
+                            )}
                       </td>
                     ))}
                     <td className="px-6 py-2">
