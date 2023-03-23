@@ -30,7 +30,9 @@ const Notification = ({ notificationData }: Props) => {
 
       {openNotification && (
         <>
-          <NotificationList notificationData={notificationData} />
+          <NotificationList
+            setOpenNotification={setOpenNotification}
+            notificationData={notificationData} />
         </>
       )}
     </div>
