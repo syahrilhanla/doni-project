@@ -1,5 +1,6 @@
 import { User } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
+import moment from "moment";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
@@ -50,7 +51,7 @@ const FileSidang = () => {
                 <p className="items-center mr-3"> Tanggal Sidang Akhir </p>{" "}
                 <AiFillCheckCircle className="fill-[#72ea8c] items-center" />
               </div>
-              <div className=" text-2xl text-center"> {jadwal}</div>
+              <div className=" text-2xl text-center"> {moment(String(jadwal)).format("DD MMMM YYYY")}</div>
             </div>
           ) : (
             <div className="flex flex-col bg-[#f1e8f252] border-4 border-[#ebb4b4] text-[#707070] justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-1/3 h-24  rounded-lg shadow-md">
