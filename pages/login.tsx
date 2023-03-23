@@ -35,15 +35,15 @@ const Dashboard = () => {
         setElogin(true)
       }
     } else if (data.username.includes("@dosen.ulm.ac.id")) {
-         try {
+      try {
         await logInDosen(data.username, data.password);
         router.push("/approval");
       } catch (error: any) {
         setElogin(true)
       }
-      
+
     } else if (data.username.includes("@admin.ulm.ac.id")) {
-       try {
+      try {
         await logInAdmin(data.username, data.password);
         router.push("/request");
       } catch (error: any) {

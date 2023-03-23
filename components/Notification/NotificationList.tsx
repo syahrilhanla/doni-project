@@ -8,11 +8,10 @@ export interface NotificationData {
 interface Props {
   notificationData: NotificationData[]
 }
-
 const NotificationList = ({ notificationData }: Props) => {
   return (
     <div
-      className="absolute w-64 max-h-[268px]
+      className="absolute w-min-[90px] max-h-[268px]
         gap-4 overflow-auto rounded-xl bg-[#F0EBF8] 
         top-[68px] right-20 z-50"
     >
@@ -24,10 +23,10 @@ const NotificationList = ({ notificationData }: Props) => {
         >
           <div className="w-full px-3 py-1">
             <span className="flex items-center gap-1">
-              {data.isRead && (
+              {data.isRead === false && (
                 <span className="p-1 h-1 w-1 rounded-full bg-red-600" />
               )}
-              <p>{data.title}</p>
+              <p className="font-bold">{data.title}</p>
             </span>
             <p>{data.text}</p>
           </div>

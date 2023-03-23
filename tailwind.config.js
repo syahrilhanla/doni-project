@@ -16,6 +16,10 @@ module.exports = {
       screens: {
         'xxs': '340px',
       },
+        fontFamily: {
+        montserrat: ["Montserrat", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
+      },
     },
   },
   plugins: [],

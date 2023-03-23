@@ -1,8 +1,19 @@
-import React, { useState } from "react";
+import { User } from "firebase/auth";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import React, { Key, useCallback, useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCheckLg } from "react-icons/bs";
 import { RiSortDesc, RiCloseLine } from "react-icons/ri";
+
 import FilterSection from "../Layout/FilterSection";
+import { db } from "../Store/firebase";
 
 interface dataTable {
   id: number;
@@ -14,44 +25,74 @@ interface dataTable {
 export default function RequestTable() {
   const [setuju, setSetuju] = useState<any>(false);
   const [tolak, setTolak] = useState<any>(false);
-  const content: dataTable[] = [
-    {
-      id: 1,
-      name: "nama 1",
-      nim: "nim 1",
-      status: true,
-    },
-    {
-      id: 2,
-      name: "nama 12",
-      nim: "nim 12",
-      status: true,
-    },
-    {
-      id: 3,
-      name: "nama 13",
-      nim: "nim 13",
-      status: true,
-    },
-    {
-      id: 4,
-      name: "nama 14",
-      nim: "nim 14",
-      status: true,
-    },
-    {
-      id: 5,
-      name: "nama 15",
-      nim: "nim 15",
-      status: true,
-    },
-    {
-      id: 6,
-      name: "nama 16",
-      nim: "nim 16",
-      status: true,
-    },
-  ];
+  const [student, setStudent] = useState<any>([]);
+  const [prof, setProf] = useState<any>([]);
+  const [dosen1, setDosen1] = useState("");
+  const [dosen2, setDosen2] = useState("");
+  const [userid, setUserid] = useState("");
+
+  const getData = useCallback(async () => {
+    const studentRef = query(
+      collection(db, "studentsList"),
+      where("statusApprove", "==", false)
+    );
+    try {
+      const studentsData= (await getDocs(studentRef)).docs
+      .map((item) => item)
+      .map((item) => item.data());
+      setStudent(studentsData);
+    } catch (e) {
+      console.log(e);
+    }
+  },[student]);
+
+  const getProf = async () => {
+    let unsubscribe = false;
+    await getDocs(collection(db, "professorList"))
+      .then((profRef) => {
+        if (unsubscribe) return;
+        const newProfDataArray = profRef.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setProf(newProfDataArray);
+      })
+      .catch((err) => {
+        if (unsubscribe) return;
+        console.error("Failed", err);
+      });
+
+    return () => (unsubscribe = true);
+  };
+
+  useEffect(() => {
+      getData();
+      getProf();
+
+  }, []);
+
+  const getStatus = (uid:any) => {
+    setSetuju(true);
+    setUserid(uid);
+  };
+
+  const getUpdate = () => {
+    const studentRef = doc(db, "studentsList", userid);
+
+    const valueUpdate = {
+      statusApprove: true,
+      profOne: dosen1,
+      profTwo: dosen2,
+    };
+
+    updateDoc(studentRef, valueUpdate).then(() => {
+      window.alert("Mahasiswa berhasil di terima");
+      setSetuju(false);
+      setDosen1("");
+      setDosen2("");
+    });
+  };
+
   return (
     <>
       <FilterSection />
@@ -69,22 +110,41 @@ export default function RequestTable() {
                   <RiCloseLine />
                 </button>
 
-                <div className="p-4 flex flex-col gap-2">
-                  <p className="block text-xl mt-6 font-medium text-gray-900 ">
-                    Apakah anda ingin menyetujui permintaan ini?
-                  </p>
+                <div className="p-4 flex flex-col mt-9 gap-2">
+                  <div className="realtive xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full">
+                    <select
+                      className="bg-[#f1e8f252] focus:outline-none border-1 justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full  text-[#707070] w-full hover:bg-[#ebe6ea]  font-medium rounded-lg text-sm px-4 py-2.5 text-center items-center"
+                      onChange={(e) => setDosen1(e.target.value)}
+                      value={dosen1}
+                    >
+                      <option selected>Dosen Pembimbing 1</option>
+                      {prof.map((item: any, index: Key) => (
+                        <option key={index} value={item.name}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="realtive xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full">
+                    <select
+                      className="bg-[#f1e8f252] focus:outline-none border-1 justify-center xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full  text-[#707070] w-full hover:bg-[#ebe6ea]  font-medium rounded-lg text-sm px-4 py-2.5 text-center items-center"
+                      onChange={(e) => setDosen2(e.target.value)}
+                      value={dosen2}
+                    >
+                      <option selected>Dosen Pembimbing 2</option>
+                      {prof.map((item: any, index: Key) => (
+                        <option key={index} value={item.name}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                   <div className="p-4 flex gap-2 justify-end items-end">
                     <button
-                      type="button"
+                      onClick={getUpdate}
                       className=" text-white bg-green-500 ring-2  rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-green-500 hover:ring-green-500 hover:bg-white focus:z-10"
                     >
-                      Iya
-                    </button>
-                    <button
-                      type="button"
-                      className=" text-white bg-red-500 ring-2  rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-red-500 hover:ring-red-500 hover:bg-white focus:z-10"
-                    >
-                      Tidak
+                      Kirim
                     </button>
                   </div>
                 </div>
@@ -156,22 +216,22 @@ export default function RequestTable() {
               </tr>
             </thead>
             <tbody>
-              {content.map((data) => (
+              {student.length > 0 ? student.map((data: any, index: Key) => (
                 <tr
-                  key={data.id}
+                  key={index}
                   className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
                 >
-                  <th
+                  <td
                     scope="row"
                     className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
                   >
                     {data.name}
-                  </th>
-                  <td className="px-6 py-2 max-w-[20%]">{data.nim}</td>
+                  </td>
+                  <td className="px-6 py-2 max-w-[20%]">{data.username}</td>
 
                   <td className="px-6 py-2 text-right flex gap-2">
                     <button
-                      onClick={() => setSetuju(!setuju)}
+                      onClick={() => getStatus(data.uid)}
                       className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white  hover:text-green-500 bg-green-500 p-2 rounded-md"
                     >
                       <BsCheckLg className="" />
@@ -184,7 +244,20 @@ export default function RequestTable() {
                     </button>
                   </td>
                 </tr>
-              ))}
+              )) : <>
+                <tr
+                  className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
+                >
+                  <td
+                    scope="row"
+                    colSpan={3}
+                    className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+                  >
+                    Tidak ada data untuk ditampilkan
+                  </td>
+                </tr>
+              </>
+              }
             </tbody>
           </table>
         </div>

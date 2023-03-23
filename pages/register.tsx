@@ -6,13 +6,13 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import { useAuth } from "../components/Context/AuthContext";
 
-
 interface formInput {
   name: String;
   username: String;
   email: String;
   phoneNumber: Number;
   generation: Number;
+  proposalDate: String;
   password: String;
   confirmPassword: String;
 }
@@ -34,6 +34,7 @@ const schema = yup.object().shape({
     .min(4, "Minimal 4 angka")
     .max(4, "Maksimal 4 angka")
     .required("Informasi angkatan diperlukan"),
+  proposalDate: yup.string(),
   password: yup
     .string()
     .min(6, "Kata sandi harus memiliki minimal 6 karakter")
@@ -46,7 +47,7 @@ const schema = yup.object().shape({
 
 export default function Register() {
   const { signUp } = useAuth();
-const router = useRouter();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -55,14 +56,22 @@ const router = useRouter();
     resolver: yupResolver(schema),
   });
 
-  const onSubmit : SubmitHandler<formInput>= async (data) => {
-  try {
-    await signUp(data.email, data.password, data.username, data.name, data.phoneNumber, data.generation)
-    router.push("/login");
-  } catch (error: any) {
-    console.log(error.message);
-  }
-};
+  const onSubmit: SubmitHandler<formInput> = async (data) => {
+    try {
+      await signUp(
+        data.email,
+        data.password,
+        data.username,
+        data.name,
+        data.phoneNumber,
+        data.generation,
+        data.proposalDate
+      );
+      router.push("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div>
       <section className="h-screen overflow-auto bg-gradient-to-t from-patternThree via-patternTwo to-patternOne  text-gray-900">
@@ -103,7 +112,7 @@ const router = useRouter();
                 type="email"
                 {...register("email")}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                placeholder="email@gmail.com"
+                placeholder="email@mhs.ulm.ac.id"
               />
               <p className="text-red-500">{errors.email?.message}</p>
             </div>
@@ -129,6 +138,18 @@ const router = useRouter();
                 placeholder="Contoh: 2020"
               />
               <p className="text-red-500">{errors.generation?.message}</p>
+            </div>
+            <div className="mb-6">
+              <label className="block mb-2 text-sm font-medium text-gray-900 ">
+                Tanggal Proposal
+              </label>
+              <input
+                type="date"
+                {...register("proposalDate")}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                placeholder="Contoh: 27 Januari 2023"
+              />
+              <p className="text-red-500">{errors.proposalDate?.message}</p>
             </div>
             <div className="mb-6">
               <label className="block mb-2 text-sm font-medium text-gray-900 ">
