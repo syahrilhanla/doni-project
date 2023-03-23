@@ -39,7 +39,7 @@ const TableActivity = ({ user }: ActivityTable) => {
     getActivity()
   }, [user])
   return (
-    <div className=" inline-block overflow-x-auto overflow-y-scroll shadow-md sm:rounded-lg max-h-[150px] w-full">
+    <div className=" inline-block overflow-x-auto overflow-y-scroll shadow-md sm:rounded-lg h-[30vh] w-full">
       <table className="text-sm text-left text-gray-900 capitalize w-full ">
         <thead className="text-xs text-white  bg-[#a589c7f8] sticky top-0 z-auto ">
           <tr>
