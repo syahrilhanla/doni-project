@@ -1,12 +1,12 @@
-import { User } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import moment from "moment";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { BsFillPersonFill } from "react-icons/bs";
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
+
 const FileSeminar = () => {
   const [jadwal, setJadwal] = useState<String>();
   const { user } = useAuth();
