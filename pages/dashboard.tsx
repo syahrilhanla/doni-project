@@ -7,7 +7,8 @@ import { useAuth } from "../components/Context/AuthContext";
 import { arrayUnion, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../components/Store/firebase";
 import TableActivity from "../components/Content/TableActivity";
-
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const Dashboard = () => {
   const [ajukan, setAjukan] = useState(false);
   const { user } = useAuth();
@@ -51,7 +52,6 @@ const Dashboard = () => {
   const handleNewTitle = async () => {
     try {
       setDeniedTitle(false);
-
       const docRef = doc(db, "studentsList", user.uid);
       const titleValue = {
         title: [
@@ -78,7 +78,6 @@ const Dashboard = () => {
           })
         }
         await updateDoc(doc(db, "professorList", prof1Data), notifProf1);
-
       }
       else {
         return
@@ -99,18 +98,36 @@ const Dashboard = () => {
         return
       }
       await updateDoc(docRef, titleValue);
-      window.alert("Judul Skripsi Telah Diajukan");
+      toast.success('Judul Skripsi Telah Diajukan', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setAjukan(false)
       setNewtitle("");
     } catch (e) {
       console.log(e);
-
+      toast.error('Silahkan Muat Ulang Halaman', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
   return (
     <Layout>
+      <ToastContainer />
       <div className="h-full px-4  py-4">
-
         <div className="flex lg:space-between xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col  mt-5 mb-2 mx-4">
           <div className="grid justify-items-start xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 py-4 px-3 w-2/5 h-24 bg-[#f1e8f252]  text-[#707070] rounded-lg shadow-md">
             <div className=" text-lg text-center font-sans">
