@@ -16,7 +16,8 @@ import { SendButton } from "../Common/Buttons";
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
 import AddProf from "./AddProf";
-
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 export default function ListDosen() {
   const [hapus, setHapus] = useState<any>(false);
   const [buka, setBuka] = useState<any>(false);
@@ -40,6 +41,16 @@ export default function ListDosen() {
       setStudent(studentsData);
     } catch (e) {
       console.log(e);
+      toast.error('Silahkan Muat Ulang Halaman', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }, [student]);
 
@@ -84,12 +95,30 @@ export default function ListDosen() {
 
     deleteDoc(fieldEdit)
       .then(() => {
-        alert("Data Berhasil Dihapus");
+        toast.success('Data Berhasil Dihapus', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
         setHapus(!hapus);
         getProf();
       })
       .catch((err) => {
-        alert("Tidak Bisa Menghapus Data..");
+        toast.error('Tidak Dapat Menghapus Data!', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       });
   };
 
@@ -101,7 +130,16 @@ export default function ListDosen() {
         profOne: "",
       };
       updateDoc(studentRef, valueUpdate).then(() => {
-        window.alert("Data berhasil diganti");
+        toast.success('Data Berhasil Diganti', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
         getData();
       });
     } else if (profTwo === professorName) {
@@ -109,7 +147,16 @@ export default function ListDosen() {
         profTwo: "",
       };
       updateDoc(studentRef, valueUpdate).then(() => {
-        window.alert("Data berhasil diganti");
+        toast.success('Data Berhasil Diganti', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
         getData();
       });
     }
@@ -117,6 +164,7 @@ export default function ListDosen() {
 
   return (
     <div>
+      <ToastContainer />
       {buka && (
         <div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
           <div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />
@@ -180,7 +228,7 @@ export default function ListDosen() {
                           className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
                         >
                           {data.profOne === professorName ||
-                          data.profTwo === professorName ? (
+                            data.profTwo === professorName ? (
                             <>
                               <th
                                 scope="row"

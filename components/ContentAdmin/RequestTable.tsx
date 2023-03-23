@@ -11,7 +11,8 @@ import React, { Key, useCallback, useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCheckLg } from "react-icons/bs";
 import { RiSortDesc, RiCloseLine } from "react-icons/ri";
-
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import FilterSection from "../Layout/FilterSection";
 import { db } from "../Store/firebase";
 
@@ -37,14 +38,24 @@ export default function RequestTable() {
       where("statusApprove", "==", false)
     );
     try {
-      const studentsData= (await getDocs(studentRef)).docs
-      .map((item) => item)
-      .map((item) => item.data());
+      const studentsData = (await getDocs(studentRef)).docs
+        .map((item) => item)
+        .map((item) => item.data());
       setStudent(studentsData);
     } catch (e) {
       console.log(e);
+      toast.error('Silahkan Muat Ulang Halaman', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
-  },[student]);
+  }, [student]);
 
   const getProf = async () => {
     let unsubscribe = false;
@@ -66,12 +77,12 @@ export default function RequestTable() {
   };
 
   useEffect(() => {
-      getData();
-      getProf();
+    getData();
+    getProf();
 
   }, []);
 
-  const getStatus = (uid:any) => {
+  const getStatus = (uid: any) => {
     setSetuju(true);
     setUserid(uid);
   };
@@ -86,7 +97,16 @@ export default function RequestTable() {
     };
 
     updateDoc(studentRef, valueUpdate).then(() => {
-      window.alert("Mahasiswa berhasil di terima");
+      toast.success('Mahasiswa berhasil di terima', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setSetuju(false);
       setDosen1("");
       setDosen2("");
@@ -95,6 +115,7 @@ export default function RequestTable() {
 
   return (
     <>
+      <ToastContainer />
       <FilterSection />
       <div>
         {setuju && (

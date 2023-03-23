@@ -7,7 +7,8 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import router from "next/router";
 import { useForm, SubmitHandler } from "react-hook-form";
-
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 interface formInput {
   name: String;
   username: String;
@@ -54,13 +55,33 @@ export default function AddProf() {
     try {
       await registerProf(data.email, data.password, data.username, data.name);
       setAddProf(false);
-      alert("Data berhasil ditambahkan");
+      toast.success('Data Berhasil Ditambahkan', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     } catch (error) {
       console.log(error);
+      toast.error('Ada Kesalahan Saat Menambahkan Data!', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
   return (
     <div>
+      <ToastContainer />
       <SendButton
         handleClick={() => handleAddProf()}
         buttonText="Tambah Dosen"
