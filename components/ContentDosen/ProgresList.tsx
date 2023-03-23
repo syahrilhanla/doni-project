@@ -37,17 +37,16 @@ export default function ProgresList() {
         (item) => item.profOne === user.name || item.profTwo === user.name
       );
 
-      console.log({ arrayStudents })
       setStudent(arrayStudents);
       setLoading(false);
     } catch (e) {
       console.log(e);
     }
-  }, [student]);
+  }, [user]);
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [user]);
 
   return (
     <div>
@@ -163,7 +162,7 @@ export default function ProgresList() {
                             href={data.files[0].chapterOne}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
-                            Cek
+                            File
                           </Link>
                         ) : (
                           <p>-</p>
@@ -176,7 +175,7 @@ export default function ProgresList() {
                             href={data.files[0].chapterTwo}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
-                            Cek
+                            File
                           </Link>
                         ) : (
                           <p>-</p>
@@ -189,7 +188,7 @@ export default function ProgresList() {
                             href={data.files[0].chapterThree}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
-                            Cek
+                            File
                           </Link>
                         ) : (
                           <p>-</p>
@@ -202,7 +201,7 @@ export default function ProgresList() {
                             href={data.files[0].chapterFour}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
-                            Cek
+                            File
                           </Link>
                         ) : (
                           <p>-</p>
@@ -215,7 +214,7 @@ export default function ProgresList() {
                             href={data.files[0].chapterFive}
                             className="hover:underline hover:text-black underline text-blue-400"
                           >
-                            Cek
+                            File
                           </Link>
                         ) : (
                           <p>-</p>
@@ -230,7 +229,7 @@ export default function ProgresList() {
                               href={data.fileSeminar}
                               className="hover:underline hover:text-black underline text-blue-400"
                             >
-                              Cek
+                              File
                             </Link>
                           </div>
                         ) : (
@@ -246,7 +245,7 @@ export default function ProgresList() {
                               href={data.fileSidang}
                               className="hover:underline hover:text-black underline text-blue-400"
                             >
-                              Cek
+                              File
                             </Link>
                           </div>
                         ) : (
