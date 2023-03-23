@@ -1,20 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
-
-import { RiLogoutBoxRLine } from "react-icons/ri";
-import { TfiBell } from "react-icons/tfi";
-import NotificationList from "../Notification/NotificationList";
-import { useAuth } from "../Context/AuthContext";
 import { useRouter } from "next/router";
+import { useAuth } from "../Context/AuthContext";
 import { doc, getDoc, } from "firebase/firestore";
 import { db } from "../Store/firebase";
 
+import { RiLogoutBoxRLine } from "react-icons/ri";
+import Notification from "../Notification/Notification";
+
 const Navbar = () => {
   const { user, logOut } = useAuth();
-  const [openNotification, setOpenNotification] = useState(false);
   const router = useRouter();
-  const [notification, setNotification] = useState([]);
-  const [notificationdosen, setNotificationDosen] = useState<any>([]);
-  const [student, setStudent] = useState<any>([]);
+  const [notificationData, setNotificationData] = useState([]);
 
   const handleLogout = async () => {
     try {
@@ -29,7 +25,7 @@ const Navbar = () => {
     try {
       const profRef = doc(db, "professorList", user.uid);
       const notifProf = await getDoc(profRef);
-      setNotificationDosen(notifProf.data()?.notifications);
+      setNotificationData(notifProf.data()?.notifications);
     } catch (error) {
       console.log(error);
     }
@@ -39,7 +35,7 @@ const Navbar = () => {
     try {
       const studentsRef = doc(db, "studentsList", user.uid);
       const notifStudents = await getDoc(studentsRef);
-      setNotification(notifStudents.data()?.notifications);
+      setNotificationData(notifStudents.data()?.notifications);
     } catch (error) {
       console.log(error);
     }
@@ -59,14 +55,7 @@ const Navbar = () => {
         className="flex justify-end items-center text-white p-8 shadow-md 
         gap-6 bg-patternTwo h-16 overflow-hidden"
       >
-        <button
-          onClick={() => setOpenNotification(!openNotification)}
-          className="relative cursor-pointer hover:bg-white hover:font-extrabold
-          hover:text-patternTwo p-2 rounded-full duration-200"
-        >
-          <TfiBell className="text-2xl" />
-          <span className="absolute top-1 right-2 p-1.5 rounded-full bg-red-500" />
-        </button>
+        <Notification notificationData={notificationData} />
 
         <button
           onClick={handleLogout}
@@ -77,16 +66,7 @@ const Navbar = () => {
         </button>
       </div>
 
-      {openNotification && (
-        <>
-          {user.role === "mhs" && (
-            <NotificationList notificationData={notification} />
-          )}
-          {user.role === "dosen" && (
-            <NotificationList notificationData={notificationdosen} />
-          )}
-        </>
-      )}
+
     </div>
   );
 };
