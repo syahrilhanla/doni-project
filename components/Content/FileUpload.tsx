@@ -4,7 +4,8 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../Store/firebase";
 import Link from "next/link";
 import { User } from "firebase/auth";
-
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const FileUpload = () => {
   const { user } = useAuth();
   const [chapter1, setChapter1] = useState<any>();
@@ -53,6 +54,16 @@ const FileUpload = () => {
     };
     setEnable1(true);
     await updateDoc(docRef, chapter1Value);
+    toast.success('Berhasil Mengunggah Bab 1', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
     setLink1("");
   };
   const handleLink2 = async () => {
@@ -70,6 +81,16 @@ const FileUpload = () => {
     };
     setEnable2(true);
     await updateDoc(docRef, chapter2Value);
+        toast.success('Berhasil Mengunggah Bab 2', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
     setLink2("");
   };
   const handleLink3 = async () => {
@@ -86,8 +107,17 @@ const FileUpload = () => {
       ],
     };
     setEnable3(true);
-
     await updateDoc(docRef, chapter3Value);
+    toast.success('Berhasil Mengunggah Bab 3', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
     setLink3("");
   };
   const handleLink4 = async () => {
@@ -104,8 +134,17 @@ const FileUpload = () => {
       ],
     };
     setEnable4(true);
-
     await updateDoc(docRef, chapter4Value);
+    toast.success('Berhasil Mengunggah Bab 4', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
     setLink4("");
   };
   const handleLink5 = async () => {
@@ -122,13 +161,23 @@ const FileUpload = () => {
       ],
     };
     setEnable5(true);
-
     await updateDoc(docRef, chapter5Value);
+    toast.success('Berhasil Mengunggah Bab 5', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
     setLink5("");
   };
 
   return (
     <div className="h-screen px-4 w-5/6 overflow-auto py-4">
+      <ToastContainer />
       <div className="flex justify-center items-center font-extralight text-3xl">
         {" "}
         Upload Link Berkas Kamu Di sini
@@ -506,9 +555,9 @@ const FileUpload = () => {
                   required
                   disabled={
                     chapter1 === "" ||
-                    chapter2 === "" ||
-                    chapter3 === "" ||
-                    chapter4 === ""
+                      chapter2 === "" ||
+                      chapter3 === "" ||
+                      chapter4 === ""
                       ? true
                       : false
                   }
@@ -517,9 +566,9 @@ const FileUpload = () => {
                   onClick={handleLink5}
                   disabled={
                     chapter1 === "" ||
-                    chapter2 === "" ||
-                    chapter3 === "" ||
-                    chapter4 === ""
+                      chapter2 === "" ||
+                      chapter3 === "" ||
+                      chapter4 === ""
                       ? true
                       : false
                   }

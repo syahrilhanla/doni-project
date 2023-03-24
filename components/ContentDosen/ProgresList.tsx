@@ -5,7 +5,8 @@ import { useCallback, useEffect, useState } from "react";
 import { RiLoader5Line, RiSortDesc } from "react-icons/ri";
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
-
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 export default function ProgresList() {
   const [student, setStudent] = useState<any>([]);
   const { user } = useAuth();
@@ -42,6 +43,16 @@ export default function ProgresList() {
       setLoading(false);
     } catch (e) {
       console.log(e);
+      toast.error('Silahkan Muat Ulang Halaman', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }, [user]);
 
@@ -51,6 +62,7 @@ export default function ProgresList() {
 
   return (
     <div>
+      <ToastContainer />
       <div className=" inline-block overflow-x-auto shadow-md sm:rounded-lg max-h-[500px] max-w-[350px] sm:max-w-full ">
         <table className=" text-left table-auto text-sm capitalize  text-gray-900 ">
           <thead className="text-xs text-white  bg-patternTwo sticky top-0 z-20  ">

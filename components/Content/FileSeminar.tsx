@@ -6,6 +6,8 @@ import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { BsFillPersonFill } from "react-icons/bs";
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 const FileSeminar = () => {
   const [jadwal, setJadwal] = useState<String>();
   const { user } = useAuth();
@@ -35,11 +37,22 @@ const FileSeminar = () => {
     };
     setEnable(true);
     await updateDoc(docRef, link1Value);
+    toast.success('Berhasil Mengunggah Berkas Seminar Hasil', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
     setLink1("");
   };
 
   return (
     <div className="h-screen px-4 w-5/6 overflow-auto py-4 mt-4">
+      <ToastContainer />
       <div className="flex justify-center">
         {jadwal ? (
           <div className="flex bg-[#f1e8f252] border-4 border-[#caf3e0] text-[#707070] flex-col justify-center my-3 items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-1/3 h-24  rounded-lg shadow-md">

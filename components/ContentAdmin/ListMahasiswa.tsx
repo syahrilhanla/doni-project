@@ -17,7 +17,8 @@ import { CloseButton, ErrorButton, SendButton } from "../Common/Buttons";
 import Dropdown from "../Common/Dropdown";
 import { useAuth } from "../Context/AuthContext";
 import moment from "moment";
-
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 interface dataTable {
   id: number;
   name: string;
@@ -94,6 +95,16 @@ export default function ListMahasiswa() {
       setLoading(true);
     } catch (e) {
       console.log(e);
+      toast.error('Silahkan Muat Ulang Halaman', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }, [student]);
 
@@ -195,7 +206,16 @@ export default function ListMahasiswa() {
     await updateDoc(studentRef, valueUpdate).then(() => {
       updateDoc(profOneRef, notifProfOne);
       updateDoc(profTwoRef, notifProfTwo);
-      window.alert("Seminar hasil berhasil diatur");
+      toast.success('Seminar Hasil Berhasil Diatur', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setAssignSeminar(false);
       setSeminarDate("");
       setExaminerOne("");
@@ -251,7 +271,16 @@ export default function ListMahasiswa() {
     await updateDoc(studentRef, valueUpdate).then(() => {
       updateDoc(profOneRef, notifProfOne);
       updateDoc(profTwoRef, notifProfTwo);
-      window.alert("Sidang akhir berhasil diatur");
+      toast.success('Sidang Akhir Berhasil Diatur', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setAssignSidang(false);
       setSidangDate("");
       setExaminerOne("");
@@ -276,13 +305,31 @@ export default function ListMahasiswa() {
   const handleAssignSeminar = () => {
     if (examinerOne && examinerTwo && seminarDate && feedbackTextAreaSeminar)
       getUpdateSeminar();
-    else alert("Lengkapi data terlebih dahulu!");
+    else toast.error('Lengkapi data terlebih dahulu!', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
   };
 
   const handleAssignSidang = () => {
     if (examinerOne && examinerTwo && sidangDate && feedbackTextAreaSidang)
       getUpdateSidang();
-    else alert("Lengkapi data terlebih dahulu!");
+    else toast.error('Lengkapi data terlebih dahulu!', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
   };
 
   const selectExaminerOne = (itemData: any) => {
@@ -302,17 +349,36 @@ export default function ListMahasiswa() {
 
     deleteDoc(fieldEdit)
       .then(() => {
-        alert("Data Berhasil Dihapus");
+        toast.success('Data Berhasil Dihapus', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
         setHapus(!hapus);
         getData();
       })
       .catch((err) => {
-        alert("Tidak Bisa Menghapus Data..");
+        toast.error('Tidak Dapat Menghapus Data!', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       });
   };
 
   return (
     <>
+      <ToastContainer />
       <FilterSection />
       <div>
         {assignSeminar && (
