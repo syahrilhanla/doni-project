@@ -6,7 +6,7 @@ export default function approval() {
   return (
     <LayoutDosen>
       <div className="w-full flex flex-col justify-start xl:p-8">
-        <h1 className="sm:text-4xl text-3xl text-[#9F86C4] text-left capitalize font-bold font-montserrat">
+        <h1 className="sm:text-4xl text-2xl text-[#9F86C4] text-left capitalize font-bold font-montserrat">
           Persetujuan Judul Skripsi
         </h1>
 
