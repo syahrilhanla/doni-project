@@ -16,7 +16,7 @@ import { SendButton } from "../Common/Buttons";
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
 import AddProf from "./AddProf";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export default function ListDosen() {
   const [hapus, setHapus] = useState<any>(false);
@@ -41,7 +41,7 @@ export default function ListDosen() {
       setStudent(studentsData);
     } catch (e) {
       console.log(e);
-      toast.error('Silahkan Muat Ulang Halaman', {
+      toast.error("Silahkan Muat Ulang Halaman", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -95,7 +95,7 @@ export default function ListDosen() {
 
     deleteDoc(fieldEdit)
       .then(() => {
-        toast.success('Data Berhasil Dihapus', {
+        toast.success("Data Berhasil Dihapus", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -109,7 +109,7 @@ export default function ListDosen() {
         getProf();
       })
       .catch((err) => {
-        toast.error('Tidak Dapat Menghapus Data!', {
+        toast.error("Tidak Dapat Menghapus Data!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -130,7 +130,7 @@ export default function ListDosen() {
         profOne: "",
       };
       updateDoc(studentRef, valueUpdate).then(() => {
-        toast.success('Data Berhasil Diganti', {
+        toast.success("Data Berhasil Diganti", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -147,7 +147,7 @@ export default function ListDosen() {
         profTwo: "",
       };
       updateDoc(studentRef, valueUpdate).then(() => {
-        toast.success('Data Berhasil Diganti', {
+        toast.success("Data Berhasil Diganti", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -165,6 +165,9 @@ export default function ListDosen() {
   return (
     <div>
       <ToastContainer />
+      <div className=" text-right my-2">
+        <AddProf />
+      </div>
       {buka && (
         <div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
           <div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />
@@ -182,108 +185,109 @@ export default function ListDosen() {
                 <h1 className="block text-xl my-2 font-medium text-gray-900 ">
                   Daftar mahasiswa yang dibimbing
                 </h1>
+                <div className="inline-block overflow-auto shadow-md sm:rounded-lg sm:max-w-full max-w-[350px] max-h-[500px] ">
+                  <table className="text-sm text-left text-gray-900 capitalize  ">
+                    <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto ">
+                      <tr>
+                        <th scope="col" className="px-6 py-3 max-w-[20%]">
+                          <div className="flex items-center gap-2">
+                            Nama
+                            <a href="#">
+                              <RiSortDesc />
+                            </a>
+                          </div>
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                          <div className="flex items-center gap-2">
+                            NIM
+                            <a href="#">
+                              <RiSortDesc />
+                            </a>
+                          </div>
+                        </th>
 
-                <table className="text-sm text-left text-gray-900 capitalize  ">
-                  <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto ">
-                    <tr>
-                      <th scope="col" className="px-6 py-3 max-w-[20%]">
-                        <div className="flex items-center gap-2">
-                          Nama
-                          <a href="#">
-                            <RiSortDesc />
-                          </a>
-                        </div>
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        <div className="flex items-center gap-2">
-                          NIM
-                          <a href="#">
-                            <RiSortDesc />
-                          </a>
-                        </div>
-                      </th>
-
-                      <th scope="col" className="px-6 py-3">
-                        <div className="flex items-center justify-center">
-                          Judul
-                        </div>
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        <div className="flex items-center justify-center">
-                          Sebagai
-                        </div>
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        <div className="flex items-center justify-center">
-                          Aksi
-                        </div>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {student ? (
-                      student.map((data: any, index: any) => (
-                        <tr
-                          key={index}
-                          className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
-                        >
-                          {data.profOne === professorName ||
-                            data.profTwo === professorName ? (
-                            <>
-                              <th
-                                scope="row"
-                                className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
-                              >
-                                {data.name}
-                              </th>
-                              <td className="px-6 py-2 max-w-[20%]">
-                                {data.nim}
-                              </td>
-                              <td className="px-6 py-2 max-w-[20%]">
-                                {data.title[0].titleText}
-                              </td>
-                              <td className="px-6 py-2 max-w-[20%]">
-                                {data.profOne === professorName ? (
-                                  <p>Dosen pembimbing 1</p>
-                                ) : (
-                                  <p>Dosen pembimbing 2</p>
-                                )}
-                              </td>
-                              <td className="px-6 py-2">
-                                <button
-                                  onClick={() =>
-                                    deleteProfName(
-                                      data.uid,
-                                      data.profOne,
-                                      data.profTwo
-                                    )
-                                  }
-                                  className="font-medium text-white hover:opacity-50 duration-150 bg-[#D0312D] p-2 rounded-md"
-                                >
-                                  <FaTrash />
-                                </button>
-                              </td>
-                            </>
-                          ) : (
-                            ""
-                          )}
-                        </tr>
-                      ))
-                    ) : (
-                      <>
-                        <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
-                          <td
-                            scope="row"
-                            colSpan={4}
-                            className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+                        <th scope="col" className="px-6 py-3">
+                          <div className="flex items-center justify-center">
+                            Judul
+                          </div>
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                          <div className="flex items-center justify-center">
+                            Sebagai
+                          </div>
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                          <div className="flex items-center justify-center">
+                            Aksi
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {student ? (
+                        student.map((data: any, index: any) => (
+                          <tr
+                            key={index}
+                            className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
                           >
-                            Tidak ada data untuk ditampilkan
-                          </td>
-                        </tr>
-                      </>
-                    )}
-                  </tbody>
-                </table>
+                            {data.profOne === professorName ||
+                            data.profTwo === professorName ? (
+                              <>
+                                <th
+                                  scope="row"
+                                  className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+                                >
+                                  {data.name}
+                                </th>
+                                <td className="px-6 py-2 max-w-[20%]">
+                                  {data.nim}
+                                </td>
+                                <td className="px-6 py-2 max-w-[20%]">
+                                  {data.title[0].titleText}
+                                </td>
+                                <td className="px-6 py-2 max-w-[20%]">
+                                  {data.profOne === professorName ? (
+                                    <p>Dosen pembimbing 1</p>
+                                  ) : (
+                                    <p>Dosen pembimbing 2</p>
+                                  )}
+                                </td>
+                                <td className="px-6 py-2">
+                                  <button
+                                    onClick={() =>
+                                      deleteProfName(
+                                        data.uid,
+                                        data.profOne,
+                                        data.profTwo
+                                      )
+                                    }
+                                    className="font-medium text-white hover:opacity-50 duration-150 bg-[#D0312D] p-2 rounded-md"
+                                  >
+                                    <FaTrash />
+                                  </button>
+                                </td>
+                              </>
+                            ) : (
+                              ""
+                            )}
+                          </tr>
+                        ))
+                      ) : (
+                        <>
+                          <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
+                            <td
+                              scope="row"
+                              colSpan={4}
+                              className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+                            >
+                              Tidak ada data untuk ditampilkan
+                            </td>
+                          </tr>
+                        </>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -327,9 +331,7 @@ export default function ListDosen() {
           </div>
         </div>
       )}
-      <div className="ml-96 -mr-28 my-2">
-        <AddProf />
-      </div>
+
       <div className="inline-block overflow-auto shadow-md sm:rounded-lg sm:max-w-full max-w-[350px] max-h-[500px] ">
         <table className="text-sm text-left text-gray-900 capitalize ">
           <thead className="text-xs text-white bg-patternTwo sticky top-0 z-auto ">

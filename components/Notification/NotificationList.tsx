@@ -1,19 +1,19 @@
 export interface NotificationData {
-  id: number,
-  title: string,
-  text: string,
-  isRead: boolean
+  id: number;
+  title: string;
+  text: string;
+  isRead: boolean;
 }
 
 interface Props {
-  notificationData: NotificationData[]
+  notificationData: NotificationData[];
 }
 const NotificationList = ({ notificationData }: Props) => {
   return (
     <div
       className="absolute w-min-[90px] max-h-[268px]
         gap-4 overflow-auto rounded-xl bg-[#F0EBF8] 
-        top-[68px] right-20 z-50"
+        top-[68px] right-0 duration-500"
     >
       {notificationData.map((data: NotificationData) => (
         <div
@@ -32,7 +32,8 @@ const NotificationList = ({ notificationData }: Props) => {
           </div>
         </div>
       ))}
-    </div>)
-}
+    </div>
+  );
+};
 
-export default NotificationList
+export default NotificationList;

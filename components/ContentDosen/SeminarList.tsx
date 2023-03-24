@@ -18,7 +18,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../Store/firebase";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { CloseButton, SendButton } from "../Common/Buttons";
@@ -92,7 +92,7 @@ export default function SeminarList() {
       setLoading(true);
     } catch (e) {
       console.log(e);
-      toast.error('Silahkan Muat Ulang Halaman', {
+      toast.error("Silahkan Muat Ulang Halaman", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -111,7 +111,6 @@ export default function SeminarList() {
     const formattedDate = moment(newDate).format("DD MMM YYYY");
     return formattedDate;
   };
-
 
   const getValueApprove = (
     uid: any,
@@ -176,16 +175,19 @@ export default function SeminarList() {
         }),
       };
       updateDoc(studentRef, value1);
-      toast.success('Berhasil Menerima Seminar Hasil Selaku Dosen Pembimbing 1', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      toast.success(
+        "Berhasil Menerima Seminar Hasil Selaku Dosen Pembimbing 1",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
       setSetuju(false);
       const newStudentData = student.filter((item: any) => {
         return item.uid !== uidUser;
@@ -215,16 +217,19 @@ export default function SeminarList() {
         }),
       };
       updateDoc(studentRef, value2);
-      toast.success('Berhasil Menerima Seminar Hasil Selaku Dosen Pembimbing 2', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      toast.success(
+        "Berhasil Menerima Seminar Hasil Selaku Dosen Pembimbing 2",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
       setSetuju(false);
       const newStudentData = student.filter((item: any) => {
         return item.uid !== uidUser;
@@ -258,7 +263,7 @@ export default function SeminarList() {
         }),
       };
       updateDoc(studentRef, value1);
-      toast.error('Berhasil Menolak Seminar Hasil Selaku Dosen Pembimbing  1', {
+      toast.error("Berhasil Menolak Seminar Hasil Selaku Dosen Pembimbing  1", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -297,7 +302,7 @@ export default function SeminarList() {
         }),
       };
       updateDoc(studentRef, value2);
-      toast.error('Berhasil Menolak Seminar Hasil Selaku Dosen Pembimbing 2', {
+      toast.error("Berhasil Menolak Seminar Hasil Selaku Dosen Pembimbing 2", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -327,30 +332,31 @@ export default function SeminarList() {
   };
   const handleAssignSeminarDate = () => {
     if (newFeedback) updateApprove();
-    else toast.error('Lengkapi data terlebih dahulu!', {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-
+    else
+      toast.error("Lengkapi data terlebih dahulu!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
   };
   const handleDeniedSeminarDate = () => {
     if (newFeedback) updateDenied();
-    else toast.error('Lengkapi data terlebih dahulu!', {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
+    else
+      toast.error("Lengkapi data terlebih dahulu!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
   };
   return (
     <div>
@@ -491,8 +497,8 @@ export default function SeminarList() {
                       {data.profOne === user.name
                         ? "Dospem 1"
                         : data.profTwo === user.name
-                          ? "Dospem 2"
-                          : "None"}
+                        ? "Dospem 2"
+                        : "None"}
                     </td>
                     {data.fileSeminar ? (
                       <td className="px-6 py-2 text-right flex gap-2">

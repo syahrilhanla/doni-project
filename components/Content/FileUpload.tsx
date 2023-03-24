@@ -4,7 +4,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../Store/firebase";
 import Link from "next/link";
 import { User } from "firebase/auth";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const FileUpload = () => {
   const { user } = useAuth();
@@ -54,7 +54,7 @@ const FileUpload = () => {
     };
     setEnable1(true);
     await updateDoc(docRef, chapter1Value);
-    toast.success('Berhasil Mengunggah Bab 1', {
+    toast.success("Berhasil Mengunggah Bab 1", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -81,7 +81,7 @@ const FileUpload = () => {
     };
     setEnable2(true);
     await updateDoc(docRef, chapter2Value);
-        toast.success('Berhasil Mengunggah Bab 2', {
+    toast.success("Berhasil Mengunggah Bab 2", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -108,7 +108,7 @@ const FileUpload = () => {
     };
     setEnable3(true);
     await updateDoc(docRef, chapter3Value);
-    toast.success('Berhasil Mengunggah Bab 3', {
+    toast.success("Berhasil Mengunggah Bab 3", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -135,7 +135,7 @@ const FileUpload = () => {
     };
     setEnable4(true);
     await updateDoc(docRef, chapter4Value);
-    toast.success('Berhasil Mengunggah Bab 4', {
+    toast.success("Berhasil Mengunggah Bab 4", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -162,7 +162,7 @@ const FileUpload = () => {
     };
     setEnable5(true);
     await updateDoc(docRef, chapter5Value);
-    toast.success('Berhasil Mengunggah Bab 5', {
+    toast.success("Berhasil Mengunggah Bab 5", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -555,9 +555,9 @@ const FileUpload = () => {
                   required
                   disabled={
                     chapter1 === "" ||
-                      chapter2 === "" ||
-                      chapter3 === "" ||
-                      chapter4 === ""
+                    chapter2 === "" ||
+                    chapter3 === "" ||
+                    chapter4 === ""
                       ? true
                       : false
                   }
@@ -566,9 +566,9 @@ const FileUpload = () => {
                   onClick={handleLink5}
                   disabled={
                     chapter1 === "" ||
-                      chapter2 === "" ||
-                      chapter3 === "" ||
-                      chapter4 === ""
+                    chapter2 === "" ||
+                    chapter3 === "" ||
+                    chapter4 === ""
                       ? true
                       : false
                   }

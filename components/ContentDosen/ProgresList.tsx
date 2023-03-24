@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { RiLoader5Line, RiSortDesc } from "react-icons/ri";
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export default function ProgresList() {
   const [student, setStudent] = useState<any>([]);
@@ -43,7 +43,7 @@ export default function ProgresList() {
       setLoading(false);
     } catch (e) {
       console.log(e);
-      toast.error('Silahkan Muat Ulang Halaman', {
+      toast.error("Silahkan Muat Ulang Halaman", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -64,8 +64,8 @@ export default function ProgresList() {
     <div>
       <ToastContainer />
       <div className=" inline-block overflow-x-auto shadow-md sm:rounded-lg max-h-[500px] max-w-[350px] sm:max-w-full ">
-        <table className=" text-left table-auto text-sm capitalize  text-gray-900 ">
-          <thead className="text-xs text-white  bg-patternTwo sticky top-0 z-20  ">
+        <table className=" text-left table-auto text-sm capitalize w-full  text-gray-900 ">
+          <thead className="text-xs text-white  bg-patternTwo sticky top-0 z-auto  ">
             <tr>
               <th scope="col" rowSpan={2} className="px-2 py-3">
                 <div className="flex items-center gap-2 justify-center">
@@ -236,7 +236,9 @@ export default function ProgresList() {
                       <td className=" text-center py-1  w-[10%]">
                         {data.seminarDate[0].dateToBe && data.fileSeminar ? (
                           <div className="flex flex-col gap-1">
-                            {moment(data.seminarDate[0].dateToBe).format("DD MMM YYYY")}
+                            {moment(data.seminarDate[0].dateToBe).format(
+                              "DD MMM YYYY"
+                            )}
                             <Link
                               target="_blank"
                               href={data.fileSeminar}
@@ -252,7 +254,9 @@ export default function ProgresList() {
                       <td className=" text-center w-[10%]">
                         {data.sidangDate[0].dateToBe && data.fileSidang ? (
                           <div className="flex flex-col gap-1">
-                            {moment(data.sidangDate[0].dateToBe).format("DD MMM YYYY")}
+                            {moment(data.sidangDate[0].dateToBe).format(
+                              "DD MMM YYYY"
+                            )}
                             <Link
                               target="_blank"
                               href={data.fileSidang}
