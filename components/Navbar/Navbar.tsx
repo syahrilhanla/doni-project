@@ -60,11 +60,11 @@ const Navbar = () => {
           <RiLogoutBoxRLine className="text-2xl" />
         </button>
 
-        <div className=" flex lg:hidden z-50 cursor-pointer">
+        <div className="flex lg:hidden z-50 cursor-pointer">
           {navbar ? (
             <>
               <FaTimes
-                className="text-2xl"
+                className="text-2xl fixed top-7 right-10"
                 onClick={() => setNavbar((prevValue) => !prevValue)}
               />
             </>

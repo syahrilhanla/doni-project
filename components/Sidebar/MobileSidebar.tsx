@@ -14,14 +14,14 @@ const MobileSidebar = ({ navbar, setNavbar, user }: Props) => {
 
   const setMobileNavbar = () => {
     if (!navbar) {
-      return "lg:hidden absolute top-0 left-0 bg-patternTwo flex flex-col justify-center items-center h-screen w-screen ml-[-110%] duration-500";
+      return "lg:hidden fixed top-0 left-0 bg-patternTwo flex flex-col justify-center items-center h-screen w-screen ml-[-110%] duration-500";
     } else
-      return "lg:hidden absolute top-0 left-0 bg-patternTwo flex flex-col justify-center items-center h-screen  w-screen duration-500 z-10";
+      return "lg:hidden fixed top-0 left-0 bg-patternTwo flex flex-col justify-center items-center h-screen  w-screen duration-500 z-10";
   };
 
   return (
     <>
-      <div className={" flex flex-col justify-center p-2 " + setMobileNavbar()}>
+      <div className={"flex flex-col justify-center p-2 " + setMobileNavbar()}>
         <ul className="space-y-2 mt-5">
           <li>
             <div
