@@ -4,71 +4,16 @@ import { useAuth } from "../Context/AuthContext";
 import { doc, getDoc, } from "firebase/firestore";
 import { db } from "../Store/firebase";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { BsPersonCircle } from "react-icons/bs";
-
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import Notification from "../Notification/Notification";
+import MobileSidebar from "../Sidebar/MobileSidebar";
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
   const router = useRouter();
   const [notificationData, setNotificationData] = useState([]);
-  // const [mobileNavbar,setMobileNavbar] = useState(false);
   const [student, setStudent] = useState<any>([]);
   const [navbar, setNavbar] = useState(false);
-
-  const menuItemsMhs = [
-    {
-      href: "/dashboard",
-      title: "Dashboard",
-    },
-    {
-      href: "/berkas",
-      title: "Berkas",
-    },
-    {
-      href: "/seminar",
-      title: "Seminar Hasil",
-    },
-    {
-      href: "/sidang",
-      title: "Sidang Akhir",
-    },
-  ];
-
-  const menuItemsDosen = [
-    {
-      href: "/approval",
-      title: "Persetujuan Judul",
-    },
-    {
-      href: "/progresMahasiswa",
-      title: "Progres Mahasiswa",
-    },
-    {
-      href: "/seminarMahasiswa",
-      title: "Seminar Hasil Mahasiswa",
-    },
-    {
-      href: "/sidangMahasiswa",
-      title: "Sidang Akhir Mahasiswa",
-    },
-  ];
-
-  const menuItemsAdmin = [
-    {
-      href: "/request",
-      title: "Permintaan Pendaftaran Mahasiswa",
-    },
-    {
-      href: "/daftarMahasiswa",
-      title: "Daftar Mahasiswa Skripsi",
-    },
-    {
-      href: "/daftarDosen",
-      title: "Daftar Dosen Pembimbing",
-    },
-  ];
 
   const handleLogout = async () => {
     try {
@@ -107,13 +52,6 @@ const Navbar = () => {
     }
   }, [user]);
 
-  const setMobileNavbar = () => {
-    if (!navbar) {
-      return "lg:hidden absolute top-0 left-0 bg-patternTwo flex flex-col justify-center items-center h-screen w-screen ml-[-110%] duration-500";
-    } else
-      return "lg:hidden absolute top-0 left-0 bg-patternTwo flex flex-col justify-center items-center h-screen  w-screen duration-500 z-10";
-  };
-
   return (
     <div className="flex flex-col top-12">
       <div
@@ -129,7 +67,29 @@ const Navbar = () => {
         >
           <RiLogoutBoxRLine className="text-2xl" />
         </button>
+
+        <div className=" flex lg:hidden z-50 cursor-pointer">
+          {navbar ? (
+            <>
+              <FaTimes
+                className="text-2xl"
+                onClick={() => setNavbar((prevValue) => !prevValue)}
+              />
+            </>
+          ) : (
+            <FaBars
+              className="text-2xl"
+              onClick={() => setNavbar((prevValue) => !prevValue)}
+            />
+          )}
+        </div>
       </div>
+
+      <MobileSidebar
+        navbar={navbar}
+        setNavbar={setNavbar}
+        user={user}
+      />
     </div>
   );
 };
