@@ -7,7 +7,9 @@ import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { BsFillPersonFill } from "react-icons/bs";
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
-
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+// import { VscCloudUpload } from "react-icons/vsc"
 const FileSidang = () => {
   const [jadwal, setJadwal] = useState<String>();
   const { user } = useAuth();
@@ -37,11 +39,22 @@ const FileSidang = () => {
     };
     setEnable(true);
     await updateDoc(docRef, link1Value);
+    toast.success('Berhasil Mengunggah Berkas Sidang Akhir', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
     setLink1("");
   };
 
   return (
     <div className="h-screen px-4 w-5/6  overflow-auto py-4">
+      <ToastContainer />
       <div className="py-4">
         <div className="flex justify-center">
           {jadwal ? (

@@ -19,7 +19,8 @@ import { db } from "../Store/firebase";
 import Link from "next/link";
 import { CloseButton, SendButton } from "../Common/Buttons";
 import moment from "moment";
-
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 // interface dataTable {
 //   id: number;
 //   name: string;
@@ -91,6 +92,16 @@ export default function SidangList() {
       setLoading(true);
     } catch (e) {
       console.log(e);
+      toast.error('Silahkan Muat Ulang Halaman', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }, [user]);
 
@@ -163,7 +174,16 @@ export default function SidangList() {
       };
 
       await updateDoc(studentRef, value1);
-      window.alert("Berhasil Menerima Sidang Akhir Selaku Dosen Pembimbing 1");
+      toast.success('Berhasil Menerima Sidang Akhir Selaku Dosen Pembimbing 1', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setSetuju(false);
       const newStudentData = student.filter((item: any) => {
         return item.uid !== uidUser;
@@ -192,7 +212,16 @@ export default function SidangList() {
         }),
       };
       updateDoc(studentRef, value2);
-      window.alert("Berhasil Menerima Sidang Akhir Selaku Dosen Pembimbing 2");
+      toast.success('Berhasil Menerima Sidang Akhir Selaku Dosen Pembimbing 2', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });      
       setSetuju(false);
       const newStudentData = student.filter((item: any) => {
         return item.uid !== uidUser;
@@ -226,7 +255,16 @@ export default function SidangList() {
         }),
       };
       updateDoc(studentRef, value1);
-      window.alert("Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 1");
+       toast.error('Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 1', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setTolak(false);
       const newStudentData = student.filter((item: any) => {
         return item.uid !== uidUser;
@@ -256,7 +294,16 @@ export default function SidangList() {
         }),
       };
       updateDoc(studentRef, value2);
-      window.alert("Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 2");
+       toast.error('Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 2', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setTolak(false);
       const newStudentData = student.filter((item: any) => {
         return item.uid !== uidUser;
@@ -277,14 +324,33 @@ export default function SidangList() {
   };
   const handleAssignSidangDate = () => {
     if (newFeedback) updateApprove();
-    else alert("Lengkapi data terlebih dahulu!");
+    else toast.error('Lengkapi data terlebih dahulu!', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
   };
   const handleDeniedSidangDate = () => {
     if (newFeedback) updateDenied();
-    else alert("Lengkapi data terlebih dahulu!");
+    else toast.error('Lengkapi data terlebih dahulu!', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
   };
   return (
     <div>
+      <ToastContainer />
       {setuju && (
         <div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
           <div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />

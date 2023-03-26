@@ -22,7 +22,7 @@ const NotificationList = ({ notificationData, setOpenNotification }: Props) => {
     <div
       className="absolute w-min-[90px] max-h-[268px]
         gap-4 overflow-auto rounded-xl bg-[#F0EBF8] 
-        top-[68px] right-20 z-50"
+        top-[68px] right-0 duration-500"
     >
       {
         reversedData.map((data: NotificationData) => (
@@ -46,5 +46,3 @@ const NotificationList = ({ notificationData, setOpenNotification }: Props) => {
       }
     </div>)
 }
-
-export default NotificationList
