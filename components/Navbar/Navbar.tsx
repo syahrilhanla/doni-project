@@ -121,14 +121,6 @@ const Navbar = () => {
         gap-6 bg-patternTwo h-16 overflow-hidden"
       >
         <Notification notificationData={notificationData} />
-        {/* <button
-          onClick={() => setOpenNotification(!openNotification)}
-          className="relative cursor-pointer hover:bg-white hover:font-extrabold
-          hover:text-patternTwo p-2 rounded-full "
-        >
-          <TfiBell className="text-2xl" />
-          <span className="absolute top-1 right-2 p-1.5 rounded-full bg-red-500" />
-        </button> */}
 
         <button
           onClick={handleLogout}
