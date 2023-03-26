@@ -12,8 +12,8 @@ const Navbar = () => {
   const { user, logOut } = useAuth();
   const router = useRouter();
   const [notificationData, setNotificationData] = useState([]);
-  const [student, setStudent] = useState<any>([]);
   const [navbar, setNavbar] = useState(false);
+  const [openNotification, setOpenNotification] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -24,33 +24,21 @@ const Navbar = () => {
     }
   };
 
-  const getNotifDosen = useCallback(async () => {
-    try {
-      const profRef = doc(db, "professorList", user.uid);
-      const notifProf = await getDoc(profRef);
-      setNotificationData(notifProf.data()?.notifications);
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+  const getNotificationData = useCallback(async () => {
+    const userRole = `${user.role === "mhs"
+      ? "studentsList" : user.role === "dosen"
+        ? "professorList" : ""
+      }`;
 
-  const getNotifMahasiswa = useCallback(async () => {
-    try {
-      const studentsRef = doc(db, "studentsList", user.uid);
-      const notifStudents = await getDoc(studentsRef);
-      setNotificationData(notifStudents.data()?.notifications);
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+    const userRef = doc(db, userRole, user.uid);
+
+    const notifications = await getDoc(userRef);
+    setNotificationData(notifications.data()?.notifications);
+  }, [user, openNotification]);
 
   useEffect(() => {
-    if (user.role === "mhs") {
-      getNotifMahasiswa();
-    } else if (user.role === "dosen") {
-      getNotifDosen();
-    }
-  }, [user]);
+    getNotificationData();
+  }, [user, openNotification]);
 
   return (
     <div className="flex flex-col top-12">
@@ -58,7 +46,11 @@ const Navbar = () => {
         className="flex justify-end items-center text-white p-8 shadow-md 
         gap-6 bg-patternTwo h-16 overflow-hidden"
       >
-        <Notification notificationData={notificationData} />
+        <Notification
+          openNotification={openNotification}
+          setOpenNotification={setOpenNotification}
+          notificationData={notificationData}
+        />
 
         <button
           onClick={handleLogout}

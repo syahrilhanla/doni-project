@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 
 import { TfiBell } from "react-icons/tfi";
 import { NotificationData } from "./NotificationList";
@@ -7,12 +7,12 @@ import NotificationList from "./NotificationList";
 import useOnClickOutside from "./hooks/useOnClickOutside";
 
 interface Props {
-  notificationData: NotificationData[]
+  notificationData: NotificationData[];
+  openNotification: boolean;
+  setOpenNotification: Dispatch<SetStateAction<boolean>>;
 }
 
-const Notification = ({ notificationData }: Props) => {
-  const [openNotification, setOpenNotification] = useState(false);
-
+const Notification = ({ notificationData, openNotification, setOpenNotification }: Props) => {
   const ref = useRef(null);
 
   useOnClickOutside(ref, () => setOpenNotification(false));
