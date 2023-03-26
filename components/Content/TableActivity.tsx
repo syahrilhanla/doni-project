@@ -1,8 +1,5 @@
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react';
 import { RiSortDesc } from 'react-icons/ri'
-// import { useAuth } from '../Context/AuthContext';
-import { db } from '../Store/firebase';
 import { StudentsData } from '../../typings';
 interface dataTable {
   id: number;
