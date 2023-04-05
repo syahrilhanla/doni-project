@@ -6,17 +6,32 @@ import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { BsFillPersonFill } from "react-icons/bs";
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { VscCloudUpload } from "react-icons/vsc"
 const FileSidang = () => {
   const [jadwal, setJadwal] = useState<String>();
   const { user } = useAuth();
+  const [fileSeminar, setFileSeminar] = useState<string>();
+  const [
+    fileSeminarIsApprovedByProf1,
+    setFileSeminarIsApprovedByProf1,
+  ] = useState<string>();
+  const [
+    fileSeminarIsApprovedByProf2,
+    setFileSeminarIsApprovedByProf2,
+  ] = useState<string>();
   const [file, setFile] = useState<string>();
   const [link1, setLink1] = useState("");
   const [enable, setEnable] = useState(false);
 
   useEffect(() => {
+    if (user.seminarDate) {
+      setJadwal(user.seminarDate[0].dateToBe);
+      setFileSeminar(user.fileSeminar);
+      setFileSeminarIsApprovedByProf1(user.seminarDate[0].isApprovedByProfOne);
+      setFileSeminarIsApprovedByProf2(user.seminarDate[0].isApprovedByProfTwo);
+    }
     if (user.sidangDate) {
       setJadwal(user.sidangDate[0].dateToBe);
       setFile(user.fileSidang);
@@ -38,7 +53,7 @@ const FileSidang = () => {
     };
     setEnable(true);
     await updateDoc(docRef, link1Value);
-    toast.success('Berhasil Mengunggah Berkas Sidang Akhir', {
+    toast.success("Berhasil Mengunggah Berkas Sidang Akhir", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -83,8 +98,9 @@ const FileSidang = () => {
               <div className="text-xl">Dosen Penguji 1</div>
             </div>
             <div
-              className={`text-center font-bold text-4xl ${!user.examinerOne && "text-sm italic text-gray-400"
-                }`}
+              className={`text-center font-bold text-4xl ${
+                !user.examinerOne && "text-sm italic text-gray-400"
+              }`}
             >
               {!user.examinerOne && "Kamu Belum Mendapatkan Dosen Penguji 1"}
               {user.examinerOne}
@@ -98,8 +114,9 @@ const FileSidang = () => {
               <div className="text-xl">Dosen Penguji 2</div>
             </div>
             <div
-              className={`text-center font-bold text-4xl ${!user.examinerTwo && "text-sm italic text-gray-400"
-                }`}
+              className={`text-center font-bold text-4xl ${
+                !user.examinerTwo && "text-sm italic text-gray-400"
+              }`}
             >
               {!user.examinerTwo && "Kamu Belum Mendapatkan Dosen Penguji 1"}
               {user.examinerTwo}
@@ -125,16 +142,34 @@ const FileSidang = () => {
             {!file && (
               <>
                 <input
-                  className="bg-gray-50 items-center border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
+                  className="disabled:opacity-50 bg-gray-50 items-center border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
                   value={link1}
                   onChange={(e) => setLink1(e.target.value)}
                   type="text"
                   placeholder="Link Google Drive"
                   required
+                  disabled={
+                    fileSeminar === "" ||
+                    fileSeminarIsApprovedByProf1 === "Denied" ||
+                    fileSeminarIsApprovedByProf1 === "" ||
+                    fileSeminarIsApprovedByProf2 === "Denied" ||
+                    fileSeminarIsApprovedByProf2 === ""
+                      ? true
+                      : false
+                  }
                 />
                 <button
                   onClick={handleLink1}
-                  className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
+                  disabled={
+                    fileSeminar === "" ||
+                    fileSeminarIsApprovedByProf1 === "Denied" ||
+                    fileSeminarIsApprovedByProf1 === "" ||
+                    fileSeminarIsApprovedByProf2 === "Denied" ||
+                    fileSeminarIsApprovedByProf2 === ""
+                      ? true
+                      : false
+                  }
+                  className="disabled:opacity-50 text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
                 >
                   Simpan
                 </button>
