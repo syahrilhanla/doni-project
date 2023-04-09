@@ -23,6 +23,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { CloseButton, SendButton } from "../Common/Buttons";
 import moment from "moment";
+import { Props } from "../ContentAdmin/RequestTable";
+import { FilterParams } from "../ContentAdmin/ListMahasiswa";
 interface dataTable {
   id: number;
   name: string;
@@ -32,7 +34,7 @@ interface dataTable {
   seminarDate: string;
 }
 
-export default function SeminarList() {
+export default function SeminarList({ searchedName, selectedYear }: Props) {
   const { user } = useAuth();
   const [setuju, setSetuju] = useState<any>(false);
   const [tolak, setTolak] = useState<any>(false);
@@ -47,19 +49,42 @@ export default function SeminarList() {
   const [dateToBe, setDateToBe] = useState<any>();
   const [loading, setLoading] = useState(false);
 
-  const getStudent = useCallback(async () => {
+  const getStudent = useCallback(async ({ filterType, value }: FilterParams) => {
     setLoading(false);
     try {
-      const studentRef1 = query(
+      const studentRef1 = filterType === "selectedYear" && value ? query(
         collection(db, "studentsList"),
         where("statusApprove", "==", true),
-        where("profOne", "==", user.name)
-      );
-      const studentRef2 = query(
+        where("profOne", "==", user.name),
+        where("generation", "==", String(value))
+      )
+        : filterType === "searchedName" && value ? query(
+          collection(db, "studentsList"),
+          where("statusApprove", "==", true),
+          where("profOne", "==", user.name),
+          where("name", "==", String(value))
+        ) : query(
+          collection(db, "studentsList"),
+          where("statusApprove", "==", true),
+          where("profOne", "==", user.name)
+        );
+
+      const studentRef2 = filterType === "selectedYear" ? query(
         collection(db, "studentsList"),
         where("statusApprove", "==", true),
-        where("profTwo", "==", user.name)
-      );
+        where("profTwo", "==", user.name),
+        where("generation", "==", String(value))
+      )
+        : filterType === "searchedName" ? query(
+          collection(db, "studentsList"),
+          where("statusApprove", "==", true),
+          where("profTwo", "==", user.name),
+          where("name", "==", String(value))
+        ) : query(
+          collection(db, "studentsList"),
+          where("statusApprove", "==", true),
+          where("profTwo", "==", user.name)
+        );
 
       const studentsData1 = (await getDocs(studentRef1)).docs
         .map((item) => item)
@@ -319,9 +344,19 @@ export default function SeminarList() {
       setStudent(newStudentData);
     }
   };
+
   useEffect(() => {
-    getStudent();
-  }, []);
+    getStudent({});
+  }, [user]);
+
+  useEffect(() => {
+    getStudent({ filterType: "selectedYear", value: selectedYear });
+  }, [selectedYear]);
+
+  useEffect(() => {
+    getStudent({ filterType: "searchedName", value: searchedName });
+  }, [searchedName]);
+
   const handleCloseModal = () => {
     setSetuju(!setuju);
     setNewFeedBack("");
@@ -497,8 +532,8 @@ export default function SeminarList() {
                       {data.profOne === user.name
                         ? "Dospem 1"
                         : data.profTwo === user.name
-                        ? "Dospem 2"
-                        : "None"}
+                          ? "Dospem 2"
+                          : "None"}
                     </td>
                     {data.fileSeminar ? (
                       <td className="px-6 py-2 text-right flex gap-2">

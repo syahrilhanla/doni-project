@@ -21,6 +21,8 @@ import { CloseButton, SendButton } from "../Common/Buttons";
 import moment from "moment";
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { Props } from "../ContentAdmin/RequestTable";
+import { FilterParams } from "../ContentAdmin/ListMahasiswa";
 // interface dataTable {
 //   id: number;
 //   name: string;
@@ -30,7 +32,7 @@ import "react-toastify/dist/ReactToastify.css";
 //   sidangDate: string;
 // }
 
-export default function SidangList() {
+export default function SidangList({ searchedName, selectedYear }: Props) {
   const { user } = useAuth();
   const [setuju, setSetuju] = useState<any>(false);
   const [tolak, setTolak] = useState<any>(false);
@@ -45,19 +47,42 @@ export default function SidangList() {
   const [dateToBe, setDateToBe] = useState<any>();
   const [loading, setLoading] = useState(false);
 
-  const getStudent = useCallback(async () => {
+  const getStudent = useCallback(async ({ filterType, value }: FilterParams) => {
     setLoading(false);
     try {
-      const studentRef1 = query(
+      const studentRef1 = filterType === "selectedYear" && value ? query(
         collection(db, "studentsList"),
         where("statusApprove", "==", true),
-        where("profOne", "==", user.name)
-      );
-      const studentRef2 = query(
+        where("profOne", "==", user.name),
+        where("generation", "==", String(value))
+      )
+        : filterType === "searchedName" && value ? query(
+          collection(db, "studentsList"),
+          where("statusApprove", "==", true),
+          where("profOne", "==", user.name),
+          where("name", "==", String(value))
+        ) : query(
+          collection(db, "studentsList"),
+          where("statusApprove", "==", true),
+          where("profOne", "==", user.name)
+        );
+
+      const studentRef2 = filterType === "selectedYear" ? query(
         collection(db, "studentsList"),
         where("statusApprove", "==", true),
-        where("profTwo", "==", user.name)
-      );
+        where("profTwo", "==", user.name),
+        where("generation", "==", String(value))
+      )
+        : filterType === "searchedName" ? query(
+          collection(db, "studentsList"),
+          where("statusApprove", "==", true),
+          where("profTwo", "==", user.name),
+          where("name", "==", String(value))
+        ) : query(
+          collection(db, "studentsList"),
+          where("statusApprove", "==", true),
+          where("profTwo", "==", user.name)
+        );
 
       const studentsData1 = (await getDocs(studentRef1)).docs
         .map((item) => item)
@@ -221,7 +246,7 @@ export default function SidangList() {
         draggable: true,
         progress: undefined,
         theme: "colored",
-      });      
+      });
       setSetuju(false);
       const newStudentData = student.filter((item: any) => {
         return item.uid !== uidUser;
@@ -255,7 +280,7 @@ export default function SidangList() {
         }),
       };
       updateDoc(studentRef, value1);
-       toast.error('Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 1', {
+      toast.error('Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 1', {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -294,7 +319,7 @@ export default function SidangList() {
         }),
       };
       updateDoc(studentRef, value2);
-       toast.error('Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 2', {
+      toast.error('Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 2', {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -311,9 +336,19 @@ export default function SidangList() {
       setStudent(newStudentData);
     }
   };
+
   useEffect(() => {
-    getStudent();
+    getStudent({});
   }, []);
+
+  useEffect(() => {
+    getStudent({ filterType: "selectedYear", value: selectedYear });
+  }, [selectedYear]);
+
+  useEffect(() => {
+    getStudent({ filterType: "searchedName", value: searchedName });
+  }, [searchedName]);
+
   const handleCloseModal = () => {
     setSetuju(!setuju);
     setNewFeedBack("");
