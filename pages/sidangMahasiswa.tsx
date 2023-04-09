@@ -4,7 +4,7 @@ import FilterSection from "../components/Layout/FilterSection";
 
 import LayoutDosen from "../components/Layout/LayoutDosen";
 
-export default function sidangMahasiswa() {
+export default function SidangMahasiswa() {
   const [selectedYear, setSelectedYear] = useState("");
   const [searchedName, setSearchedName] = useState("");
 

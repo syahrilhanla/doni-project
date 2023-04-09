@@ -3,7 +3,7 @@ import SeminarList from "../components/ContentDosen/SeminarList";
 import FilterSection from "../components/Layout/FilterSection";
 import LayoutDosen from "../components/Layout/LayoutDosen";
 
-export default function seminarMahasiswa() {
+export default function SeminarMahasiswa() {
   const [selectedYear, setSelectedYear] = useState("");
   const [searchedName, setSearchedName] = useState("");
 

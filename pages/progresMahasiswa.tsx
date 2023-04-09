@@ -3,7 +3,7 @@ import ProgresList from "../components/ContentDosen/ProgresList";
 import FilterSection from "../components/Layout/FilterSection";
 import LayoutDosen from "../components/Layout/LayoutDosen";
 
-export default function progresMahasiswa() {
+export default function ProgressMahasiswa() {
   const [selectedYear, setSelectedYear] = useState("");
   const [searchedName, setSearchedName] = useState("");
 

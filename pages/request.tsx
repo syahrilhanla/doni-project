@@ -3,7 +3,7 @@ import RequestTable from "../components/ContentAdmin/RequestTable";
 import LayoutAdmin from "../components/Layout/LayoutAdmin";
 import FilterSection from "../components/Layout/FilterSection";
 
-export default function request() {
+export default function Request() {
   const [selectedYear, setSelectedYear] = useState("");
   const [searchedName, setSearchedName] = useState("");
 

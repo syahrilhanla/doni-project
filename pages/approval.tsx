@@ -3,7 +3,7 @@ import ApprovalTable from "../components/ContentDosen/ApprovalTable";
 import FilterSection from "../components/Layout/FilterSection";
 import { useState } from "react";
 
-export default function approval() {
+export default function Approval() {
   const [selectedYear, setSelectedYear] = useState("");
   const [searchedName, setSearchedName] = useState("");
 

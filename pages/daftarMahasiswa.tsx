@@ -3,7 +3,7 @@ import ListMahasiswa from "../components/ContentAdmin/ListMahasiswa";
 import LayoutAdmin from "../components/Layout/LayoutAdmin";
 import FilterSection from "../components/Layout/FilterSection";
 
-export default function daftarMahasiswa() {
+export default function DaftarMahasiswa() {
   const [selectedYear, setSelectedYear] = useState("");
   const [searchedName, setSearchedName] = useState("");
 
