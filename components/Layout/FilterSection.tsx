@@ -1,7 +1,14 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import Dropdown from "../Common/Dropdown";
 
-const FilterSection = () => {
+interface Props {
+  setSelectedYear: Dispatch<SetStateAction<number>>;
+  setSearchedName: Dispatch<SetStateAction<string>>;
+}
+
+const FilterSection = ({
+  setSearchedName, setSelectedYear
+}: Props) => {
   const [title, setTitle] = useState("");
   const [angkatan, setAngkatan] = useState("");
 
@@ -19,7 +26,8 @@ const FilterSection = () => {
   ]
 
   const handleSetAngkatan = (itemData: any) => {
-    setAngkatan(itemData)
+    setAngkatan(itemData);
+    setSelectedYear(itemData.name);
   }
 
   return (

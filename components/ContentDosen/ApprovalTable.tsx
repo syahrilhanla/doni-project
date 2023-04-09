@@ -31,7 +31,17 @@ interface dataTable {
   generation: number;
 }
 
-export default function ApprovalTable() {
+interface Props {
+  selectedYear: number;
+  searchedName: string;
+}
+
+interface FilterParams {
+  filterType?: "searchedName" | "selectedYear";
+  value?: number | string;
+}
+
+export default function ApprovalTable({ searchedName, selectedYear }: Props) {
   const { user } = useAuth();
   const [setuju, setSetuju] = useState<boolean>(false);
   const [tolak, setTolak] = useState<boolean>(false);
@@ -46,19 +56,42 @@ export default function ApprovalTable() {
   const [titleTextUser, setTitleTextUser] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getStudent = useCallback(async () => {
+  const getStudent = useCallback(async ({ filterType, value }: FilterParams) => {
     setLoading(false);
     try {
-      const studentRef1 = query(
+      const studentRef1 = filterType === "selectedYear" ? query(
         collection(db, "studentsList"),
         where("statusApprove", "==", true),
-        where("profOne", "==", user.name)
-      );
-      const studentRef2 = query(
+        where("profOne", "==", user.name),
+        where("generation", "==", String(value))
+      )
+        : filterType === "searchedName" ? query(
+          collection(db, "studentsList"),
+          where("statusApprove", "==", true),
+          where("profOne", "==", user.name),
+          where("name", "==", String(value))
+        ) : query(
+          collection(db, "studentsList"),
+          where("statusApprove", "==", true),
+          where("profOne", "==", user.name)
+        );
+
+      const studentRef2 = filterType === "selectedYear" ? query(
         collection(db, "studentsList"),
         where("statusApprove", "==", true),
-        where("profTwo", "==", user.name)
-      );
+        where("profTwo", "==", user.name),
+        where("generation", "==", String(value))
+      )
+        : filterType === "searchedName" ? query(
+          collection(db, "studentsList"),
+          where("statusApprove", "==", true),
+          where("profTwo", "==", user.name),
+          where("name", "==", String(value))
+        ) : query(
+          collection(db, "studentsList"),
+          where("statusApprove", "==", true),
+          where("profTwo", "==", user.name)
+        );
       const studentsData1 = (await getDocs(studentRef1)).docs
         .map((item) => item)
         .map((item) => item.data())
@@ -99,7 +132,7 @@ export default function ApprovalTable() {
         });
       }
     }
-  }, [user]);
+  }, [user, searchedName, selectedYear]);
 
   const getCurrentDate = (separator = "-") => {
     let newDate = new Date();
@@ -309,8 +342,16 @@ export default function ApprovalTable() {
   };
 
   useEffect(() => {
-    getStudent();
+    getStudent({});
   }, [user]);
+
+  useEffect(() => {
+    getStudent({ filterType: "selectedYear", value: selectedYear });
+  }, [selectedYear]);
+
+  useEffect(() => {
+    getStudent({ filterType: "searchedName", value: searchedName });
+  }, [searchedName]);
 
   const handleCloseModal = () => {
     setSetuju(!setuju);

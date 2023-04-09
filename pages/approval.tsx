@@ -1,8 +1,21 @@
 import LayoutDosen from "../components/Layout/LayoutDosen";
 import ApprovalTable from "../components/ContentDosen/ApprovalTable";
 import FilterSection from "../components/Layout/FilterSection";
+import { useEffect, useState } from "react";
 
 export default function approval() {
+  const [selectedFilter, setSelectedFilter] = useState<"year" | "name" | "">("");
+  const [selectedYear, setSelectedYear] = useState(0);
+  const [searchedName, setSearchedName] = useState("");
+
+  useEffect(() => {
+
+  }, [selectedYear]);
+
+  useEffect(() => {
+
+  }, [searchedName]);
+
   return (
     <LayoutDosen>
       <div className="w-full flex flex-col justify-start xl:p-8">
@@ -10,11 +23,14 @@ export default function approval() {
           Persetujuan Judul Skripsi
         </h1>
 
-        <FilterSection />
+        <FilterSection
+          setSearchedName={setSearchedName}
+          setSelectedYear={setSelectedYear}
+        />
       </div>
 
       <div className="w-full flex p-4 flex-col justify-center items-center">
-        <ApprovalTable />
+        <ApprovalTable searchedName={searchedName} selectedYear={selectedYear} />
       </div>
     </LayoutDosen>
   );

@@ -30,7 +30,9 @@ const Dropdown = ({ displayText, dropdownData, handleClickItem }: Props) => {
         <RiArrowDownSLine className="text-[#707070] text-xl" />
       </button>
       {openDropdown && (
-        <ul className="rounded-lg absolute mt-1 z-50 w-full max-h-48 overflow-auto bg-[#ffffff]">
+        <ul className="rounded-lg absolute mt-1 z-50 
+          w-full max-h-48 overflow-auto bg-[#ffffff]"
+        >
           {dropdownData.map(item => (
             <li
               key={item.id}
