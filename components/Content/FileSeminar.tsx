@@ -6,15 +6,31 @@ import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { BsFillPersonFill } from "react-icons/bs";
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const FileSeminar = () => {
   const [jadwal, setJadwal] = useState<String>();
   const { user } = useAuth();
   const [file, setFile] = useState("");
+  const [chapter5, setChapter5] = useState<any>();
+  const [isApprovedByProf1Chapter5, setIsApprovedByProf1Chapter5] = useState<
+    any
+  >();
+  const [isApprovedByProf2Chapter5, setIsApprovedByProf2Chapter5] = useState<
+    any
+  >();
   const [link1, setLink1] = useState("");
   const [enable, setEnable] = useState(false);
   useEffect(() => {
+    if (user.files) {
+      setChapter5(user.files[0].chapterFive.link);
+      setIsApprovedByProf1Chapter5(
+        user.files[0].chapterFive.isApprovedByProfOne
+      );
+      setIsApprovedByProf2Chapter5(
+        user.files[0].chapterFive.isApprovedByProfTwo
+      );
+    }
     if (user.seminarDate) {
       setJadwal(user.seminarDate[0].dateToBe);
       setFile(user.fileSeminar);
@@ -37,7 +53,7 @@ const FileSeminar = () => {
     };
     setEnable(true);
     await updateDoc(docRef, link1Value);
-    toast.success('Berhasil Mengunggah Berkas Seminar Hasil', {
+    toast.success("Berhasil Mengunggah Berkas Seminar Hasil", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -81,8 +97,9 @@ const FileSeminar = () => {
             <div className="text-xl">Dosen Penguji 1</div>
           </div>
           <div
-            className={`text-center font-bold text-4xl ${!user.examinerOne && "text-sm italic text-gray-400"
-              }`}
+            className={`text-center font-bold text-4xl ${
+              !user.examinerOne && "text-sm italic text-gray-400"
+            }`}
           >
             {!user.examinerOne && "Kamu Belum Mendapatkan Dosen Penguji 1"}
             {user.examinerOne}
@@ -96,8 +113,9 @@ const FileSeminar = () => {
             <div className="text-xl">Dosen Penguji 2</div>
           </div>
           <div
-            className={`text-center font-bold text-4xl ${!user.examinerTwo && "text-sm italic text-gray-400"
-              }`}
+            className={`text-center font-bold text-4xl ${
+              !user.examinerTwo && "text-sm italic text-gray-400"
+            }`}
           >
             {!user.examinerTwo && "Kamu Belum Mendapatkan Dosen Penguji 1"}
             {user.examinerTwo}
@@ -123,16 +141,34 @@ const FileSeminar = () => {
           {!file && (
             <>
               <input
-                className="bg-gray-50 items-center border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
+                className="disabled:opacity-50 bg-gray-50 items-center border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
                 value={link1}
                 onChange={(e) => setLink1(e.target.value)}
                 type="text"
                 placeholder="Link Google Drive"
                 required
+                disabled={
+                  chapter5 === "" ||
+                  isApprovedByProf1Chapter5 === "Denied" ||
+                  isApprovedByProf1Chapter5 === "" ||
+                  isApprovedByProf2Chapter5 === "Denied" ||
+                  isApprovedByProf2Chapter5 === ""
+                    ? true
+                    : false
+                }
               />
               <button
                 onClick={handleLink1}
-                className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
+                disabled={
+                  chapter5 === "" ||
+                  isApprovedByProf1Chapter5 === "Denied" ||
+                  isApprovedByProf1Chapter5 === "" ||
+                  isApprovedByProf2Chapter5 === "Denied" ||
+                  isApprovedByProf2Chapter5 === ""
+                    ? true
+                    : false
+                }
+                className="disabled:opacity-50 text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
               >
                 Simpan
               </button>
