@@ -4,17 +4,8 @@ import FilterSection from "../components/Layout/FilterSection";
 import { useEffect, useState } from "react";
 
 export default function approval() {
-  const [selectedFilter, setSelectedFilter] = useState<"year" | "name" | "">("");
   const [selectedYear, setSelectedYear] = useState(0);
   const [searchedName, setSearchedName] = useState("");
-
-  useEffect(() => {
-
-  }, [selectedYear]);
-
-  useEffect(() => {
-
-  }, [searchedName]);
 
   return (
     <LayoutDosen>
