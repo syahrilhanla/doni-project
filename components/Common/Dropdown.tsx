@@ -33,6 +33,18 @@ const Dropdown = ({ displayText, dropdownData, handleClickItem }: Props) => {
         <ul className="rounded-lg absolute mt-1 z-50 
           w-full max-h-48 overflow-auto bg-[#ffffff]"
         >
+          <li
+            key={"reset"}
+            className="sticky top-0 z-10 py-2 px-4 hover:bg-[#f8f8f8] 
+              duration-200 cursor-pointer bg-white"
+            onClick={() => {
+              handleClickItem("");
+              setSelectedItemText("")
+              setOpenDropdown(false);
+            }}
+          >
+            Reset
+          </li>
           {dropdownData.map(item => (
             <li
               key={item.id}
