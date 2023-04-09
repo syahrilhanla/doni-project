@@ -252,7 +252,7 @@ export default function ApprovalTable() {
         }),
       };
       updateDoc(studentRef, value1);
-      toast.error('Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 1', {
+      toast.success('Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 1', {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -290,7 +290,7 @@ export default function ApprovalTable() {
         }),
       };
       updateDoc(studentRef, value2);
-      toast.error('Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 2', {
+      toast.success('Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 2', {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
