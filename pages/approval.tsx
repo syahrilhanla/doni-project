@@ -21,7 +21,10 @@ export default function approval() {
       </div>
 
       <div className="w-full flex p-4 flex-col justify-center items-center">
-        <ApprovalTable searchedName={searchedName} selectedYear={selectedYear} />
+        <ApprovalTable
+          searchedName={searchedName}
+          selectedYear={selectedYear}
+        />
       </div>
     </LayoutDosen>
   );

@@ -29,7 +29,17 @@ interface dataTable {
   sidang: string;
 }
 
-export default function ListMahasiswa() {
+interface Props {
+  selectedYear: number;
+  searchedName: string;
+}
+
+export interface FilterParams {
+  filterType?: "searchedName" | "selectedYear";
+  value?: number | string;
+}
+
+export default function ListMahasiswa({ searchedName, selectedYear }: Props) {
   const { user } = useAuth();
 
   const [student, setStudent] = useState<any>([]);
@@ -47,28 +57,14 @@ export default function ListMahasiswa() {
   const [sidangDate, setSidangDate] = useState<any>();
   const [feedbackTextAreaSeminar, setFeedbackTextAreaSeminar] = useState("");
   const [feedbackTextAreaSidang, setFeedbackTextAreaSidang] = useState("");
-  const [
-    feedbackUserSeminarByProfOne,
-    setFeedbackUserSeminarByProfOne,
-  ] = useState<any>();
-  const [
-    feedbackUserSeminarByProfTwo,
-    setFeedbackUserSeminarByProfTwo,
-  ] = useState<any>();
+
   const [isApprovedByProfOneSeminar, setIsApprovedByProfOneSeminar] = useState<
     any
   >();
   const [isApprovedByProfTwoSeminar, setIsApprovedByProfTwoSeminar] = useState<
     any
   >();
-  const [
-    feedbackUserSidangByProfOne,
-    setFeedbackUserSidangByProfOne,
-  ] = useState<any>();
-  const [
-    feedbackUserSidangByProfTwo,
-    setFeedbackUserSidangByProfTwo,
-  ] = useState<any>();
+
   const [isApprovedByProfOneSidang, setIsApprovedByProfOneSidang] = useState<
     any
   >();
@@ -78,10 +74,18 @@ export default function ListMahasiswa() {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getData = useCallback(async () => {
+  const getData = useCallback(async ({ filterType, value }: FilterParams) => {
     setLoading(false);
 
-    const studentRef = query(
+    const studentRef = filterType === "searchedName" ? query(
+      collection(db, "studentsList"),
+      where("statusApprove", "==", true),
+      where("name", "==", value)
+    ) : filterType === "selectedYear" ? query(
+      collection(db, "studentsList"),
+      where("statusApprove", "==", true),
+      where("generation", "==", String(value))
+    ) : query(
       collection(db, "studentsList"),
       where("statusApprove", "==", true)
     );
@@ -128,9 +132,17 @@ export default function ListMahasiswa() {
   };
 
   useEffect(() => {
-    getData();
+    getData({});
     getProf();
   }, [user]);
+
+  useEffect(() => {
+    getData({ filterType: "searchedName", value: searchedName });
+  }, [searchedName]);
+
+  useEffect(() => {
+    getData({ filterType: "selectedYear", value: selectedYear });
+  }, [selectedYear]);
 
   const getStatusSeminar = (
     uid: any,
@@ -222,7 +234,7 @@ export default function ListMahasiswa() {
       setExaminerTwo("");
     });
 
-    getData();
+    getData({});
   };
 
   const getUpdateSidang = async () => {
@@ -287,7 +299,7 @@ export default function ListMahasiswa() {
       setExaminerTwo("");
     });
 
-    getData();
+    getData({});
   };
 
   const handleCloseSeminarModal = () => {
@@ -360,7 +372,7 @@ export default function ListMahasiswa() {
           theme: "colored",
         });
         setHapus(!hapus);
-        getData();
+        getData({});
       })
       .catch((err) => {
         toast.error('Tidak Dapat Menghapus Data!', {
@@ -379,7 +391,7 @@ export default function ListMahasiswa() {
   return (
     <>
       <ToastContainer />
-      <FilterSection />
+      {/* <FilterSection /> */}
       <div>
         {assignSeminar && (
           <div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
