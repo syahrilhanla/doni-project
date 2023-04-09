@@ -40,30 +40,43 @@ const FileSeminar = () => {
   }, [user]);
 
   const handleLink1 = async () => {
-    const docRef = doc(db, "studentsList", user.uid);
-    const link1Value = {
-      fileSeminar: link1,
-      seminarDate: [
-        {
-          dateToBe: "",
-          isApprovedByProfOne: "",
-          isApprovedByProfTwo: "",
-        },
-      ],
-    };
-    setEnable(true);
-    await updateDoc(docRef, link1Value);
-    toast.success("Berhasil Mengunggah Berkas Seminar Hasil", {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-    setLink1("");
+    try {
+      const docRef = doc(db, "studentsList", user.uid);
+      const link1Value = {
+        fileSeminar: link1,
+        seminarDate: [
+          {
+            dateToBe: "",
+            isApprovedByProfOne: "",
+            isApprovedByProfTwo: "",
+          },
+        ],
+      };
+      setEnable(true);
+      await updateDoc(docRef, link1Value);
+      toast.success("Berhasil Mengunggah Berkas Seminar Hasil", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setLink1("");
+    } catch (error) {
+      toast.error('Gagal Mengunggah File Seminar', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
   };
 
   return (
@@ -97,9 +110,8 @@ const FileSeminar = () => {
             <div className="text-xl">Dosen Penguji 1</div>
           </div>
           <div
-            className={`text-center font-bold text-4xl ${
-              !user.examinerOne && "text-sm italic text-gray-400"
-            }`}
+            className={`text-center font-bold text-4xl ${!user.examinerOne && "text-sm italic text-gray-400"
+              }`}
           >
             {!user.examinerOne && "Kamu Belum Mendapatkan Dosen Penguji 1"}
             {user.examinerOne}
@@ -113,9 +125,8 @@ const FileSeminar = () => {
             <div className="text-xl">Dosen Penguji 2</div>
           </div>
           <div
-            className={`text-center font-bold text-4xl ${
-              !user.examinerTwo && "text-sm italic text-gray-400"
-            }`}
+            className={`text-center font-bold text-4xl ${!user.examinerTwo && "text-sm italic text-gray-400"
+              }`}
           >
             {!user.examinerTwo && "Kamu Belum Mendapatkan Dosen Penguji 1"}
             {user.examinerTwo}
@@ -149,10 +160,10 @@ const FileSeminar = () => {
                 required
                 disabled={
                   chapter5 === "" ||
-                  isApprovedByProf1Chapter5 === "Denied" ||
-                  isApprovedByProf1Chapter5 === "" ||
-                  isApprovedByProf2Chapter5 === "Denied" ||
-                  isApprovedByProf2Chapter5 === ""
+                    isApprovedByProf1Chapter5 === "Denied" ||
+                    isApprovedByProf1Chapter5 === "" ||
+                    isApprovedByProf2Chapter5 === "Denied" ||
+                    isApprovedByProf2Chapter5 === ""
                     ? true
                     : false
                 }
@@ -161,10 +172,10 @@ const FileSeminar = () => {
                 onClick={handleLink1}
                 disabled={
                   chapter5 === "" ||
-                  isApprovedByProf1Chapter5 === "Denied" ||
-                  isApprovedByProf1Chapter5 === "" ||
-                  isApprovedByProf2Chapter5 === "Denied" ||
-                  isApprovedByProf2Chapter5 === ""
+                    isApprovedByProf1Chapter5 === "Denied" ||
+                    isApprovedByProf1Chapter5 === "" ||
+                    isApprovedByProf2Chapter5 === "Denied" ||
+                    isApprovedByProf2Chapter5 === ""
                     ? true
                     : false
                 }
