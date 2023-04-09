@@ -10,7 +10,7 @@ export default function approval() {
           Persetujuan Judul Skripsi
         </h1>
 
-        {/* <FilterSection /> */}
+        <FilterSection />
       </div>
 
       <div className="w-full flex p-4 flex-col justify-center items-center">

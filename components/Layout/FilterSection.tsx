@@ -12,7 +12,10 @@ const FilterSection = () => {
     { name: 2019 },
     { name: 2020 },
     { name: 2021 },
-    { name: 2022 }
+    { name: 2022 },
+    { name: 2023 },
+    { name: 2024 },
+    { name: 2025 },
   ]
 
   const handleSetAngkatan = (itemData: any) => {
