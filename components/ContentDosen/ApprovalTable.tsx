@@ -59,13 +59,13 @@ export default function ApprovalTable({ searchedName, selectedYear }: Props) {
   const getStudent = useCallback(async ({ filterType, value }: FilterParams) => {
     setLoading(false);
     try {
-      const studentRef1 = filterType === "selectedYear" ? query(
+      const studentRef1 = filterType === "selectedYear" && value ? query(
         collection(db, "studentsList"),
         where("statusApprove", "==", true),
         where("profOne", "==", user.name),
         where("generation", "==", String(value))
       )
-        : filterType === "searchedName" ? query(
+        : filterType === "searchedName" && value ? query(
           collection(db, "studentsList"),
           where("statusApprove", "==", true),
           where("profOne", "==", user.name),

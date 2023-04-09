@@ -39,11 +39,11 @@ export default function RequestTable({ searchedName, selectedYear }: Props) {
   const [userid, setUserid] = useState("");
 
   const getData = useCallback(async ({ filterType, value }: FilterParams) => {
-    const studentRef = filterType === "searchedName" ? query(
+    const studentRef = filterType === "searchedName" && value ? query(
       collection(db, "studentsList"),
       where("statusApprove", "==", true),
       where("name", "==", value)
-    ) : filterType === "selectedYear" ? query(
+    ) : filterType === "selectedYear" && value ? query(
       collection(db, "studentsList"),
       where("statusApprove", "==", true),
       where("generation", "==", String(value))

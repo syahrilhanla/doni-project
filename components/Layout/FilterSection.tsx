@@ -11,7 +11,6 @@ const FilterSection = ({
   setSearchedName, setSelectedYear
 }: Props) => {
   const [studentsName, setStudentsName] = useState("");
-  const [angkatan, setAngkatan] = useState("");
 
   const debouncedValue = useDebounce(studentsName, 500);
 
@@ -29,7 +28,6 @@ const FilterSection = ({
   ]
 
   const handleSetAngkatan = (itemData: any) => {
-    setAngkatan(itemData);
     setSelectedYear(itemData.name);
   }
 
