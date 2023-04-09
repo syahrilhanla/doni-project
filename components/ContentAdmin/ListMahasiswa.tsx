@@ -30,13 +30,13 @@ interface dataTable {
 }
 
 interface Props {
-  selectedYear: number;
+  selectedYear: string;
   searchedName: string;
 }
 
 export interface FilterParams {
   filterType?: "searchedName" | "selectedYear";
-  value?: number | string;
+  value?: string;
 }
 
 export default function ListMahasiswa({ searchedName, selectedYear }: Props) {
@@ -77,7 +77,9 @@ export default function ListMahasiswa({ searchedName, selectedYear }: Props) {
   const getData = useCallback(async ({ filterType, value }: FilterParams) => {
     setLoading(false);
 
-    const studentRef = filterType === "searchedName" ? query(
+    console.log({ filterType })
+
+    const studentRef = filterType === "searchedName" && value !== "" ? query(
       collection(db, "studentsList"),
       where("statusApprove", "==", true),
       where("name", "==", value)

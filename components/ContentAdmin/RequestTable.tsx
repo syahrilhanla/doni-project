@@ -24,8 +24,8 @@ interface dataTable {
   status: boolean;
 }
 
-interface Props {
-  selectedYear: number;
+export interface Props {
+  selectedYear: string;
   searchedName: string;
 }
 

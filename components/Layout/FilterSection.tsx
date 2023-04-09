@@ -3,7 +3,7 @@ import Dropdown from "../Common/Dropdown";
 import useDebounce from "../../utils/useDebounce";
 
 interface Props {
-  setSelectedYear: Dispatch<SetStateAction<number>>;
+  setSelectedYear: Dispatch<SetStateAction<string>>;
   setSearchedName: Dispatch<SetStateAction<string>>;
 }
 

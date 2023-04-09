@@ -4,7 +4,7 @@ import LayoutAdmin from "../components/Layout/LayoutAdmin";
 import FilterSection from "../components/Layout/FilterSection";
 
 export default function request() {
-  const [selectedYear, setSelectedYear] = useState(0);
+  const [selectedYear, setSelectedYear] = useState("");
   const [searchedName, setSearchedName] = useState("");
 
   return (

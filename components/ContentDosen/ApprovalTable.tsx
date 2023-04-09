@@ -32,13 +32,13 @@ interface dataTable {
 }
 
 interface Props {
-  selectedYear: number;
+  selectedYear: string;
   searchedName: string;
 }
 
 interface FilterParams {
   filterType?: "searchedName" | "selectedYear";
-  value?: number | string;
+  value?: string;
 }
 
 export default function ApprovalTable({ searchedName, selectedYear }: Props) {

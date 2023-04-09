@@ -4,7 +4,7 @@ import FilterSection from "../components/Layout/FilterSection";
 import { useEffect, useState } from "react";
 
 export default function approval() {
-  const [selectedYear, setSelectedYear] = useState(0);
+  const [selectedYear, setSelectedYear] = useState("");
   const [searchedName, setSearchedName] = useState("");
 
   return (
