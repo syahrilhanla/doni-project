@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Dropdown from "../Common/Dropdown";
+import useDebounce from "../../utils/useDebounce";
 
-const FilterSection = () => {
-  const [title, setTitle] = useState("");
-  const [angkatan, setAngkatan] = useState("");
+interface Props {
+  setSelectedYear: Dispatch<SetStateAction<string>>;
+  setSearchedName: Dispatch<SetStateAction<string>>;
+}
+
+const FilterSection = ({
+  setSearchedName, setSelectedYear
+}: Props) => {
+  const [studentsName, setStudentsName] = useState("");
+
+  const debouncedValue = useDebounce(studentsName, 500);
 
   const listAngkatan = [
     { name: 2016 },
@@ -12,17 +21,24 @@ const FilterSection = () => {
     { name: 2019 },
     { name: 2020 },
     { name: 2021 },
-    { name: 2022 }
+    { name: 2022 },
+    { name: 2023 },
+    { name: 2024 },
+    { name: 2025 },
   ]
 
   const handleSetAngkatan = (itemData: any) => {
-    setAngkatan(itemData)
+    setSelectedYear(itemData.name);
   }
+
+  useEffect(() => {
+    setSearchedName(debouncedValue);
+  }, [debouncedValue]);
 
   return (
     <>
       <div
-        className={`w-full flex justify-start items-center my-5 py-4  xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col `}
+        className={`w-full flex justify-start items-center py-4 xxs:max-sm:flex-col sm:max-md:flex-col md:max-lg:flex-col `}
       >
         <div className="realtive xxs:max-sm:w-full sm:max-md:w-full md:max-lg:w-full">
           <Dropdown
@@ -36,10 +52,10 @@ const FilterSection = () => {
         >
           <input
             type="text"
-            onChange={(e) => setTitle(e.target.value)}
-            value={title}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  focus:border-purple-300 block w-full pl-10 p-2.5 focus:outline-none "
-            placeholder="Cari Judul / Mahasiswa"
+            onChange={(e) => setStudentsName(e.target.value)}
+            value={studentsName}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  focus:border-purple-300 block w-full p-2.5 focus:outline-none "
+            placeholder="Masukkan nama lengkap mahasiswa"
             required
           />
           <div className="absolute inset-y-0 right-0 flex items-center pr-3">

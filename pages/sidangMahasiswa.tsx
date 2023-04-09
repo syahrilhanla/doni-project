@@ -1,9 +1,13 @@
+import { useState } from "react";
 import SidangList from "../components/ContentDosen/SidangList";
 import FilterSection from "../components/Layout/FilterSection";
 
 import LayoutDosen from "../components/Layout/LayoutDosen";
 
-export default function sidangMahasiswa() {
+export default function SidangMahasiswa() {
+  const [selectedYear, setSelectedYear] = useState("");
+  const [searchedName, setSearchedName] = useState("");
+
   return (
     <LayoutDosen>
       <div className="w-full flex flex-col justify-start xl:p-8">
@@ -11,11 +15,17 @@ export default function sidangMahasiswa() {
           Persetujuan Skripsi Sidang Akhir
         </h1>
 
-        {/* <FilterSection /> */}
+        <FilterSection
+          setSearchedName={setSearchedName}
+          setSelectedYear={setSelectedYear}
+        />
       </div>
 
       <div className="flex p-4 flex-col justify-center items-center">
-        <SidangList />
+        <SidangList
+          searchedName={searchedName}
+          selectedYear={selectedYear}
+        />
       </div>
     </LayoutDosen>
   );

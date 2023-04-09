@@ -15,6 +15,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FilterSection from "../Layout/FilterSection";
 import { db } from "../Store/firebase";
+import { FilterParams } from "./ListMahasiswa";
 
 interface dataTable {
   id: number;
@@ -23,7 +24,12 @@ interface dataTable {
   status: boolean;
 }
 
-export default function RequestTable() {
+export interface Props {
+  selectedYear: string;
+  searchedName: string;
+}
+
+export default function RequestTable({ searchedName, selectedYear }: Props) {
   const [setuju, setSetuju] = useState<any>(false);
   const [tolak, setTolak] = useState<any>(false);
   const [student, setStudent] = useState<any>([]);
@@ -32,11 +38,22 @@ export default function RequestTable() {
   const [dosen2, setDosen2] = useState("");
   const [userid, setUserid] = useState("");
 
-  const getData = useCallback(async () => {
-    const studentRef = query(
+  const getData = useCallback(async ({ filterType, value }: FilterParams) => {
+    const studentRef = filterType === "searchedName" && value ? query(
       collection(db, "studentsList"),
-      where("statusApprove", "==", false)
+      where("statusApprove", "==", true),
+      where("name", "==", value)
+    ) : filterType === "selectedYear" && value ? query(
+      collection(db, "studentsList"),
+      where("statusApprove", "==", true),
+      where("generation", "==", String(value))
+    ) : query(
+      collection(db, "studentsList"),
+      where("statusApprove", "==", true)
     );
+
+    console.log({ filterType, value })
+
     try {
       const studentsData = (await getDocs(studentRef)).docs
         .map((item) => item)
@@ -77,9 +94,17 @@ export default function RequestTable() {
   };
 
   useEffect(() => {
-    getData();
+    getData({});
     getProf();
   }, []);
+
+  useEffect(() => {
+    getData({ filterType: "selectedYear", value: selectedYear });
+  }, [selectedYear]);
+
+  useEffect(() => {
+    getData({ filterType: "searchedName", value: searchedName });
+  }, [searchedName]);
 
   const getStatus = (uid: any) => {
     setSetuju(true);
@@ -115,7 +140,6 @@ export default function RequestTable() {
   return (
     <>
       <ToastContainer />
-      <FilterSection />
       <div>
         {setuju && (
           <div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">

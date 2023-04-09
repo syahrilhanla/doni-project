@@ -1,7 +1,12 @@
+import { useState } from "react";
 import ListMahasiswa from "../components/ContentAdmin/ListMahasiswa";
 import LayoutAdmin from "../components/Layout/LayoutAdmin";
+import FilterSection from "../components/Layout/FilterSection";
 
-export default function daftarMahasiswa() {
+export default function DaftarMahasiswa() {
+  const [selectedYear, setSelectedYear] = useState("");
+  const [searchedName, setSearchedName] = useState("");
+
   return (
     <LayoutAdmin>
       <div className="w-full flex flex-col justify-start xl:p-8">
@@ -9,11 +14,17 @@ export default function daftarMahasiswa() {
           Daftar Mahasiswa Skripsi
         </h1>
 
-        {/* <FilterSection /> */}
+        <FilterSection
+          setSearchedName={setSearchedName}
+          setSelectedYear={setSelectedYear}
+        />
       </div>
 
       <div className="flex p-4 flex-col justify-center items-center">
-        <ListMahasiswa />
+        <ListMahasiswa
+          searchedName={searchedName}
+          selectedYear={selectedYear}
+        />
       </div>
     </LayoutAdmin>
   );
