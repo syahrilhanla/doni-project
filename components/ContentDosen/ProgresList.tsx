@@ -15,8 +15,11 @@ import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { CloseButton, SendButton } from "../Common/Buttons";
-export default function ProgresList() {
+import { CloseButton } from "../Common/Buttons";
+import { Props } from "../ContentAdmin/RequestTable";
+import { FilterParams } from "../ContentAdmin/ListMahasiswa";
+
+export default function ProgresList({ searchedName, selectedYear }: Props) {
   const [student, setStudent] = useState<any>([]);
   const { user } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
@@ -85,19 +88,40 @@ export default function ProgresList() {
   const [linkChapterFour, setLinkChapterFour] = useState<any>();
   const [linkChapterFive, setLinkChapterFive] = useState<any>();
 
-  const getData = useCallback(async () => {
+  const getData = useCallback(async ({ filterType, value }: FilterParams) => {
     setLoading(true);
 
     try {
-      const studentRef1 = query(
+      const studentRef1 = filterType === "searchedName" && value ? query(
         collection(db, "studentsList"),
         where("statusApprove", "==", true),
-        where("profOne", "==", user.name)
+        where("profOne", "==", user.name),
+        where("name", "==", value)
+      ) : filterType === "searchedName" && value ? query(
+        collection(db, "studentsList"),
+        where("statusApprove", "==", true),
+        where("profOne", "==", user.name),
+        where("generation", "==", value)
+      ) : query(
+        collection(db, "studentsList"),
+        where("statusApprove", "==", true),
+        where("profOne", "==", user.name),
       );
-      const studentRef2 = query(
+
+      const studentRef2 = filterType === "searchedName" && value ? query(
         collection(db, "studentsList"),
         where("statusApprove", "==", true),
-        where("profTwo", "==", user.name)
+        where("profTwo", "==", user.name),
+        where("name", "==", value)
+      ) : filterType === "searchedName" && value ? query(
+        collection(db, "studentsList"),
+        where("statusApprove", "==", true),
+        where("profTwo", "==", user.name),
+        where("generation", "==", value)
+      ) : query(
+        collection(db, "studentsList"),
+        where("statusApprove", "==", true),
+        where("profTwo", "==", user.name),
       );
 
       const studentsData1 = (await getDocs(studentRef1)).docs
@@ -130,8 +154,16 @@ export default function ProgresList() {
   }, [user]);
 
   useEffect(() => {
-    getData();
+    getData({});
   }, [user]);
+
+  useEffect(() => {
+    getData({ filterType: "selectedYear", value: selectedYear });
+  }, [selectedYear]);
+
+  useEffect(() => {
+    getData({ filterType: "searchedName", value: searchedName });
+  }, [searchedName]);
 
   const getCurrentDate = (separator = "-") => {
     let newDate = new Date();

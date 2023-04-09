@@ -1,7 +1,7 @@
 import LayoutDosen from "../components/Layout/LayoutDosen";
 import ApprovalTable from "../components/ContentDosen/ApprovalTable";
 import FilterSection from "../components/Layout/FilterSection";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function approval() {
   const [selectedYear, setSelectedYear] = useState("");
