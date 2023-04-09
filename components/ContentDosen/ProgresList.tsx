@@ -91,17 +91,19 @@ export default function ProgresList({ searchedName, selectedYear }: Props) {
   const getData = useCallback(async ({ filterType, value }: FilterParams) => {
     setLoading(true);
 
+    console.log({ filterType, value })
+
     try {
       const studentRef1 = filterType === "searchedName" && value ? query(
         collection(db, "studentsList"),
         where("statusApprove", "==", true),
         where("profOne", "==", user.name),
         where("name", "==", value)
-      ) : filterType === "searchedName" && value ? query(
+      ) : filterType === "selectedYear" && value ? query(
         collection(db, "studentsList"),
         where("statusApprove", "==", true),
         where("profOne", "==", user.name),
-        where("generation", "==", value)
+        where("generation", "==", String(value))
       ) : query(
         collection(db, "studentsList"),
         where("statusApprove", "==", true),
@@ -113,11 +115,11 @@ export default function ProgresList({ searchedName, selectedYear }: Props) {
         where("statusApprove", "==", true),
         where("profTwo", "==", user.name),
         where("name", "==", value)
-      ) : filterType === "searchedName" && value ? query(
+      ) : filterType === "selectedYear" && value ? query(
         collection(db, "studentsList"),
         where("statusApprove", "==", true),
         where("profTwo", "==", user.name),
-        where("generation", "==", value)
+        where("generation", "==", String(value))
       ) : query(
         collection(db, "studentsList"),
         where("statusApprove", "==", true),
@@ -131,6 +133,8 @@ export default function ProgresList({ searchedName, selectedYear }: Props) {
       const studentsData2 = (await getDocs(studentRef2)).docs
         .map((item) => item)
         .map((item) => item.data());
+
+      console.log({ studentsData1, studentsData2 })
 
       const arrayStudents = [...studentsData1, ...studentsData2].filter(
         (item) => item.profOne === user.name || item.profTwo === user.name
