@@ -49,86 +49,102 @@ export default function SeminarList({ searchedName, selectedYear }: Props) {
   const [dateToBe, setDateToBe] = useState<any>();
   const [loading, setLoading] = useState(false);
 
-  const getStudent = useCallback(async ({ filterType, value }: FilterParams) => {
-    setLoading(false);
-    try {
-      const studentRef1 = filterType === "selectedYear" && value ? query(
-        collection(db, "studentsList"),
-        where("statusApprove", "==", true),
-        where("profOne", "==", user.name),
-        where("generation", "==", String(value))
-      )
-        : filterType === "searchedName" && value ? query(
-          collection(db, "studentsList"),
-          where("statusApprove", "==", true),
-          where("profOne", "==", user.name),
-          where("name", "==", String(value))
-        ) : query(
-          collection(db, "studentsList"),
-          where("statusApprove", "==", true),
-          where("profOne", "==", user.name)
+  const getStudent = useCallback(
+    async ({ filterType, value }: FilterParams) => {
+      setLoading(false);
+      try {
+        const studentRef1 =
+          filterType === "searchedName" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profOne", "==", user.name),
+                where("name", "==", value)
+              )
+            : filterType === "selectedYear" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profOne", "==", user.name),
+                where("generation", "==", String(value))
+              )
+            : query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profOne", "==", user.name)
+              );
+
+        const studentRef2 =
+          filterType === "searchedName" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profTwo", "==", user.name),
+                where("name", "==", value)
+              )
+            : filterType === "selectedYear" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profTwo", "==", user.name),
+                where("generation", "==", String(value))
+              )
+            : query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profTwo", "==", user.name)
+              );
+
+        const studentsData1 = (await getDocs(studentRef1)).docs
+          .map((item) => item)
+          .map((item) => item.data())
+          .filter(
+            (item) => item.seminarDate[0].isApprovedByProfOne !== "Denied"
+          )
+          .filter((item) => item.title[0].titleText !== "");
+
+        const studentsData2 = (await getDocs(studentRef2)).docs
+          .map((item) => item)
+          .map((item) => item.data())
+          .filter(
+            (item) => item.seminarDate[0].isApprovedByProfTwo !== "Denied"
+          )
+          .filter((item) => item.title[0].titleText !== "");
+
+        const arrayStudents = [...studentsData1, ...studentsData2].filter(
+          (item: any) =>
+            item.profOne === user.name || item.profTwo === user.name
         );
 
-      const studentRef2 = filterType === "selectedYear" ? query(
-        collection(db, "studentsList"),
-        where("statusApprove", "==", true),
-        where("profTwo", "==", user.name),
-        where("generation", "==", String(value))
-      )
-        : filterType === "searchedName" ? query(
-          collection(db, "studentsList"),
-          where("statusApprove", "==", true),
-          where("profTwo", "==", user.name),
-          where("name", "==", String(value))
-        ) : query(
-          collection(db, "studentsList"),
-          where("statusApprove", "==", true),
-          where("profTwo", "==", user.name)
-        );
-
-      const studentsData1 = (await getDocs(studentRef1)).docs
-        .map((item) => item)
-        .map((item) => item.data())
-        .filter((item) => item.seminarDate[0].isApprovedByProfOne !== "Denied")
-        .filter((item) => item.title[0].titleText !== "");
-
-      const studentsData2 = (await getDocs(studentRef2)).docs
-        .map((item) => item)
-        .map((item) => item.data())
-        .filter((item) => item.seminarDate[0].isApprovedByProfTwo !== "Denied")
-        .filter((item) => item.title[0].titleText !== "");
-
-      const arrayStudents = [...studentsData1, ...studentsData2].filter(
-        (item: any) => item.profOne === user.name || item.profTwo === user.name
-      );
-
-      const fixArray = arrayStudents
-        .map((item: any) => {
-          if (item.profOne === user.name) {
-            if (item.seminarDate[0].isApprovedByProfOne !== user.name)
-              return item;
-          } else if (item.profTwo === user.name) {
-            if (item.seminarDate[0].isApprovedByProfTwo !== user.name)
-              return item;
-          }
-        })
-        .filter((item: any) => item !== undefined);
-      setStudent(fixArray);
-      setLoading(true);
-    } catch (e) {
-      console.log(e);
-      toast.error("Silahkan Muat Ulang Halaman", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-    }
-  }, [user]);
+        const fixArray = arrayStudents
+          .map((item: any) => {
+            if (item.profOne === user.name) {
+              if (item.seminarDate[0].isApprovedByProfOne !== user.name)
+                return item;
+            } else if (item.profTwo === user.name) {
+              if (item.seminarDate[0].isApprovedByProfTwo !== user.name)
+                return item;
+            }
+          })
+          .filter((item: any) => item !== undefined);
+        setStudent(fixArray);
+        setLoading(true);
+      } catch (e) {
+        console.log(e);
+        toast.error("Silahkan Muat Ulang Halaman", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+    },
+    [user]
+  );
 
   const getCurrentDate = (separator = "-") => {
     let newDate = new Date();
@@ -532,8 +548,8 @@ export default function SeminarList({ searchedName, selectedYear }: Props) {
                       {data.profOne === user.name
                         ? "Dospem 1"
                         : data.profTwo === user.name
-                          ? "Dospem 2"
-                          : "None"}
+                        ? "Dospem 2"
+                        : "None"}
                     </td>
                     {data.fileSeminar ? (
                       <td className="px-6 py-2 text-right flex gap-2">

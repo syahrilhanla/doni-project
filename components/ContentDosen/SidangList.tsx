@@ -19,7 +19,7 @@ import { db } from "../Store/firebase";
 import Link from "next/link";
 import { CloseButton, SendButton } from "../Common/Buttons";
 import moment from "moment";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Props } from "../ContentAdmin/RequestTable";
 import { FilterParams } from "../ContentAdmin/ListMahasiswa";
@@ -47,88 +47,100 @@ export default function SidangList({ searchedName, selectedYear }: Props) {
   const [dateToBe, setDateToBe] = useState<any>();
   const [loading, setLoading] = useState(false);
 
-  const getStudent = useCallback(async ({ filterType, value }: FilterParams) => {
-    setLoading(false);
-    try {
-      const studentRef1 = filterType === "selectedYear" && value ? query(
-        collection(db, "studentsList"),
-        where("statusApprove", "==", true),
-        where("profOne", "==", user.name),
-        where("generation", "==", String(value))
-      )
-        : filterType === "searchedName" && value ? query(
-          collection(db, "studentsList"),
-          where("statusApprove", "==", true),
-          where("profOne", "==", user.name),
-          where("name", "==", String(value))
-        ) : query(
-          collection(db, "studentsList"),
-          where("statusApprove", "==", true),
-          where("profOne", "==", user.name)
+  const getStudent = useCallback(
+    async ({ filterType, value }: FilterParams) => {
+      setLoading(false);
+      try {
+        const studentRef1 =
+          filterType === "searchedName" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profOne", "==", user.name),
+                where("name", "==", value)
+              )
+            : filterType === "selectedYear" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profOne", "==", user.name),
+                where("generation", "==", String(value))
+              )
+            : query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profOne", "==", user.name)
+              );
+
+        const studentRef2 =
+          filterType === "searchedName" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profTwo", "==", user.name),
+                where("name", "==", value)
+              )
+            : filterType === "selectedYear" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profTwo", "==", user.name),
+                where("generation", "==", String(value))
+              )
+            : query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profTwo", "==", user.name)
+              );
+
+        const studentsData1 = (await getDocs(studentRef1)).docs
+          .map((item) => item)
+          .map((item) => item.data())
+          .filter((item) => item.sidangDate[0].isApprovedByProfOne !== "Denied")
+          .filter((item) => item.title[0].titleText !== "")
+          .filter((item) => item.fileSidang !== "");
+
+        const studentsData2 = (await getDocs(studentRef2)).docs
+          .map((item) => item)
+          .map((item) => item.data())
+          .filter((item) => item.sidangDate[0].isApprovedByProfTwo !== "Denied")
+          .filter((item) => item.title[0].titleText !== "")
+          .filter((item) => item.fileSidang !== "");
+
+        const arrayStudents = [...studentsData1, ...studentsData2].filter(
+          (item: any) =>
+            item.profOne === user.name || item.profTwo === user.name
         );
 
-      const studentRef2 = filterType === "selectedYear" ? query(
-        collection(db, "studentsList"),
-        where("statusApprove", "==", true),
-        where("profTwo", "==", user.name),
-        where("generation", "==", String(value))
-      )
-        : filterType === "searchedName" ? query(
-          collection(db, "studentsList"),
-          where("statusApprove", "==", true),
-          where("profTwo", "==", user.name),
-          where("name", "==", String(value))
-        ) : query(
-          collection(db, "studentsList"),
-          where("statusApprove", "==", true),
-          where("profTwo", "==", user.name)
-        );
-
-      const studentsData1 = (await getDocs(studentRef1)).docs
-        .map((item) => item)
-        .map((item) => item.data())
-        .filter((item) => item.sidangDate[0].isApprovedByProfOne !== "Denied")
-        .filter((item) => item.title[0].titleText !== "")
-        .filter((item) => item.fileSidang !== "");
-
-      const studentsData2 = (await getDocs(studentRef2)).docs
-        .map((item) => item)
-        .map((item) => item.data())
-        .filter((item) => item.sidangDate[0].isApprovedByProfTwo !== "Denied")
-        .filter((item) => item.title[0].titleText !== "")
-        .filter((item) => item.fileSidang !== "");
-
-      const arrayStudents = [...studentsData1, ...studentsData2].filter(
-        (item: any) => item.profOne === user.name || item.profTwo === user.name
-      );
-
-      const fixArray = arrayStudents
-        .map((item: any) => {
-          if (item.profOne === user.name) {
-            if (item.sidangDate[0].isApprovedByProfOne !== user.name)
-              return item;
-          } else if (item.profTwo === user.name) {
-            if (item.sidangDate[0].isApprovedByProfTwo !== user.name)
-              return item;
-          }
-        })
-        .filter((item: any) => item !== undefined);
-      setStudent(fixArray);
-      setLoading(true);
-    } catch (e) {
-      console.log(e);
-      toast.error('Silahkan Muat Ulang Halaman', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-    }
-  }, [user]);
+        const fixArray = arrayStudents
+          .map((item: any) => {
+            if (item.profOne === user.name) {
+              if (item.sidangDate[0].isApprovedByProfOne !== user.name)
+                return item;
+            } else if (item.profTwo === user.name) {
+              if (item.sidangDate[0].isApprovedByProfTwo !== user.name)
+                return item;
+            }
+          })
+          .filter((item: any) => item !== undefined);
+        setStudent(fixArray);
+        setLoading(true);
+      } catch (e) {
+        console.log(e);
+        toast.error("Silahkan Muat Ulang Halaman", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+    },
+    [user]
+  );
 
   const getCurrentDate = (separator = "-") => {
     let newDate = new Date();
@@ -199,16 +211,19 @@ export default function SidangList({ searchedName, selectedYear }: Props) {
       };
 
       await updateDoc(studentRef, value1);
-      toast.success('Berhasil Menerima Sidang Akhir Selaku Dosen Pembimbing 1', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      toast.success(
+        "Berhasil Menerima Sidang Akhir Selaku Dosen Pembimbing 1",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
       setSetuju(false);
       const newStudentData = student.filter((item: any) => {
         return item.uid !== uidUser;
@@ -237,16 +252,19 @@ export default function SidangList({ searchedName, selectedYear }: Props) {
         }),
       };
       updateDoc(studentRef, value2);
-      toast.success('Berhasil Menerima Sidang Akhir Selaku Dosen Pembimbing 2', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      toast.success(
+        "Berhasil Menerima Sidang Akhir Selaku Dosen Pembimbing 2",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
       setSetuju(false);
       const newStudentData = student.filter((item: any) => {
         return item.uid !== uidUser;
@@ -280,7 +298,7 @@ export default function SidangList({ searchedName, selectedYear }: Props) {
         }),
       };
       updateDoc(studentRef, value1);
-      toast.error('Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 1', {
+      toast.error("Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 1", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -319,7 +337,7 @@ export default function SidangList({ searchedName, selectedYear }: Props) {
         }),
       };
       updateDoc(studentRef, value2);
-      toast.error('Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 2', {
+      toast.error("Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 2", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -359,29 +377,31 @@ export default function SidangList({ searchedName, selectedYear }: Props) {
   };
   const handleAssignSidangDate = () => {
     if (newFeedback) updateApprove();
-    else toast.error('Lengkapi data terlebih dahulu!', {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
+    else
+      toast.error("Lengkapi data terlebih dahulu!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
   };
   const handleDeniedSidangDate = () => {
     if (newFeedback) updateDenied();
-    else toast.error('Lengkapi data terlebih dahulu!', {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
+    else
+      toast.error("Lengkapi data terlebih dahulu!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
   };
   return (
     <div>
@@ -522,8 +542,8 @@ export default function SidangList({ searchedName, selectedYear }: Props) {
                       {data.profOne === user.name
                         ? "Dospem 1"
                         : data.profTwo === user.name
-                          ? "Dospem 2"
-                          : "None"}
+                        ? "Dospem 2"
+                        : "None"}
                     </td>
                     {data.fileSidang ? (
                       <td className="px-6 py-2 text-right flex gap-2">
