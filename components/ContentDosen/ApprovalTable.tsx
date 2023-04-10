@@ -18,7 +18,7 @@ import {
 } from "react-icons/ri";
 import { StudentsData, TitleType } from "../../typings";
 import { CloseButton, SendButton } from "../Common/Buttons";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { useAuth } from "../Context/AuthContext";
@@ -56,83 +56,94 @@ export default function ApprovalTable({ searchedName, selectedYear }: Props) {
   const [titleTextUser, setTitleTextUser] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getStudent = useCallback(async ({ filterType, value }: FilterParams) => {
-    setLoading(false);
-    try {
-      const studentRef1 = filterType === "selectedYear" && value ? query(
-        collection(db, "studentsList"),
-        where("statusApprove", "==", true),
-        where("profOne", "==", user.name),
-        where("generation", "==", String(value))
-      )
-        : filterType === "searchedName" && value ? query(
-          collection(db, "studentsList"),
-          where("statusApprove", "==", true),
-          where("profOne", "==", user.name),
-          where("name", "==", String(value))
-        ) : query(
-          collection(db, "studentsList"),
-          where("statusApprove", "==", true),
-          where("profOne", "==", user.name)
+  const getStudent = useCallback(
+    async ({ filterType, value }: FilterParams) => {
+      setLoading(false);
+      try {
+        const studentRef1 =
+          filterType === "searchedName" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profOne", "==", user.name),
+                where("name", "==", value)
+              )
+            : filterType === "selectedYear" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profOne", "==", user.name),
+                where("generation", "==", String(value))
+              )
+            : query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profOne", "==", user.name)
+              );
+
+        const studentRef2 =
+          filterType === "searchedName" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profTwo", "==", user.name),
+                where("name", "==", value)
+              )
+            : filterType === "selectedYear" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profTwo", "==", user.name),
+                where("generation", "==", String(value))
+              )
+            : query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profTwo", "==", user.name)
+              );
+        const studentsData1 = (await getDocs(studentRef1)).docs
+          .map((item) => item)
+          .map((item) => item.data())
+          .filter((item) => item.title[0].isApprovedByProfOne !== "Denied")
+          .filter((item) => item.title[0].titleText !== "");
+        const studentsData2 = (await getDocs(studentRef2)).docs
+          .map((item) => item)
+          .map((item) => item.data())
+          .filter((item) => item.title[0].isApprovedByProfTwo !== "Denied")
+          .filter((item) => item.title[0].titleText !== "");
+
+        const arrayStudents = [...studentsData1, ...studentsData2].filter(
+          (item) => item.profOne === user.name || item.profTwo === user.name
         );
 
-      const studentRef2 = filterType === "selectedYear" ? query(
-        collection(db, "studentsList"),
-        where("statusApprove", "==", true),
-        where("profTwo", "==", user.name),
-        where("generation", "==", String(value))
-      )
-        : filterType === "searchedName" ? query(
-          collection(db, "studentsList"),
-          where("statusApprove", "==", true),
-          where("profTwo", "==", user.name),
-          where("name", "==", String(value))
-        ) : query(
-          collection(db, "studentsList"),
-          where("statusApprove", "==", true),
-          where("profTwo", "==", user.name)
-        );
-      const studentsData1 = (await getDocs(studentRef1)).docs
-        .map((item) => item)
-        .map((item) => item.data())
-        .filter((item) => item.title[0].isApprovedByProfOne !== "Denied")
-        .filter((item) => item.title[0].titleText !== "");
-      const studentsData2 = (await getDocs(studentRef2)).docs
-        .map((item) => item)
-        .map((item) => item.data())
-        .filter((item) => item.title[0].isApprovedByProfTwo !== "Denied")
-        .filter((item) => item.title[0].titleText !== "");
-
-      const arrayStudents = [...studentsData1, ...studentsData2].filter(
-        (item) => item.profOne === user.name || item.profTwo === user.name
-      );
-
-      const fixArray = arrayStudents.filter((item) => {
-        if (item.profOne === user.name) {
-          if (item.title[0].isApprovedByProfOne !== user.name) return item;
-        } else if (item.profTwo === user.name) {
-          if (item.title[0].isApprovedByProfTwo !== user.name) return item;
-        }
-      });
-
-      setStudent(fixArray);
-      setLoading(true);
-    } catch (e) {
-      console.log(e);
-      if (user) {
-        toast.error('Silahkan Muat Ulang Halaman', {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
+        const fixArray = arrayStudents.filter((item) => {
+          if (item.profOne === user.name) {
+            if (item.title[0].isApprovedByProfOne !== user.name) return item;
+          } else if (item.profTwo === user.name) {
+            if (item.title[0].isApprovedByProfTwo !== user.name) return item;
+          }
         });
+
+        setStudent(fixArray);
+        setLoading(true);
+      } catch (e) {
+        console.log(e);
+        if (user) {
+          toast.error("Silahkan Muat Ulang Halaman", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }
       }
-    }
-  }, [user, searchedName, selectedYear]);
+    },
+    [user, searchedName, selectedYear]
+  );
 
   const getCurrentDate = (separator = "-") => {
     let newDate = new Date();
@@ -204,16 +215,19 @@ export default function ApprovalTable({ searchedName, selectedYear }: Props) {
         }),
       };
       updateDoc(studentRef, value1);
-      toast.success('Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 1', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      toast.success(
+        "Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 1",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
       setSetuju(false);
       const newStudentData = student.filter((item) => {
         return item.uid !== uidUser;
@@ -242,16 +256,19 @@ export default function ApprovalTable({ searchedName, selectedYear }: Props) {
         }),
       };
       updateDoc(studentRef, value2);
-      toast.success('Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 2', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      toast.success(
+        "Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 2",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
       setSetuju(false);
       const newStudentData = student.filter((item) => {
         return item.uid !== uidUser;
@@ -285,16 +302,19 @@ export default function ApprovalTable({ searchedName, selectedYear }: Props) {
         }),
       };
       updateDoc(studentRef, value1);
-      toast.success('Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 1', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      toast.success(
+        "Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 1",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
       setTolak(false);
       const newStudentData = student.filter((item) => {
         return item.uid !== uidUser;
@@ -323,16 +343,19 @@ export default function ApprovalTable({ searchedName, selectedYear }: Props) {
         }),
       };
       updateDoc(studentRef, value2);
-      toast.success('Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 2', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      toast.success(
+        "Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 2",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
       setTolak(false);
       const newStudentData = student.filter((item) => {
         return item.uid !== uidUser;
@@ -367,9 +390,8 @@ export default function ApprovalTable({ searchedName, selectedYear }: Props) {
     if (newFeedback) {
       await updateApprove();
       setSetuju(false);
-    }
-    else
-      toast.error('Lengkapi data terlebih dahulu!', {
+    } else
+      toast.error("Lengkapi data terlebih dahulu!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -383,16 +405,17 @@ export default function ApprovalTable({ searchedName, selectedYear }: Props) {
 
   const handleDeniedTitle = () => {
     if (newFeedback) updateDenied();
-    else toast.error('Lengkapi data terlebih dahulu!', {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
+    else
+      toast.error("Lengkapi data terlebih dahulu!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
   };
 
   return (
@@ -530,8 +553,8 @@ export default function ApprovalTable({ searchedName, selectedYear }: Props) {
                       {data.profOne === user.name
                         ? "Dospem 1"
                         : data.profTwo === user.name
-                          ? "Dospem 2"
-                          : "None"}
+                        ? "Dospem 2"
+                        : "None"}
                     </td>
                     {data.title.map((item: TitleType, index: number) => (
                       <td
