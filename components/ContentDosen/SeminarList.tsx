@@ -56,19 +56,19 @@ export default function SeminarList({ searchedName, selectedYear }: Props) {
         const studentRef1 =
           filterType === "searchedName" && value
             ? query(
-                collection(db, "studentsList"),
-                where("statusApprove", "==", true),
-                where("profOne", "==", user.name),
-                where("name", "==", value)
-              )
+              collection(db, "studentsList"),
+              where("statusApprove", "==", true),
+              where("profOne", "==", user.name),
+              where("name", "==", value)
+            )
             : filterType === "selectedYear" && value
-            ? query(
+              ? query(
                 collection(db, "studentsList"),
                 where("statusApprove", "==", true),
                 where("profOne", "==", user.name),
                 where("generation", "==", String(value))
               )
-            : query(
+              : query(
                 collection(db, "studentsList"),
                 where("statusApprove", "==", true),
                 where("profOne", "==", user.name)
@@ -77,19 +77,19 @@ export default function SeminarList({ searchedName, selectedYear }: Props) {
         const studentRef2 =
           filterType === "searchedName" && value
             ? query(
-                collection(db, "studentsList"),
-                where("statusApprove", "==", true),
-                where("profTwo", "==", user.name),
-                where("name", "==", value)
-              )
+              collection(db, "studentsList"),
+              where("statusApprove", "==", true),
+              where("profTwo", "==", user.name),
+              where("name", "==", value)
+            )
             : filterType === "selectedYear" && value
-            ? query(
+              ? query(
                 collection(db, "studentsList"),
                 where("statusApprove", "==", true),
                 where("profTwo", "==", user.name),
                 where("generation", "==", String(value))
               )
-            : query(
+              : query(
                 collection(db, "studentsList"),
                 where("statusApprove", "==", true),
                 where("profTwo", "==", user.name)
@@ -98,18 +98,16 @@ export default function SeminarList({ searchedName, selectedYear }: Props) {
         const studentsData1 = (await getDocs(studentRef1)).docs
           .map((item) => item)
           .map((item) => item.data())
-          .filter(
-            (item) => item.seminarDate[0].isApprovedByProfOne !== "Denied"
-          )
-          .filter((item) => item.title[0].titleText !== "");
+          .filter((item) => item.seminarDate[0].isApprovedByProfOne !== "Denied")
+          .filter((item) => item.title[0].titleText !== "")
+          .filter((item) => item.fileSeminar !== "");
 
         const studentsData2 = (await getDocs(studentRef2)).docs
           .map((item) => item)
           .map((item) => item.data())
-          .filter(
-            (item) => item.seminarDate[0].isApprovedByProfTwo !== "Denied"
-          )
-          .filter((item) => item.title[0].titleText !== "");
+          .filter((item) => item.seminarDate[0].isApprovedByProfTwo !== "Denied")
+          .filter((item) => item.title[0].titleText !== "")
+          .filter((item) => item.fileSeminar !== "");
 
         const arrayStudents = [...studentsData1, ...studentsData2].filter(
           (item: any) =>
@@ -548,8 +546,8 @@ export default function SeminarList({ searchedName, selectedYear }: Props) {
                       {data.profOne === user.name
                         ? "Dospem 1"
                         : data.profTwo === user.name
-                        ? "Dospem 2"
-                        : "None"}
+                          ? "Dospem 2"
+                          : "None"}
                     </td>
                     {data.fileSeminar ? (
                       <td className="px-6 py-2 text-right flex gap-2">
