@@ -190,13 +190,7 @@ export const AuthContextProvider = ({
             }
           }
         );
-        // getDoc(doc(db, "studentsList", response.user.uid)).then(
-        //   (userData: any) => {
-        //     if (userData.data()) {
-        //       setUser(userData.data());
-        //     }
-        //   }
-        // );
+
         return response.user;
       }
     );
