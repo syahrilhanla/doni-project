@@ -1,33 +1,19 @@
-import React, { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
-
-import { RiLogoutBoxRLine } from "react-icons/ri";
-import { TfiBell } from "react-icons/tfi";
-import NotificationList, {
-  NotificationData,
-} from "../Notification/NotificationList";
-import { useAuth } from "../Context/AuthContext";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import {
-  arrayUnion,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
-import { User } from "firebase/auth";
+import { useAuth } from "../Context/AuthContext";
+import { doc, getDoc, } from "firebase/firestore";
 import { db } from "../Store/firebase";
+import { FaBars, FaTimes } from "react-icons/fa";
+import { RiLogoutBoxRLine } from "react-icons/ri";
+import Notification from "../Notification/Notification";
+import MobileSidebar from "../Sidebar/MobileSidebar";
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
-  const [openNotification, setOpenNotification] = useState(false);
   const router = useRouter();
-  const [notification, setNotification] = useState([]);
-  const [notificationdosen, setNotificationDosen] = useState<any>([]);
-   const [student, setStudent] = useState<any>([]);
+  const [notificationData, setNotificationData] = useState([]);
+  const [navbar, setNavbar] = useState(false);
+  const [openNotification, setOpenNotification] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -37,72 +23,25 @@ const Navbar = () => {
       console.log(error);
     }
   };
-  const getNotifDosen = useCallback(async () => {
-    try {
-      const profRef = doc(db, "professorList", user.uid);
-      const notifProf = await getDoc(profRef);
-      setNotificationDosen(notifProf.data()?.notifications);
-    } catch (error) {
-      console.log(error);
+
+  const getNotificationData = useCallback(async () => {
+    if (user.role) {
+      const userRole = `${user.role === "mhs"
+        ? "studentsList" : user.role === "dosen"
+          ? "professorList" : ""
+        }`;
+
+      const userRef = doc(db, userRole, user.uid);
+
+      const notifications = await getDoc(userRef);
+      setNotificationData(notifications.data()?.notifications);
     }
-  }, []);
-  const getNotifMahasiswa = useCallback(async () => {
-    try {
-      const studentsRef = doc(db, "studentsList", user.uid);
-      const notifStudents = await getDoc(studentsRef);
-      setNotification(notifStudents.data()?.notifications);
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+
+  }, [user, openNotification]);
 
   useEffect(() => {
-    if (user.role === "mhs") {
-       getNotifMahasiswa();
-    } else if (user.role === "dosen") {
-      getNotifDosen();
-    }
-  }, [user]);
-
-  const notificationData: NotificationData[] = [
-    {
-      id: 1,
-      title: "title 1",
-      text: "Text 1",
-      isRead: true,
-    },
-    {
-      id: 2,
-      title: "title 2",
-      text: "text 2",
-      isRead: false,
-    },
-    {
-      id: 11,
-      title: "title 1",
-      text: "Text 1",
-      isRead: true,
-    },
-    {
-      id: 22,
-      title: "title 2",
-      text: "text 2",
-      isRead: false,
-    },
-    {
-      id: 115,
-      title: "title 1",
-      text: "Text 1",
-      isRead: true,
-    },
-    {
-      id: 22,
-      title: "title 2",
-      text: "text 2",
-      isRead: false,
-    },
-  ];
-
+    getNotificationData();
+  }, [user, openNotification]);
 
   return (
     <div className="flex flex-col top-12">
@@ -110,14 +49,11 @@ const Navbar = () => {
         className="flex justify-end items-center text-white p-8 shadow-md 
         gap-6 bg-patternTwo h-16 overflow-hidden"
       >
-        <button
-          onClick={() => setOpenNotification(!openNotification)}
-          className="relative cursor-pointer hover:bg-white hover:font-extrabold
-          hover:text-patternTwo p-2 rounded-full duration-200"
-        >
-          <TfiBell className="text-2xl" />
-          <span className="absolute top-1 right-2 p-1.5 rounded-full bg-red-500" />
-        </button>
+        <Notification
+          openNotification={openNotification}
+          setOpenNotification={setOpenNotification}
+          notificationData={notificationData}
+        />
 
         <button
           onClick={handleLogout}
@@ -126,18 +62,29 @@ const Navbar = () => {
         >
           <RiLogoutBoxRLine className="text-2xl" />
         </button>
+
+        <div className="flex lg:hidden z-50 cursor-pointer">
+          {navbar ? (
+            <>
+              <FaTimes
+                className="text-2xl fixed top-7 right-10"
+                onClick={() => setNavbar((prevValue) => !prevValue)}
+              />
+            </>
+          ) : (
+            <FaBars
+              className="text-2xl"
+              onClick={() => setNavbar((prevValue) => !prevValue)}
+            />
+          )}
+        </div>
       </div>
 
-      {openNotification && (
-        <>
-          {user.role === "mhs" && (
-            <NotificationList notificationData={notification} />
-          )}
-          {user.role === "dosen" && (
-            <NotificationList notificationData={notificationdosen} />
-          )}
-        </>
-      )}
+      <MobileSidebar
+        navbar={navbar}
+        setNavbar={setNavbar}
+        user={user}
+      />
     </div>
   );
 };

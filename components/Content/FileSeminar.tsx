@@ -1,18 +1,36 @@
-import { User } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
+import moment from "moment";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 import { BsFillPersonFill } from "react-icons/bs";
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const FileSeminar = () => {
   const [jadwal, setJadwal] = useState<String>();
   const { user } = useAuth();
   const [file, setFile] = useState("");
+  const [chapter5, setChapter5] = useState<any>();
+  const [isApprovedByProf1Chapter5, setIsApprovedByProf1Chapter5] = useState<
+    any
+  >();
+  const [isApprovedByProf2Chapter5, setIsApprovedByProf2Chapter5] = useState<
+    any
+  >();
   const [link1, setLink1] = useState("");
   const [enable, setEnable] = useState(false);
   useEffect(() => {
+    if (user.files) {
+      setChapter5(user.files[0].chapterFive.link);
+      setIsApprovedByProf1Chapter5(
+        user.files[0].chapterFive.isApprovedByProfOne
+      );
+      setIsApprovedByProf2Chapter5(
+        user.files[0].chapterFive.isApprovedByProfTwo
+      );
+    }
     if (user.seminarDate) {
       setJadwal(user.seminarDate[0].dateToBe);
       setFile(user.fileSeminar);
@@ -22,24 +40,48 @@ const FileSeminar = () => {
   }, [user]);
 
   const handleLink1 = async () => {
-    const docRef = doc(db, "studentsList", user.uid);
-    const link1Value = {
-      fileSeminar: link1,
-      seminarDate: [
-        {
-          dateToBe: "",
-          isApprovedByProfOne: "",
-          isApprovedByProfTwo: "",
-        },
-      ],
-    };
-    setEnable(true);
-    await updateDoc(docRef, link1Value);
-    setLink1("");
+    try {
+      const docRef = doc(db, "studentsList", user.uid);
+      const link1Value = {
+        fileSeminar: link1,
+        seminarDate: [
+          {
+            dateToBe: "",
+            isApprovedByProfOne: "",
+            isApprovedByProfTwo: "",
+          },
+        ],
+      };
+      setEnable(true);
+      await updateDoc(docRef, link1Value);
+      toast.success("Berhasil Mengunggah Berkas Seminar Hasil", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setLink1("");
+    } catch (error) {
+      toast.error('Gagal Mengunggah File Seminar', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
   };
 
   return (
     <div className="h-screen px-4 w-5/6 overflow-auto py-4 mt-4">
+      <ToastContainer />
       <div className="flex justify-center">
         {jadwal ? (
           <div className="flex bg-[#f1e8f252] border-4 border-[#caf3e0] text-[#707070] flex-col justify-center my-3 items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-1/3 h-24  rounded-lg shadow-md">
@@ -48,7 +90,7 @@ const FileSeminar = () => {
               <p className="items-center mr-3"> Tanggal Seminar Hasil </p>{" "}
               <AiFillCheckCircle className="fill-[#72ea8c] items-center" />
             </div>
-            <div className=" text-2xl text-center">{jadwal}</div>
+            <div className=" text-2xl text-center">{moment(String(jadwal)).format("DD MMMM YYYY")}</div>
           </div>
         ) : (
           <div className="flex flex-col bg-[#f1e8f252] border-4 border-[#ebb4b4] text-[#707070] justify-center items-center xxs:max-sm:w-full sm:max-md:w-full  md:max-lg:w-full md:max-lg:space-between mr-2 px-4 w-1/3 h-24  rounded-lg shadow-md">
@@ -110,16 +152,34 @@ const FileSeminar = () => {
           {!file && (
             <>
               <input
-                className="bg-gray-50 items-center border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
+                className="disabled:opacity-50 bg-gray-50 items-center border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
                 value={link1}
                 onChange={(e) => setLink1(e.target.value)}
                 type="text"
                 placeholder="Link Google Drive"
                 required
+                disabled={
+                  chapter5 === "" ||
+                    isApprovedByProf1Chapter5 === "Denied" ||
+                    isApprovedByProf1Chapter5 === "" ||
+                    isApprovedByProf2Chapter5 === "Denied" ||
+                    isApprovedByProf2Chapter5 === ""
+                    ? true
+                    : false
+                }
               />
               <button
                 onClick={handleLink1}
-                className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
+                disabled={
+                  chapter5 === "" ||
+                    isApprovedByProf1Chapter5 === "Denied" ||
+                    isApprovedByProf1Chapter5 === "" ||
+                    isApprovedByProf2Chapter5 === "Denied" ||
+                    isApprovedByProf2Chapter5 === ""
+                    ? true
+                    : false
+                }
+                className="disabled:opacity-50 text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
               >
                 Simpan
               </button>

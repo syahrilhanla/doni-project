@@ -18,6 +18,8 @@ import {
 } from "react-icons/ri";
 import { StudentsData, TitleType } from "../../typings";
 import { CloseButton, SendButton } from "../Common/Buttons";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { useAuth } from "../Context/AuthContext";
 import { db } from "../Store/firebase";
@@ -29,7 +31,17 @@ interface dataTable {
   generation: number;
 }
 
-export default function ApprovalTable() {
+interface Props {
+  selectedYear: string;
+  searchedName: string;
+}
+
+interface FilterParams {
+  filterType?: "searchedName" | "selectedYear";
+  value?: string;
+}
+
+export default function ApprovalTable({ searchedName, selectedYear }: Props) {
   const { user } = useAuth();
   const [setuju, setSetuju] = useState<boolean>(false);
   const [tolak, setTolak] = useState<boolean>(false);
@@ -44,48 +56,82 @@ export default function ApprovalTable() {
   const [titleTextUser, setTitleTextUser] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getStudent = useCallback(async () => {
-    setLoading(false);
-    try {
-      const studentRef1 = query(
-        collection(db, "studentsList"),
-        where("statusApprove", "==", true),
-        where("profOne", "==", user.name)
-      );
-      const studentRef2 = query(
-        collection(db, "studentsList"),
-        where("statusApprove", "==", true),
-        where("profTwo", "==", user.name)
-      );
-      const studentsData1 = (await getDocs(studentRef1)).docs
-        .map((item) => item)
-        .map((item) => item.data())
-        .filter((item) => item.title[0].isApprovedByProfOne !== "Denied")
-        .filter((item) => item.title[0].titleText !== "");
-      const studentsData2 = (await getDocs(studentRef2)).docs
-        .map((item) => item)
-        .map((item) => item.data())
-        .filter((item) => item.title[0].isApprovedByProfTwo !== "Denied")
-        .filter((item) => item.title[0].titleText !== "");
+  const getStudent = useCallback(
+    async ({ filterType, value }: FilterParams) => {
+      setLoading(false);
+      try {
+        const studentRef1 =
+          filterType === "searchedName" && value
+            ? query(
+              collection(db, "studentsList"),
+              where("statusApprove", "==", true),
+              where("profOne", "==", user.name),
+              where("name", "==", value)
+            )
+            : filterType === "selectedYear" && value
+              ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profOne", "==", user.name),
+                where("generation", "==", String(value))
+              )
+              : query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profOne", "==", user.name)
+              );
 
-      const arrayStudents = [...studentsData1, ...studentsData2].filter(
-        (item) => item.profOne === user.name || item.profTwo === user.name
-      );
+        const studentRef2 =
+          filterType === "searchedName" && value
+            ? query(
+              collection(db, "studentsList"),
+              where("statusApprove", "==", true),
+              where("profTwo", "==", user.name),
+              where("name", "==", value)
+            )
+            : filterType === "selectedYear" && value
+              ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profTwo", "==", user.name),
+                where("generation", "==", String(value))
+              )
+              : query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profTwo", "==", user.name)
+              );
+        const studentsData1 = (await getDocs(studentRef1)).docs
+          .map((item) => item)
+          .map((item) => item.data())
+          .filter((item) => item.title[0].isApprovedByProfOne !== "Denied")
+          .filter((item) => item.title[0].titleText !== "");
+        const studentsData2 = (await getDocs(studentRef2)).docs
+          .map((item) => item)
+          .map((item) => item.data())
+          .filter((item) => item.title[0].isApprovedByProfTwo !== "Denied")
+          .filter((item) => item.title[0].titleText !== "");
 
-      const fixArray = arrayStudents.filter((item) => {
-        if (item.profOne === user.name) {
-          if (item.title[0].isApprovedByProfOne !== user.name) return item;
-        } else if (item.profTwo === user.name) {
-          if (item.title[0].isApprovedByProfTwo !== user.name) return item;
-        }
-      });
+        const arrayStudents = [...studentsData1, ...studentsData2].filter(
+          (item) => item.profOne === user.name || item.profTwo === user.name
+        );
 
-      setStudent(fixArray);
-      setLoading(true);
-    } catch (e) {
-      console.log(e);
-    }
-  }, [user]);
+        const fixArray = arrayStudents.filter((item) => {
+          if (item.profOne === user.name) {
+            if (item.title[0].isApprovedByProfOne !== user.name) return item;
+          } else if (item.profTwo === user.name) {
+            if (item.title[0].isApprovedByProfTwo !== user.name) return item;
+          }
+        });
+
+        setStudent(fixArray);
+        setLoading(true);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [user, searchedName, selectedYear]
+  );
 
   const getCurrentDate = (separator = "-") => {
     let newDate = new Date();
@@ -157,7 +203,19 @@ export default function ApprovalTable() {
         }),
       };
       updateDoc(studentRef, value1);
-      window.alert("Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 1");
+      toast.success(
+        "Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 1",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
       setSetuju(false);
       const newStudentData = student.filter((item) => {
         return item.uid !== uidUser;
@@ -186,7 +244,19 @@ export default function ApprovalTable() {
         }),
       };
       updateDoc(studentRef, value2);
-      window.alert("Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 2");
+      toast.success(
+        "Berhasil Menerima Judul Skripsi Selaku Dosen Pembimbing 2",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
       setSetuju(false);
       const newStudentData = student.filter((item) => {
         return item.uid !== uidUser;
@@ -220,7 +290,19 @@ export default function ApprovalTable() {
         }),
       };
       updateDoc(studentRef, value1);
-      window.alert("Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 1");
+      toast.success(
+        "Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 1",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
       setTolak(false);
       const newStudentData = student.filter((item) => {
         return item.uid !== uidUser;
@@ -249,7 +331,19 @@ export default function ApprovalTable() {
         }),
       };
       updateDoc(studentRef, value2);
-      window.alert("Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 2");
+      toast.success(
+        "Berhasil Menolak Judul Skripsi Selaku Dosen Pembimbing 2",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
       setTolak(false);
       const newStudentData = student.filter((item) => {
         return item.uid !== uidUser;
@@ -259,8 +353,16 @@ export default function ApprovalTable() {
   };
 
   useEffect(() => {
-    getStudent();
+    getStudent({});
   }, [user]);
+
+  useEffect(() => {
+    getStudent({ filterType: "selectedYear", value: selectedYear });
+  }, [selectedYear]);
+
+  useEffect(() => {
+    getStudent({ filterType: "searchedName", value: searchedName });
+  }, [searchedName]);
 
   const handleCloseModal = () => {
     setSetuju(!setuju);
@@ -276,17 +378,37 @@ export default function ApprovalTable() {
     if (newFeedback) {
       await updateApprove();
       setSetuju(false);
-    }
-    else alert("Lengkapi data terlebih dahulu!");
+    } else
+      toast.error("Lengkapi data terlebih dahulu!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
   };
 
   const handleDeniedTitle = () => {
     if (newFeedback) updateDenied();
-    else alert("Lengkapi data terlebih dahulu!");
+    else
+      toast.error("Lengkapi data terlebih dahulu!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
   };
 
   return (
     <div className="w-full">
+      <ToastContainer />
       {setuju && (
         <div className="flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
           <div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />
@@ -479,7 +601,7 @@ export default function ApprovalTable() {
                     className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
                   >
                     <div className="flex items-center justify-center">
-                      Belum Ada Yang Mengajukan Judul Skripsi
+                      Tidak Ada Judul Skripsi yang Diajukan
                     </div>
                   </td>
                 </tr>

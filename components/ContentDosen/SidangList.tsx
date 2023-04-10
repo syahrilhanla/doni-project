@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   RiCheckboxCircleLine,
   RiCloseCircleLine,
-  RiCloseLine,
   RiLoader5Line,
   RiSortDesc,
 } from "react-icons/ri";
@@ -12,7 +11,6 @@ import {
   collection,
   doc,
   getDocs,
-  orderBy,
   query,
   updateDoc,
   where,
@@ -21,16 +19,20 @@ import { db } from "../Store/firebase";
 import Link from "next/link";
 import { CloseButton, SendButton } from "../Common/Buttons";
 import moment from "moment";
-interface dataTable {
-  id: number;
-  name: string;
-  title: string;
-  file: string;
-  generation: number;
-  sidangDate: string;
-}
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Props } from "../ContentAdmin/RequestTable";
+import { FilterParams } from "../ContentAdmin/ListMahasiswa";
+// interface dataTable {
+//   id: number;
+//   name: string;
+//   title: string;
+//   file: string;
+//   generation: number;
+//   sidangDate: string;
+// }
 
-export default function SidangList() {
+export default function SidangList({ searchedName, selectedYear }: Props) {
   const { user } = useAuth();
   const [setuju, setSetuju] = useState<any>(false);
   const [tolak, setTolak] = useState<any>(false);
@@ -45,55 +47,100 @@ export default function SidangList() {
   const [dateToBe, setDateToBe] = useState<any>();
   const [loading, setLoading] = useState(false);
 
-  const getStudent = useCallback(async () => {
-    setLoading(false);
-    try {
-      const studentRef1 = query(
-        collection(db, "studentsList"),
-        where("statusApprove", "==", true),
-        where("profOne", "==", user.name)
-      );
-      const studentRef2 = query(
-        collection(db, "studentsList"),
-        where("statusApprove", "==", true),
-        where("profTwo", "==", user.name)
-      );
+  const getStudent = useCallback(
+    async ({ filterType, value }: FilterParams) => {
+      setLoading(false);
+      try {
+        const studentRef1 =
+          filterType === "searchedName" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profOne", "==", user.name),
+                where("name", "==", value)
+              )
+            : filterType === "selectedYear" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profOne", "==", user.name),
+                where("generation", "==", String(value))
+              )
+            : query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profOne", "==", user.name)
+              );
 
-      const studentsData1 = (await getDocs(studentRef1)).docs
-        .map((item) => item)
-        .map((item) => item.data())
-        .filter((item) => item.sidangDate[0].isApprovedByProfOne !== "Denied")
-        .filter((item) => item.title[0].titleText !== "")
-        .filter((item) => item.fileSidang !== "");
+        const studentRef2 =
+          filterType === "searchedName" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profTwo", "==", user.name),
+                where("name", "==", value)
+              )
+            : filterType === "selectedYear" && value
+            ? query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profTwo", "==", user.name),
+                where("generation", "==", String(value))
+              )
+            : query(
+                collection(db, "studentsList"),
+                where("statusApprove", "==", true),
+                where("profTwo", "==", user.name)
+              );
 
-      const studentsData2 = (await getDocs(studentRef2)).docs
-        .map((item) => item)
-        .map((item) => item.data())
-        .filter((item) => item.sidangDate[0].isApprovedByProfTwo !== "Denied")
-        .filter((item) => item.title[0].titleText !== "")
-        .filter((item) => item.fileSidang !== "");
+        const studentsData1 = (await getDocs(studentRef1)).docs
+          .map((item) => item)
+          .map((item) => item.data())
+          .filter((item) => item.sidangDate[0].isApprovedByProfOne !== "Denied")
+          .filter((item) => item.title[0].titleText !== "")
+          .filter((item) => item.fileSidang !== "");
 
-      const arrayStudents = [...studentsData1, ...studentsData2].filter(
-        (item: any) => item.profOne === user.name || item.profTwo === user.name
-      );
+        const studentsData2 = (await getDocs(studentRef2)).docs
+          .map((item) => item)
+          .map((item) => item.data())
+          .filter((item) => item.sidangDate[0].isApprovedByProfTwo !== "Denied")
+          .filter((item) => item.title[0].titleText !== "")
+          .filter((item) => item.fileSidang !== "");
 
-      const fixArray = arrayStudents
-        .map((item: any) => {
-          if (item.profOne === user.name) {
-            if (item.sidangDate[0].isApprovedByProfOne !== user.name)
-              return item;
-          } else if (item.profTwo === user.name) {
-            if (item.sidangDate[0].isApprovedByProfTwo !== user.name)
-              return item;
-          }
-        })
-        .filter((item: any) => item !== undefined);
-      setStudent(fixArray);
-      setLoading(true);
-    } catch (e) {
-      console.log(e);
-    }
-  }, [user]);
+        const arrayStudents = [...studentsData1, ...studentsData2].filter(
+          (item: any) =>
+            item.profOne === user.name || item.profTwo === user.name
+        );
+
+        const fixArray = arrayStudents
+          .map((item: any) => {
+            if (item.profOne === user.name) {
+              if (item.sidangDate[0].isApprovedByProfOne !== user.name)
+                return item;
+            } else if (item.profTwo === user.name) {
+              if (item.sidangDate[0].isApprovedByProfTwo !== user.name)
+                return item;
+            }
+          })
+          .filter((item: any) => item !== undefined);
+        setStudent(fixArray);
+        setLoading(true);
+      } catch (e) {
+        console.log(e);
+        toast.error("Silahkan Muat Ulang Halaman", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+    },
+    [user]
+  );
 
   const getCurrentDate = (separator = "-") => {
     let newDate = new Date();
@@ -164,7 +211,19 @@ export default function SidangList() {
       };
 
       await updateDoc(studentRef, value1);
-      window.alert("Berhasil Menerima Sidang Akhir Selaku Dosen Pembimbing 1");
+      toast.success(
+        "Berhasil Menerima Sidang Akhir Selaku Dosen Pembimbing 1",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
       setSetuju(false);
       const newStudentData = student.filter((item: any) => {
         return item.uid !== uidUser;
@@ -193,7 +252,19 @@ export default function SidangList() {
         }),
       };
       updateDoc(studentRef, value2);
-      window.alert("Berhasil Menerima Sidang Akhir Selaku Dosen Pembimbing 2");
+      toast.success(
+        "Berhasil Menerima Sidang Akhir Selaku Dosen Pembimbing 2",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
       setSetuju(false);
       const newStudentData = student.filter((item: any) => {
         return item.uid !== uidUser;
@@ -227,7 +298,16 @@ export default function SidangList() {
         }),
       };
       updateDoc(studentRef, value1);
-      window.alert("Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 1");
+      toast.error("Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 1", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setTolak(false);
       const newStudentData = student.filter((item: any) => {
         return item.uid !== uidUser;
@@ -257,7 +337,16 @@ export default function SidangList() {
         }),
       };
       updateDoc(studentRef, value2);
-      window.alert("Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 2");
+      toast.error("Berhasil Menolak Sidang Akhir Selaku Dosen Pembimbing 2", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setTolak(false);
       const newStudentData = student.filter((item: any) => {
         return item.uid !== uidUser;
@@ -265,9 +354,19 @@ export default function SidangList() {
       setStudent(newStudentData);
     }
   };
+
   useEffect(() => {
-    getStudent();
+    getStudent({});
   }, []);
+
+  useEffect(() => {
+    getStudent({ filterType: "selectedYear", value: selectedYear });
+  }, [selectedYear]);
+
+  useEffect(() => {
+    getStudent({ filterType: "searchedName", value: searchedName });
+  }, [searchedName]);
+
   const handleCloseModal = () => {
     setSetuju(!setuju);
     setNewFeedBack("");
@@ -278,14 +377,35 @@ export default function SidangList() {
   };
   const handleAssignSidangDate = () => {
     if (newFeedback) updateApprove();
-    else alert("Lengkapi data terlebih dahulu!");
+    else
+      toast.error("Lengkapi data terlebih dahulu!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
   };
   const handleDeniedSidangDate = () => {
     if (newFeedback) updateDenied();
-    else alert("Lengkapi data terlebih dahulu!");
+    else
+      toast.error("Lengkapi data terlebih dahulu!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
   };
   return (
     <div>
+      <ToastContainer />
       {setuju && (
         <div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
           <div className="bg-gray-700 opacity-30 h-screen w-screen -z-50 absolute top-0 left-0 right-0" />
@@ -409,15 +529,12 @@ export default function SidangList() {
                     <td className="px-6 py-2 text-center">{data.generation}</td>
                     <td className="py-1">
                       <div className="flex flex-col items-center">
-                        {data.sidangDate[0].dateToBe
-                          ? data.sidangDate[0].dateToBe
-                          : "-"}
                         <Link
                           target="_blank"
                           className="hover:underline hover:text-black underline:none text-purple-500"
                           href={`${data.fileSidang}`}
                         >
-                          {data.fileSidang ? "Cek" : ""}
+                          {data.fileSidang ? "File" : ""}
                         </Link>
                       </div>
                     </td>
@@ -425,8 +542,8 @@ export default function SidangList() {
                       {data.profOne === user.name
                         ? "Dospem 1"
                         : data.profTwo === user.name
-                          ? "Dospem 2"
-                          : "None"}
+                        ? "Dospem 2"
+                        : "None"}
                     </td>
                     {data.fileSidang ? (
                       <td className="px-6 py-2 text-right flex gap-2">
@@ -476,7 +593,7 @@ export default function SidangList() {
                     className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
                   >
                     <div className="flex items-center justify-center">
-                      Belum Ada Yang Mengajukan Sidang Akhir
+                      Tidak Ada Sidang Akhir yang Diajukan
                     </div>
                   </td>
                 </tr>

@@ -4,7 +4,8 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../Store/firebase";
 import Link from "next/link";
 import { User } from "firebase/auth";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const FileUpload = () => {
   const { user } = useAuth();
   const [chapter1, setChapter1] = useState<any>();
@@ -12,6 +13,36 @@ const FileUpload = () => {
   const [chapter3, setChapter3] = useState<any>();
   const [chapter4, setChapter4] = useState<any>();
   const [chapter5, setChapter5] = useState<any>();
+  const [isApprovedByProf1Chapter1, setIsApprovedByProf1Chapter1] = useState<
+    any
+  >();
+  const [isApprovedByProf1Chapter2, setIsApprovedByProf1Chapter2] = useState<
+    any
+  >();
+  const [isApprovedByProf1Chapter3, setIsApprovedByProf1Chapter3] = useState<
+    any
+  >();
+  const [isApprovedByProf1Chapter4, setIsApprovedByProf1Chapter4] = useState<
+    any
+  >();
+  const [isApprovedByProf1Chapter5, setIsApprovedByProf1Chapter5] = useState<
+    any
+  >();
+  const [isApprovedByProf2Chapter1, setIsApprovedByProf2Chapter1] = useState<
+    any
+  >();
+  const [isApprovedByProf2Chapter2, setIsApprovedByProf2Chapter2] = useState<
+    any
+  >();
+  const [isApprovedByProf2Chapter3, setIsApprovedByProf2Chapter3] = useState<
+    any
+  >();
+  const [isApprovedByProf2Chapter4, setIsApprovedByProf2Chapter4] = useState<
+    any
+  >();
+  const [isApprovedByProf2Chapter5, setIsApprovedByProf2Chapter5] = useState<
+    any
+  >();
   const [link1, setLink1] = useState("");
   const [link2, setLink2] = useState("");
   const [link3, setLink3] = useState("");
@@ -25,16 +56,46 @@ const FileUpload = () => {
 
   useEffect(() => {
     if (user.files) {
-      setChapter1(user.files[0].chapterOne);
-      setChapter2(user.files[0].chapterTwo);
-      setChapter3(user.files[0].chapterThree);
-      setChapter4(user.files[0].chapterFour);
-      setChapter5(user.files[0].chapterFive);
-      setEnable1(user.files[0].chapterOne ? false : true);
-      setEnable2(user.files[0].chapterTwo ? false : true);
-      setEnable3(user.files[0].chapterThree ? false : true);
-      setEnable4(user.files[0].chapterFour ? false : true);
-      setEnable5(user.files[0].chapterFive ? false : true);
+      setChapter1(user.files[0].chapterOne.link);
+      setChapter2(user.files[0].chapterTwo.link);
+      setChapter3(user.files[0].chapterThree.link);
+      setChapter4(user.files[0].chapterFour.link);
+      setChapter5(user.files[0].chapterFive.link);
+      setIsApprovedByProf1Chapter1(
+        user.files[0].chapterOne.isApprovedByProfOne
+      );
+      setIsApprovedByProf1Chapter2(
+        user.files[0].chapterTwo.isApprovedByProfOne
+      );
+      setIsApprovedByProf1Chapter3(
+        user.files[0].chapterThree.isApprovedByProfOne
+      );
+      setIsApprovedByProf1Chapter4(
+        user.files[0].chapterFour.isApprovedByProfOne
+      );
+      setIsApprovedByProf1Chapter5(
+        user.files[0].chapterFive.isApprovedByProfOne
+      );
+      setIsApprovedByProf2Chapter1(
+        user.files[0].chapterOne.isApprovedByProfTwo
+      );
+      setIsApprovedByProf2Chapter2(
+        user.files[0].chapterTwo.isApprovedByProfTwo
+      );
+      setIsApprovedByProf2Chapter3(
+        user.files[0].chapterThree.isApprovedByProfTwo
+      );
+      setIsApprovedByProf2Chapter4(
+        user.files[0].chapterFour.isApprovedByProfTwo
+      );
+      setIsApprovedByProf2Chapter5(
+        user.files[0].chapterFive.isApprovedByProfTwo
+      );
+      setEnable1(user.files[0].chapterOne.link ? false : true);
+      setEnable2(user.files[0].chapterTwo.link ? false : true);
+      setEnable3(user.files[0].chapterThree.link ? false : true);
+      setEnable4(user.files[0].chapterFour.link ? false : true);
+      setEnable5(user.files[0].chapterFive.link ? false : true);
     }
   }, [user]);
 
@@ -43,16 +104,46 @@ const FileUpload = () => {
     const chapter1Value = {
       files: [
         {
-          chapterOne: link1,
-          chapterTwo: user.files[0].chapterTwo,
-          chapterThree: user.files[0].chapterThree,
-          chapterFour: user.files[0].chapterFour,
-          chapterFive: user.files[0].chapterFive,
+          chapterOne: {
+            isApprovedByProfOne: user.files[0].chapterOne.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterOne.isApprovedByProfTwo,
+            link: link1,
+          },
+          chapterTwo: {
+            isApprovedByProfOne: user.files[0].chapterTwo.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterTwo.isApprovedByProfTwo,
+            link: user.files[0].chapterTwo.link,
+          },
+          chapterThree: {
+            isApprovedByProfOne: user.files[0].chapterThree.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterThree.isApprovedByProfTwo,
+            link: user.files[0].chapterThree.link,
+          },
+          chapterFour: {
+            isApprovedByProfOne: user.files[0].chapterFour.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterFour.isApprovedByProfTwo,
+            link: user.files[0].chapterFour.link,
+          },
+          chapterFive: {
+            isApprovedByProfOne: user.files[0].chapterFive.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterFive.isApprovedByProfTwo,
+            link: user.files[0].chapterFive.link,
+          },
         },
       ],
     };
     setEnable1(true);
     await updateDoc(docRef, chapter1Value);
+    toast.success("Berhasil Mengunggah Bab 1", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
     setLink1("");
   };
   const handleLink2 = async () => {
@@ -60,16 +151,46 @@ const FileUpload = () => {
     const chapter2Value = {
       files: [
         {
-          chapterOne: user.files[0].chapterOne,
-          chapterTwo: link2,
-          chapterThree: user.files[0].chapterThree,
-          chapterFour: user.files[0].chapterFour,
-          chapterFive: user.files[0].chapterFive,
+          chapterOne: {
+            isApprovedByProfOne: user.files[0].chapterOne.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterOne.isApprovedByProfTwo,
+            link: user.files[0].chapterOne.link,
+          },
+          chapterTwo: {
+            isApprovedByProfOne: user.files[0].chapterTwo.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterTwo.isApprovedByProfTwo,
+            link: link2,
+          },
+          chapterThree: {
+            isApprovedByProfOne: user.files[0].chapterThree.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterThree.isApprovedByProfTwo,
+            link: user.files[0].chapterThree.link,
+          },
+          chapterFour: {
+            isApprovedByProfOne: user.files[0].chapterFour.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterFour.isApprovedByProfTwo,
+            link: user.files[0].chapterFour.link,
+          },
+          chapterFive: {
+            isApprovedByProfOne: user.files[0].chapterFive.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterFive.isApprovedByProfTwo,
+            link: user.files[0].chapterFive.link,
+          },
         },
       ],
     };
     setEnable2(true);
     await updateDoc(docRef, chapter2Value);
+    toast.success("Berhasil Mengunggah Bab 2", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
     setLink2("");
   };
   const handleLink3 = async () => {
@@ -77,17 +198,46 @@ const FileUpload = () => {
     const chapter3Value = {
       files: [
         {
-          chapterOne: user.files[0].chapterOne,
-          chapterTwo: user.files[0].chapterTwo,
-          chapterThree: link3,
-          chapterFour: user.files[0].chapterFour,
-          chapterFive: user.files[0].chapterFive,
+          chapterOne: {
+            isApprovedByProfOne: user.files[0].chapterOne.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterOne.isApprovedByProfTwo,
+            link: user.files[0].chapterOne.link,
+          },
+          chapterTwo: {
+            isApprovedByProfOne: user.files[0].chapterTwo.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterTwo.isApprovedByProfTwo,
+            link: user.files[0].chapterTwo.link,
+          },
+          chapterThree: {
+            isApprovedByProfOne: user.files[0].chapterThree.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterThree.isApprovedByProfTwo,
+            link: link3,
+          },
+          chapterFour: {
+            isApprovedByProfOne: user.files[0].chapterFour.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterFour.isApprovedByProfTwo,
+            link: user.files[0].chapterFour.link,
+          },
+          chapterFive: {
+            isApprovedByProfOne: user.files[0].chapterFive.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterFive.isApprovedByProfTwo,
+            link: user.files[0].chapterFive.link,
+          },
         },
       ],
     };
     setEnable3(true);
-
     await updateDoc(docRef, chapter3Value);
+    toast.success("Berhasil Mengunggah Bab 3", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
     setLink3("");
   };
   const handleLink4 = async () => {
@@ -95,17 +245,46 @@ const FileUpload = () => {
     const chapter4Value = {
       files: [
         {
-          chapterOne: user.files[0].chapterOne,
-          chapterTwo: user.files[0].chapterTwo,
-          chapterThree: user.files[0].chapterThree,
-          chapterFour: link4,
-          chapterFive: user.files[0].chapterFive,
+          chapterOne: {
+            isApprovedByProfOne: user.files[0].chapterOne.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterOne.isApprovedByProfTwo,
+            link: user.files[0].chapterOne.link,
+          },
+          chapterTwo: {
+            isApprovedByProfOne: user.files[0].chapterTwo.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterTwo.isApprovedByProfTwo,
+            link: user.files[0].chapterTwo.link,
+          },
+          chapterThree: {
+            isApprovedByProfOne: user.files[0].chapterThree.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterThree.isApprovedByProfTwo,
+            link: user.files[0].chapterThree.link,
+          },
+          chapterFour: {
+            isApprovedByProfOne: user.files[0].chapterFour.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterFour.isApprovedByProfTwo,
+            link: link4,
+          },
+          chapterFive: {
+            isApprovedByProfOne: user.files[0].chapterFive.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterFive.isApprovedByProfTwo,
+            link: user.files[0].chapterFive.link,
+          },
         },
       ],
     };
     setEnable4(true);
-
     await updateDoc(docRef, chapter4Value);
+    toast.success("Berhasil Mengunggah Bab 4", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
     setLink4("");
   };
   const handleLink5 = async () => {
@@ -113,22 +292,52 @@ const FileUpload = () => {
     const chapter5Value = {
       files: [
         {
-          chapterOne: user.files[0].chapterOne,
-          chapterTwo: user.files[0].chapterTwo,
-          chapterThree: user.files[0].chapterThree,
-          chapterFour: user.files[0].chapterFour,
-          chapterFive: link5,
+          chapterOne: {
+            isApprovedByProfOne: user.files[0].chapterOne.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterOne.isApprovedByProfTwo,
+            link: user.files[0].chapterOne.link,
+          },
+          chapterTwo: {
+            isApprovedByProfOne: user.files[0].chapterTwo.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterTwo.isApprovedByProfTwo,
+            link: user.files[0].chapterTwo.link,
+          },
+          chapterThree: {
+            isApprovedByProfOne: user.files[0].chapterThree.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterThree.isApprovedByProfTwo,
+            link: user.files[0].chapterThree.link,
+          },
+          chapterFour: {
+            isApprovedByProfOne: user.files[0].chapterFour.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterFour.isApprovedByProfTwo,
+            link: user.files[0].chapterFour.link,
+          },
+          chapterFive: {
+            isApprovedByProfOne: user.files[0].chapterFive.isApprovedByProfOne,
+            isApprovedByProfTwo: user.files[0].chapterFive.isApprovedByProfTwo,
+            link: link5,
+          },
         },
       ],
     };
     setEnable5(true);
-
     await updateDoc(docRef, chapter5Value);
+    toast.success("Berhasil Mengunggah Bab 5", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
     setLink5("");
   };
 
   return (
     <div className="h-screen px-4 w-5/6 overflow-auto py-4">
+      <ToastContainer />
       <div className="flex justify-center items-center font-extralight text-3xl">
         {" "}
         Upload Link Berkas Kamu Di sini
@@ -234,16 +443,34 @@ const FileUpload = () => {
             {!chapter2 && (
               <>
                 <input
-                  className="bg-gray-50 items-center border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
+                  className="disabled:opacity-50 bg-gray-50 items-center border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-gray-200 block w-full p-2.5"
                   value={link2}
                   onChange={(e) => setLink2(e.target.value)}
                   type="text"
                   placeholder="Link Google Drive"
                   required
+                  disabled={
+                    chapter1 === "" ||
+                    isApprovedByProf1Chapter1 === "Denied" ||
+                    isApprovedByProf1Chapter1 === "" ||
+                    isApprovedByProf2Chapter1 === "Denied" ||
+                    isApprovedByProf2Chapter1 === ""
+                      ? true
+                      : false
+                  }
                 />
                 <button
                   onClick={handleLink2}
-                  className=" text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
+                  disabled={
+                    chapter1 === "" ||
+                    isApprovedByProf1Chapter1 === "Denied" ||
+                    isApprovedByProf1Chapter1 === "" ||
+                    isApprovedByProf2Chapter1 === "Denied" ||
+                    isApprovedByProf2Chapter1 === ""
+                      ? true
+                      : false
+                  }
+                  className=" disabled:opacity-50 text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
                 >
                   Simpan
                 </button>
@@ -324,11 +551,27 @@ const FileUpload = () => {
                   type="text"
                   placeholder="Link Google Drive"
                   required
-                  disabled={chapter1 === "" || chapter2 === "" ? true : false}
+                  disabled={
+                    chapter2 === "" ||
+                    isApprovedByProf1Chapter2 === "Denied" ||
+                    isApprovedByProf1Chapter2 === "" ||
+                    isApprovedByProf2Chapter2 === "Denied" ||
+                    isApprovedByProf2Chapter2 === ""
+                      ? true
+                      : false
+                  }
                 />
                 <button
                   onClick={handleLink3}
-                  disabled={chapter1 === "" || chapter2 === "" ? true : false}
+                  disabled={
+                    chapter2 === "" ||
+                    isApprovedByProf1Chapter2 === "Denied" ||
+                    isApprovedByProf1Chapter2 === "" ||
+                    isApprovedByProf2Chapter2 === "Denied" ||
+                    isApprovedByProf2Chapter2 === ""
+                      ? true
+                      : false
+                  }
                   className="disabled:opacity-50 text-white items-center bg-patternTwo focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm  px-5 min-h-[50px]  hover:text-white focus:z-10"
                 >
                   Simpan
@@ -411,7 +654,11 @@ const FileUpload = () => {
                   placeholder="Link Google Drive"
                   required
                   disabled={
-                    chapter1 === "" || chapter2 === "" || chapter3 === ""
+                    chapter3 === "" ||
+                    isApprovedByProf1Chapter3 === "Denied" ||
+                    isApprovedByProf1Chapter3 === "" ||
+                    isApprovedByProf2Chapter3 === "Denied" ||
+                    isApprovedByProf2Chapter3 === ""
                       ? true
                       : false
                   }
@@ -419,7 +666,11 @@ const FileUpload = () => {
                 <button
                   onClick={handleLink4}
                   disabled={
-                    chapter1 === "" || chapter2 === "" || chapter3 === ""
+                    chapter3 === "" ||
+                    isApprovedByProf1Chapter3 === "Denied" ||
+                    isApprovedByProf1Chapter3 === "" ||
+                    isApprovedByProf2Chapter3 === "Denied" ||
+                    isApprovedByProf2Chapter3 === ""
                       ? true
                       : false
                   }
@@ -505,10 +756,11 @@ const FileUpload = () => {
                   placeholder="Link Google Drive"
                   required
                   disabled={
-                    chapter1 === "" ||
-                    chapter2 === "" ||
-                    chapter3 === "" ||
-                    chapter4 === ""
+                    chapter4 === "" ||
+                    isApprovedByProf1Chapter4 === "Denied" ||
+                    isApprovedByProf1Chapter4 === "" ||
+                    isApprovedByProf2Chapter4 === "Denied" ||
+                    isApprovedByProf2Chapter4 === ""
                       ? true
                       : false
                   }
@@ -516,10 +768,11 @@ const FileUpload = () => {
                 <button
                   onClick={handleLink5}
                   disabled={
-                    chapter1 === "" ||
-                    chapter2 === "" ||
-                    chapter3 === "" ||
-                    chapter4 === ""
+                    chapter4 === "" ||
+                    isApprovedByProf1Chapter4 === "Denied" ||
+                    isApprovedByProf1Chapter4 === "" ||
+                    isApprovedByProf2Chapter4 === "Denied" ||
+                    isApprovedByProf2Chapter4 === ""
                       ? true
                       : false
                   }

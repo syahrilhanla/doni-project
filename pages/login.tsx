@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/router";
+
+import { useAuth } from "../components/Context/AuthContext";
+import { useForm } from "react-hook-form";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useAuth } from "../components/Context/AuthContext";
-import { useRouter } from "next/router";
 interface IFormInput {
   username: string;
   password: string;

@@ -11,9 +11,11 @@ import React, { Key, useCallback, useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCheckLg } from "react-icons/bs";
 import { RiSortDesc, RiCloseLine } from "react-icons/ri";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import FilterSection from "../Layout/FilterSection";
 import { db } from "../Store/firebase";
+import { FilterParams } from "./ListMahasiswa";
 
 interface dataTable {
   id: number;
@@ -22,7 +24,12 @@ interface dataTable {
   status: boolean;
 }
 
-export default function RequestTable() {
+export interface Props {
+  selectedYear: string;
+  searchedName: string;
+}
+
+export default function RequestTable({ searchedName, selectedYear }: Props) {
   const [setuju, setSetuju] = useState<any>(false);
   const [tolak, setTolak] = useState<any>(false);
   const [student, setStudent] = useState<any>([]);
@@ -31,20 +38,41 @@ export default function RequestTable() {
   const [dosen2, setDosen2] = useState("");
   const [userid, setUserid] = useState("");
 
-  const getData = useCallback(async () => {
-    const studentRef = query(
+  const getData = useCallback(async ({ filterType, value }: FilterParams) => {
+    const studentRef = filterType === "searchedName" && value ? query(
       collection(db, "studentsList"),
-      where("statusApprove", "==", false)
+      where("statusApprove", "==", true),
+      where("name", "==", value)
+    ) : filterType === "selectedYear" && value ? query(
+      collection(db, "studentsList"),
+      where("statusApprove", "==", true),
+      where("generation", "==", String(value))
+    ) : query(
+      collection(db, "studentsList"),
+      where("statusApprove", "==", true)
     );
+
+    console.log({ filterType, value })
+
     try {
-      const studentsData= (await getDocs(studentRef)).docs
-      .map((item) => item)
-      .map((item) => item.data());
+      const studentsData = (await getDocs(studentRef)).docs
+        .map((item) => item)
+        .map((item) => item.data());
       setStudent(studentsData);
     } catch (e) {
       console.log(e);
+      toast.error("Silahkan Muat Ulang Halaman", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
-  },[student]);
+  }, [student]);
 
   const getProf = async () => {
     let unsubscribe = false;
@@ -66,12 +94,19 @@ export default function RequestTable() {
   };
 
   useEffect(() => {
-      getData();
-      getProf();
-
+    getData({});
+    getProf();
   }, []);
 
-  const getStatus = (uid:any) => {
+  useEffect(() => {
+    getData({ filterType: "selectedYear", value: selectedYear });
+  }, [selectedYear]);
+
+  useEffect(() => {
+    getData({ filterType: "searchedName", value: searchedName });
+  }, [searchedName]);
+
+  const getStatus = (uid: any) => {
     setSetuju(true);
     setUserid(uid);
   };
@@ -86,7 +121,16 @@ export default function RequestTable() {
     };
 
     updateDoc(studentRef, valueUpdate).then(() => {
-      window.alert("Mahasiswa berhasil di terima");
+      toast.success("Mahasiswa berhasil di terima", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setSetuju(false);
       setDosen1("");
       setDosen2("");
@@ -95,7 +139,7 @@ export default function RequestTable() {
 
   return (
     <>
-      <FilterSection />
+      <ToastContainer />
       <div>
         {setuju && (
           <div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
@@ -216,48 +260,49 @@ export default function RequestTable() {
               </tr>
             </thead>
             <tbody>
-              {student.length > 0 ? student.map((data: any, index: Key) => (
-                <tr
-                  key={index}
-                  className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
-                >
-                  <td
-                    scope="row"
-                    className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+              {student.length > 0 ? (
+                student.map((data: any, index: Key) => (
+                  <tr
+                    key={index}
+                    className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
                   >
-                    {data.name}
-                  </td>
-                  <td className="px-6 py-2 max-w-[20%]">{data.username}</td>
+                    <td
+                      scope="row"
+                      className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+                    >
+                      {data.name}
+                    </td>
+                    <td className="px-6 py-2 max-w-[20%]">{data.username}</td>
 
-                  <td className="px-6 py-2 text-right flex gap-2">
-                    <button
-                      onClick={() => getStatus(data.uid)}
-                      className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white  hover:text-green-500 bg-green-500 p-2 rounded-md"
+                    <td className="px-6 py-2 text-right flex gap-2">
+                      <button
+                        onClick={() => getStatus(data.uid)}
+                        className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white  hover:text-green-500 bg-green-500 p-2 rounded-md"
+                      >
+                        <BsCheckLg className="" />
+                      </button>
+                      <button
+                        onClick={() => setTolak(!tolak)}
+                        className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
+                      >
+                        <AiOutlineClose />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <>
+                  <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
+                    <td
+                      scope="row"
+                      colSpan={3}
+                      className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
                     >
-                      <BsCheckLg className="" />
-                    </button>
-                    <button
-                      onClick={() => setTolak(!tolak)}
-                      className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
-                    >
-                      <AiOutlineClose />
-                    </button>
-                  </td>
-                </tr>
-              )) : <>
-                <tr
-                  className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
-                >
-                  <td
-                    scope="row"
-                    colSpan={3}
-                    className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
-                  >
-                    Tidak ada data untuk ditampilkan
-                  </td>
-                </tr>
-              </>
-              }
+                      Tidak ada data untuk ditampilkan
+                    </td>
+                  </tr>
+                </>
+              )}
             </tbody>
           </table>
         </div>

@@ -17,7 +17,8 @@ import { CloseButton, ErrorButton, SendButton } from "../Common/Buttons";
 import Dropdown from "../Common/Dropdown";
 import { useAuth } from "../Context/AuthContext";
 import moment from "moment";
-
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 interface dataTable {
   id: number;
   name: string;
@@ -28,7 +29,17 @@ interface dataTable {
   sidang: string;
 }
 
-export default function ListMahasiswa() {
+interface Props {
+  selectedYear: string;
+  searchedName: string;
+}
+
+export interface FilterParams {
+  filterType?: "searchedName" | "selectedYear";
+  value?: string;
+}
+
+export default function ListMahasiswa({ searchedName, selectedYear }: Props) {
   const { user } = useAuth();
 
   const [student, setStudent] = useState<any>([]);
@@ -46,28 +57,14 @@ export default function ListMahasiswa() {
   const [sidangDate, setSidangDate] = useState<any>();
   const [feedbackTextAreaSeminar, setFeedbackTextAreaSeminar] = useState("");
   const [feedbackTextAreaSidang, setFeedbackTextAreaSidang] = useState("");
-  const [
-    feedbackUserSeminarByProfOne,
-    setFeedbackUserSeminarByProfOne,
-  ] = useState<any>();
-  const [
-    feedbackUserSeminarByProfTwo,
-    setFeedbackUserSeminarByProfTwo,
-  ] = useState<any>();
+
   const [isApprovedByProfOneSeminar, setIsApprovedByProfOneSeminar] = useState<
     any
   >();
   const [isApprovedByProfTwoSeminar, setIsApprovedByProfTwoSeminar] = useState<
     any
   >();
-  const [
-    feedbackUserSidangByProfOne,
-    setFeedbackUserSidangByProfOne,
-  ] = useState<any>();
-  const [
-    feedbackUserSidangByProfTwo,
-    setFeedbackUserSidangByProfTwo,
-  ] = useState<any>();
+
   const [isApprovedByProfOneSidang, setIsApprovedByProfOneSidang] = useState<
     any
   >();
@@ -77,10 +74,18 @@ export default function ListMahasiswa() {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getData = useCallback(async () => {
+  const getData = useCallback(async ({ filterType, value }: FilterParams) => {
     setLoading(false);
 
-    const studentRef = query(
+    const studentRef = filterType === "searchedName" && value ? query(
+      collection(db, "studentsList"),
+      where("statusApprove", "==", true),
+      where("name", "==", value)
+    ) : filterType === "selectedYear" && value ? query(
+      collection(db, "studentsList"),
+      where("statusApprove", "==", true),
+      where("generation", "==", String(value))
+    ) : query(
       collection(db, "studentsList"),
       where("statusApprove", "==", true)
     );
@@ -94,6 +99,16 @@ export default function ListMahasiswa() {
       setLoading(true);
     } catch (e) {
       console.log(e);
+      toast.error('Silahkan Muat Ulang Halaman', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }, [student]);
 
@@ -117,9 +132,17 @@ export default function ListMahasiswa() {
   };
 
   useEffect(() => {
-    getData();
+    getData({});
     getProf();
   }, [user]);
+
+  useEffect(() => {
+    getData({ filterType: "searchedName", value: searchedName });
+  }, [searchedName]);
+
+  useEffect(() => {
+    getData({ filterType: "selectedYear", value: selectedYear });
+  }, [selectedYear]);
 
   const getStatusSeminar = (
     uid: any,
@@ -195,14 +218,23 @@ export default function ListMahasiswa() {
     await updateDoc(studentRef, valueUpdate).then(() => {
       updateDoc(profOneRef, notifProfOne);
       updateDoc(profTwoRef, notifProfTwo);
-      window.alert("Seminar hasil berhasil diatur");
+      toast.success('Seminar Hasil Berhasil Diatur', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setAssignSeminar(false);
       setSeminarDate("");
       setExaminerOne("");
       setExaminerTwo("");
     });
 
-    getData();
+    getData({});
   };
 
   const getUpdateSidang = async () => {
@@ -251,14 +283,23 @@ export default function ListMahasiswa() {
     await updateDoc(studentRef, valueUpdate).then(() => {
       updateDoc(profOneRef, notifProfOne);
       updateDoc(profTwoRef, notifProfTwo);
-      window.alert("Sidang akhir berhasil diatur");
+      toast.success('Sidang Akhir Berhasil Diatur', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setAssignSidang(false);
       setSidangDate("");
       setExaminerOne("");
       setExaminerTwo("");
     });
 
-    getData();
+    getData({});
   };
 
   const handleCloseSeminarModal = () => {
@@ -276,13 +317,31 @@ export default function ListMahasiswa() {
   const handleAssignSeminar = () => {
     if (examinerOne && examinerTwo && seminarDate && feedbackTextAreaSeminar)
       getUpdateSeminar();
-    else alert("Lengkapi data terlebih dahulu!");
+    else toast.error('Lengkapi data terlebih dahulu!', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
   };
 
   const handleAssignSidang = () => {
     if (examinerOne && examinerTwo && sidangDate && feedbackTextAreaSidang)
       getUpdateSidang();
-    else alert("Lengkapi data terlebih dahulu!");
+    else toast.error('Lengkapi data terlebih dahulu!', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
   };
 
   const selectExaminerOne = (itemData: any) => {
@@ -302,18 +361,36 @@ export default function ListMahasiswa() {
 
     deleteDoc(fieldEdit)
       .then(() => {
-        alert("Data Berhasil Dihapus");
+        toast.success('Data Berhasil Dihapus', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
         setHapus(!hapus);
-        getData();
+        getData({});
       })
       .catch((err) => {
-        alert("Tidak Bisa Menghapus Data..");
+        toast.error('Tidak Dapat Menghapus Data!', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       });
   };
 
   return (
     <>
-      <FilterSection />
+      <ToastContainer />
       <div>
         {assignSeminar && (
           <div className=" flex justify-center items-center fixed top-0 left-0 right-0 z-50  p-4 overflow-x-hidden overflow-y-auto w-screen h-screen mx-auto ">
@@ -496,127 +573,129 @@ export default function ListMahasiswa() {
               </tr>
             </thead>
             <tbody>
-              {loading ? (
-                student.map((data: any, index: any) => (
-                  <tr
-                    key={index}
-                    className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
-                  >
-                    <th
-                      scope="row"
-                      className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
+              {
+                loading ? (
+                  student.map((data: any, index: any) => (
+                    <tr
+                      key={index}
+                      className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto "
                     >
-                      {data.name}
-                    </th>
-                    <td className="px-6 py-2 max-w-[20%]">{data.username}</td>
-                    <td className="px-6 py-2 max-w-[20%]">{data.profOne}</td>
-                    <td className="px-6 py-2 max-w-[20%]">{data.profTwo}</td>
-
-                    {data.seminarDate.map((item: any, index: any) => (
-                      <td key={index} className="px-6 py-2 text-center ">
-                        {
-                          data.seminarDate[0].dateToBe !== ""
-                            ? <div>
-                              <p>{item.dateToBe}</p>
-                              <button
-                                onClick={() =>
-                                  getStatusSeminar(
-                                    data.uid,
-                                    item.isApprovedByProfOne,
-                                    item.isApprovedByProfTwo
-                                  )
-                                }
-                                className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
-                              >
-                                Tanggal Seminar
-                              </button>
-                            </div>
-                            :
-                            (item.isApprovedByProfOne !== "") &&
-                              (item.isApprovedByProfTwo !== "") ? (
-                              <button
-                                onClick={() =>
-                                  getStatusSeminar(
-                                    data.uid,
-                                    item.isApprovedByProfOne,
-                                    item.isApprovedByProfTwo
-                                  )
-                                }
-                                className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
-                              >
-                                Tanggal Seminar
-                              </button>
-                            )
-                              : (
-                                <p>Belum ditentukan</p>
-                              )
-                        }
-                      </td>
-                    ))}
-                    {data.sidangDate.map((item: any, index: any) => (
-                      <td key={index} className="px-6 py-2 text-center ">
-                        {
-                          data.sidangDate[0].dateToBe !== ""
-                            ? <div>
-                              <p>{item.dateToBe}</p>
-                              <button
-                                onClick={() =>
-                                  getStatusSidang(
-                                    data.uid,
-                                    item.isApprovedByProfOne,
-                                    item.isApprovedByProfTwo
-                                  )
-                                }
-                                className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
-                              >
-                                Tanggal Sidang
-                              </button>
-                            </div>
-                            :
-                            (item.isApprovedByProfOne !== "") &&
-                              (item.isApprovedByProfTwo !== "") ? (
-                              <button
-                                onClick={() =>
-                                  getStatusSidang(
-                                    data.uid,
-                                    item.isApprovedByProfOne,
-                                    item.isApprovedByProfTwo
-                                  )
-                                }
-                                className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
-                              >
-                                Tanggal Sidang
-                              </button>
-                            ) : (
-                              <p>Belum ditentukan</p>
-                            )}
-                      </td>
-                    ))}
-                    <td className="px-6 py-2">
-                      <button
-                        onClick={() => getStudentId(data.uid)}
-                        className="font-medium text-white hover:opacity-50 duration-150 bg-[#D0312D] p-2 rounded-md"
+                      <th
+                        scope="row"
+                        className="px-6 py-2 font-medium   whitespace-nowrap max-w-[20%] "
                       >
-                        <FaTrash />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <>
-                  <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
-                    <td
-                      scope="row"
-                      colSpan={7}
-                      className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
-                    >
-                      <div className="flex items-center justify-center">
-                        <RiLoader5Line className="animate-spin text-3xl my-5 " />
-                      </div>
-                    </td>
-                  </tr>
-                </>
-              )}
+                        {data.name}
+                      </th>
+                      <td className="px-6 py-2 max-w-[20%]">{data.username}</td>
+                      <td className="px-6 py-2 max-w-[20%]">{data.profOne}</td>
+                      <td className="px-6 py-2 max-w-[20%]">{data.profTwo}</td>
+
+                      {data.seminarDate.map((item: any, index: any) => (
+                        <td key={index} className="px-6 py-2 text-center ">
+                          {
+                            data.seminarDate[0].dateToBe !== ""
+                              ? <div>
+                                <p>{item.dateToBe}</p>
+                                <button
+                                  onClick={() =>
+                                    getStatusSeminar(
+                                      data.uid,
+                                      item.isApprovedByProfOne,
+                                      item.isApprovedByProfTwo
+                                    )
+                                  }
+                                  className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
+                                >
+                                  Tanggal Seminar
+                                </button>
+                              </div>
+                              :
+                              (item.isApprovedByProfOne !== "") &&
+                                (item.isApprovedByProfTwo !== "") ? (
+                                <button
+                                  onClick={() =>
+                                    getStatusSeminar(
+                                      data.uid,
+                                      item.isApprovedByProfOne,
+                                      item.isApprovedByProfTwo
+                                    )
+                                  }
+                                  className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
+                                >
+                                  Tanggal Seminar
+                                </button>
+                              )
+                                : (
+                                  <p>Belum ditentukan</p>
+                                )
+                          }
+                        </td>
+                      ))}
+                      {data.sidangDate.map((item: any, index: any) => (
+                        <td key={index} className="px-6 py-2 text-center ">
+                          {
+                            data.sidangDate[0].dateToBe !== ""
+                              ? <div>
+                                <p>{item.dateToBe}</p>
+                                <button
+                                  onClick={() =>
+                                    getStatusSidang(
+                                      data.uid,
+                                      item.isApprovedByProfOne,
+                                      item.isApprovedByProfTwo
+                                    )
+                                  }
+                                  className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
+                                >
+                                  Tanggal Sidang
+                                </button>
+                              </div>
+                              :
+                              (item.isApprovedByProfOne !== "") &&
+                                (item.isApprovedByProfTwo !== "") ? (
+                                <button
+                                  onClick={() =>
+                                    getStatusSidang(
+                                      data.uid,
+                                      item.isApprovedByProfOne,
+                                      item.isApprovedByProfTwo
+                                    )
+                                  }
+                                  className="font-medium text-white hover:opacity-80  bg-[#c282f6] focus:outline-none p-2 rounded-md"
+                                >
+                                  Tanggal Sidang
+                                </button>
+                              ) : (
+                                <p>Belum ditentukan</p>
+                              )}
+                        </td>
+                      ))}
+                      <td className="px-6 py-2">
+                        <button
+                          onClick={() => getStudentId(data.uid)}
+                          className="font-medium text-white hover:opacity-50 duration-150 bg-[#D0312D] p-2 rounded-md"
+                        >
+                          <FaTrash />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) :
+                  (
+                    <>
+                      <tr className="even:bg-[#f0ebf8d7] odd:bg-white border-b z-auto ">
+                        <td
+                          scope="row"
+                          colSpan={7}
+                          className="text-center px-6 py-2 whitespace-nowrap max-w-[20%] "
+                        >
+                          <div className="flex items-center justify-center">
+                            <RiLoader5Line className="animate-spin text-3xl my-5 " />
+                          </div>
+                        </td>
+                      </tr>
+                    </>
+                  )}
             </tbody>
           </table>
         </div>

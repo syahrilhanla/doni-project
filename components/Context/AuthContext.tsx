@@ -83,11 +83,31 @@ export const AuthContextProvider = ({
             role: "mhs",
             files: [
               {
-                chapterOne: "",
-                chapterTwo: "",
-                chapterThree: "",
-                chapterFour: "",
-                chapterFive: "",
+                chapterOne: {
+                  isApprovedByProfOne: "",
+                  isApprovedByProfTwo: "",
+                  link: "",
+                },
+                chapterTwo: {
+                  isApprovedByProfOne: "",
+                  isApprovedByProfTwo: "",
+                  link: "",
+                },
+                chapterThree: {
+                  isApprovedByProfOne: "",
+                  isApprovedByProfTwo: "",
+                  link: "",
+                },
+                chapterFour: {
+                  isApprovedByProfOne: "",
+                  isApprovedByProfTwo: "",
+                  link: "",
+                },
+                chapterFive: {
+                  isApprovedByProfOne: "",
+                  isApprovedByProfTwo: "",
+                  link: "",
+                },
               },
             ],
             notifications: [],
@@ -122,7 +142,7 @@ export const AuthContextProvider = ({
             ],
           });
         } catch (e) {
-          console.error("ga bisa bikin akun bang")
+          console.error("ga bisa bikin akun bang");
           console.error(e);
         }
       }
@@ -170,13 +190,7 @@ export const AuthContextProvider = ({
             }
           }
         );
-        // getDoc(doc(db, "studentsList", response.user.uid)).then(
-        //   (userData: any) => {
-        //     if (userData.data()) {
-        //       setUser(userData.data());
-        //     }
-        //   }
-        // );
+
         return response.user;
       }
     );
