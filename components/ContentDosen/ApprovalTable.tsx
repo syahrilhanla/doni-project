@@ -63,19 +63,19 @@ export default function ApprovalTable({ searchedName, selectedYear }: Props) {
         const studentRef1 =
           filterType === "searchedName" && value
             ? query(
-                collection(db, "studentsList"),
-                where("statusApprove", "==", true),
-                where("profOne", "==", user.name),
-                where("name", "==", value)
-              )
+              collection(db, "studentsList"),
+              where("statusApprove", "==", true),
+              where("profOne", "==", user.name),
+              where("name", "==", value)
+            )
             : filterType === "selectedYear" && value
-            ? query(
+              ? query(
                 collection(db, "studentsList"),
                 where("statusApprove", "==", true),
                 where("profOne", "==", user.name),
                 where("generation", "==", String(value))
               )
-            : query(
+              : query(
                 collection(db, "studentsList"),
                 where("statusApprove", "==", true),
                 where("profOne", "==", user.name)
@@ -84,19 +84,19 @@ export default function ApprovalTable({ searchedName, selectedYear }: Props) {
         const studentRef2 =
           filterType === "searchedName" && value
             ? query(
-                collection(db, "studentsList"),
-                where("statusApprove", "==", true),
-                where("profTwo", "==", user.name),
-                where("name", "==", value)
-              )
+              collection(db, "studentsList"),
+              where("statusApprove", "==", true),
+              where("profTwo", "==", user.name),
+              where("name", "==", value)
+            )
             : filterType === "selectedYear" && value
-            ? query(
+              ? query(
                 collection(db, "studentsList"),
                 where("statusApprove", "==", true),
                 where("profTwo", "==", user.name),
                 where("generation", "==", String(value))
               )
-            : query(
+              : query(
                 collection(db, "studentsList"),
                 where("statusApprove", "==", true),
                 where("profTwo", "==", user.name)
@@ -128,18 +128,6 @@ export default function ApprovalTable({ searchedName, selectedYear }: Props) {
         setLoading(true);
       } catch (e) {
         console.log(e);
-        if (user) {
-          toast.error("Silahkan Muat Ulang Halaman", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-        }
       }
     },
     [user, searchedName, selectedYear]
@@ -553,8 +541,8 @@ export default function ApprovalTable({ searchedName, selectedYear }: Props) {
                       {data.profOne === user.name
                         ? "Dospem 1"
                         : data.profTwo === user.name
-                        ? "Dospem 2"
-                        : "None"}
+                          ? "Dospem 2"
+                          : "None"}
                     </td>
                     {data.title.map((item: TitleType, index: number) => (
                       <td
