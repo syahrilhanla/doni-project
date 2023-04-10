@@ -25,15 +25,18 @@ const Navbar = () => {
   };
 
   const getNotificationData = useCallback(async () => {
-    const userRole = `${user.role === "mhs"
-      ? "studentsList" : user.role === "dosen"
-        ? "professorList" : ""
-      }`;
+    if (user.role) {
+      const userRole = `${user.role === "mhs"
+        ? "studentsList" : user.role === "dosen"
+          ? "professorList" : ""
+        }`;
 
-    const userRef = doc(db, userRole, user.uid);
+      const userRef = doc(db, userRole, user.uid);
 
-    const notifications = await getDoc(userRef);
-    setNotificationData(notifications.data()?.notifications);
+      const notifications = await getDoc(userRef);
+      setNotificationData(notifications.data()?.notifications);
+    }
+
   }, [user, openNotification]);
 
   useEffect(() => {
