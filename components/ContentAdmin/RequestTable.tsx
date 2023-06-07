@@ -52,22 +52,24 @@ export default function RequestTable({ searchedName, selectedYear }: Props) {
       where("statusApprove", "==", false)
     );
 
-    console.log({ filterType, value })
-
     try {
       const studentsData = (await getDocs(studentRef)).docs
         .map((item) => item)
         .map((item) => item.data());
+
       setStudent(studentsData);
       console.log({ studentsData });
-    } catch (e) {
+    }
+
+    catch (e) {
       console.log(e);
+
       toast.error("Silahkan Muat Ulang Halaman", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
-        pauseOnHover: true,
+        pauseOnHover: false,
         draggable: true,
         progress: undefined,
         theme: "colored",
@@ -77,6 +79,7 @@ export default function RequestTable({ searchedName, selectedYear }: Props) {
 
   const getProf = async () => {
     let unsubscribe = false;
+
     await getDocs(collection(db, "professorList"))
       .then((profRef) => {
         if (unsubscribe) return;
@@ -127,16 +130,53 @@ export default function RequestTable({ searchedName, selectedYear }: Props) {
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
-        pauseOnHover: true,
+        pauseOnHover: false,
         draggable: true,
         progress: undefined,
         theme: "colored",
       });
+
       setSetuju(false);
       setDosen1("");
       setDosen2("");
     });
   };
+
+  const handleReject = () => {
+    const studentRef = doc(db, "studentsList", userid);
+
+    const valueUpdate = {
+      statusApprove: null,
+    };
+
+    updateDoc(studentRef, valueUpdate).then(() => {
+      toast.success("Mahasiswa telah ditolak", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      setTolak(false);
+    }).catch(e => {
+      toast.error("Gagal menolak mahasiswa", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      setTolak(false);
+    });
+  }
 
   return (
     <>
@@ -218,12 +258,18 @@ export default function RequestTable({ searchedName, selectedYear }: Props) {
                     <button
                       type="button"
                       className=" text-white bg-green-500 ring-2  rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-green-500 hover:ring-green-500 hover:bg-white focus:z-10"
+                      onClick={() => {
+                        handleReject();
+                      }}
                     >
                       Iya
                     </button>
                     <button
                       type="button"
                       className=" text-white bg-red-500 ring-2  rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-red-500 hover:ring-red-500 hover:bg-white focus:z-10"
+                      onClick={() => {
+                        setTolak(false);
+                      }}
                     >
                       Tidak
                     </button>
@@ -280,10 +326,13 @@ export default function RequestTable({ searchedName, selectedYear }: Props) {
                         onClick={() => getStatus(data.uid)}
                         className="font-medium text-white ring-1 hover:ring-green-500 hover:bg-white  hover:text-green-500 bg-green-500 p-2 rounded-md"
                       >
-                        <BsCheckLg className="" />
+                        <BsCheckLg />
                       </button>
                       <button
-                        onClick={() => setTolak(!tolak)}
+                        onClick={() => {
+                          setUserid(data.uid);
+                          setTolak(!tolak)
+                        }}
                         className="font-medium text-white ring-1 hover:ring-red-600  hover:bg-white hover:text-red-600 bg-red-600 p-2 rounded-md"
                       >
                         <AiOutlineClose />
