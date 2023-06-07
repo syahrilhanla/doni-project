@@ -41,15 +41,15 @@ export default function RequestTable({ searchedName, selectedYear }: Props) {
   const getData = useCallback(async ({ filterType, value }: FilterParams) => {
     const studentRef = filterType === "searchedName" && value ? query(
       collection(db, "studentsList"),
-      where("statusApprove", "==", true),
+      where("statusApprove", "==", false),
       where("name", "==", value)
     ) : filterType === "selectedYear" && value ? query(
       collection(db, "studentsList"),
-      where("statusApprove", "==", true),
+      where("statusApprove", "==", false),
       where("generation", "==", String(value))
     ) : query(
       collection(db, "studentsList"),
-      where("statusApprove", "==", true)
+      where("statusApprove", "==", false)
     );
 
     console.log({ filterType, value })
@@ -59,6 +59,7 @@ export default function RequestTable({ searchedName, selectedYear }: Props) {
         .map((item) => item)
         .map((item) => item.data());
       setStudent(studentsData);
+      console.log({ studentsData });
     } catch (e) {
       console.log(e);
       toast.error("Silahkan Muat Ulang Halaman", {
