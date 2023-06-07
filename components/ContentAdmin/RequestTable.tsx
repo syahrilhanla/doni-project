@@ -218,12 +218,18 @@ export default function RequestTable({ searchedName, selectedYear }: Props) {
                     <button
                       type="button"
                       className=" text-white bg-green-500 ring-2  rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-green-500 hover:ring-green-500 hover:bg-white focus:z-10"
+                      onClick={() => {
+                        setTolak(false);
+                      }}
                     >
                       Iya
                     </button>
                     <button
                       type="button"
                       className=" text-white bg-red-500 ring-2  rounded-lg  text-sm font-medium px-5 min-h-[50px] mt-3  hover:text-red-500 hover:ring-red-500 hover:bg-white focus:z-10"
+                      onClick={() => {
+                        setTolak(false);
+                      }}
                     >
                       Tidak
                     </button>
